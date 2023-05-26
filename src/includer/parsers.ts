@@ -61,7 +61,7 @@ function info(spec: OpenapiSpec): Info {
     return parsed;
 }
 
-function tags(spec: OpenapiSpec): Map<string, Tag> {
+function tagsFromSpec(spec: OpenapiSpec): Map<string, Tag> {
     const {tags, paths} = spec;
 
     const parsed = new Map();
@@ -83,21 +83,21 @@ function tags(spec: OpenapiSpec): Map<string, Tag> {
     const visiter = (params: VisiterParams): VisiterOutput | null => {
         const {endpoint} = params;
 
-        const tags = endpoint.tags;
+        const endpointTags = endpoint.tags;
         const titles = endpoint[TAG_NAMES_FIELD];
 
-        if (!tags?.length || !titles?.length || tags.length !== titles.length) {
+        if (!endpointTags?.length || !titles?.length || endpointTags.length !== titles.length) {
             return null;
         }
 
-        return {tags, titles};
+        return {tags: endpointTags, titles};
     };
 
     const tagsTitles = visitPaths(paths, visiter).filter(Boolean) as VisiterOutput[];
 
-    for (const {tags, titles} of tagsTitles) {
+    for (const {tags: visiterTags, titles} of tagsTitles) {
         for (let i = 0; i < titles.length; i++) {
-            const key = slugify(tags[i]);
+            const key = slugify(visiterTags[i]);
 
             parsed.set(key, {...parsed.get(key), name: titles[i]});
         }
@@ -105,12 +105,29 @@ function tags(spec: OpenapiSpec): Map<string, Tag> {
 
     return parsed;
 }
+const opid = (path: string, method: string, id?: string) =>
+    slugify(id ?? ([path, method].join('-')));
 
-function paths(spec: OpenapiSpec, tagsByID: Map<string, Tag>): Specification {
+function pathsFromSpec(spec: OpenapiSpec, tagsByID: Map<string, Tag>): Specification {
     const endpoints: Endpoints = [];
-    const {paths, servers, components = {}, security: globalSecurity = []} = spec;
+    const {
+        paths,
+        servers,
+        components = {},
+        security: globalSecurity = [],
+    } = spec;
     const visiter = ({path, method, endpoint}: VisiterParams) => {
-        const {summary, description, tags = [], operationId, parameters, responses, requestBody, security = []} = endpoint;
+        const {
+            summary,
+            description,
+            tags = [],
+            operationId,
+            parameters,
+            responses,
+            requestBody,
+            security = [],
+        } = endpoint;
+        console.log('WTF??? ', requestBody);
         const parsedSecurity = [...security, ...globalSecurity].reduce((arr, item) => {
             arr.push(...Object.keys(item).reduce((acc, key) => {
                 // @ts-ignore
@@ -119,9 +136,6 @@ function paths(spec: OpenapiSpec, tagsByID: Map<string, Tag>): Specification {
             }, []));
             return arr;
         }, []);
-
-        const opid = (path: string, method: string, id?: string) =>
-            slugify(id ?? ([path, method].join('-')));
 
         const parsedServers = (endpoint.servers || servers || [{url: '/'}])
             .map((server: Server) => {
@@ -166,7 +180,7 @@ function paths(spec: OpenapiSpec, tagsByID: Map<string, Tag>): Specification {
             operationId,
             tags: tags.map((tag) => slugify(tag)),
             id: opid(path, method, operationId),
-            requestBody: contentType ? {
+            requestBody: (contentType && requestBody) ? {
                 type: contentType,
                 schema: requestBody.content[contentType].schema,
             } : undefined,
@@ -216,6 +230,6 @@ function visitPaths<T>(paths: {[key: string]: any}, visiter: (params: VisiterPar
     return results;
 }
 
-export {info, tags, paths};
+export {info, tagsFromSpec as tags, pathsFromSpec as paths};
 
-export default {info, tags, paths};
+export default {info, tags: tagsFromSpec, paths: pathsFromSpec};

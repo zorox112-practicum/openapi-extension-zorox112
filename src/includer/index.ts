@@ -1,30 +1,22 @@
 import assert from 'assert';
-import { resolve, join, dirname } from 'path';
-import { mkdir, writeFile } from 'fs/promises';
-import { matchFilter } from './utils';
+import {resolve, join, dirname} from 'path';
+import {mkdir, writeFile} from 'fs/promises';
+import {matchFilter} from './utils';
 
-import { dump } from 'js-yaml';
+import {dump} from 'js-yaml';
 
 import parsers from './parsers';
 import generators from './generators';
 
-import type { IncluderFunctionParams, YfmToc, YfmTocItem } from '../../../../models';
+import {IncluderFunctionParams, YfmPreset, YfmToc, YfmTocItem} from './models';
 import SwaggerParser from '@apidevtools/swagger-parser';
-import type { JSONSchema6 } from 'json-schema';
+import {JSONSchema6} from 'json-schema';
 
-import { LEADING_PAGE_NAME_DEFAULT } from './constants';
+import {LEADING_PAGE_NAME_DEFAULT, SPEC_RENDER_MODES, SPEC_RENDER_MODE_DEFAULT, LEADING_PAGE_MODES} from './constants';
 
-import {
-    Endpoint,
-    Info,
-    Refs,
-    Specification,
-    LeadingPageMode,
-    OpenApiIncluderParams,
-    LeadingPageSpecRenderMode
-} from '../types';
+import {Endpoint, Info, Refs, Specification, LeadingPageMode, OpenApiIncluderParams, OpenapiSpec} from '../types';
 
-const name = 'openapi';
+const INCLUDER_NAME = 'openapi';
 
 class OpenApiIncluderError extends Error {
     path: string;
@@ -43,8 +35,15 @@ async function includerFunction(params: IncluderFunctionParams<OpenApiIncluderPa
         writeBasePath,
         tocPath,
         vars,
-        passedParams: { input, leadingPage = {}, filter, noindex, sandbox },
-        index
+        passedParams: {
+            input,
+            leadingPage = {},
+            filter,
+            noindex,
+            hidden,
+            sandbox,
+        },
+        index,
     } = params;
 
     const tocDirPath = dirname(tocPath);
@@ -56,12 +55,12 @@ async function includerFunction(params: IncluderFunctionParams<OpenApiIncluderPa
     const parser = new SwaggerParser();
 
     try {
-        const data = await parser.validate(contentPath, { validate: { spec: true } });
+        const data = await parser.validate(contentPath, {validate: {spec: true}});
 
         const allRefs: Refs = {};
         for (const file of Object.values(parser.$refs.values())) {
             const schemas = Object.entries(file.components?.schemas || {}).concat(Object.entries(file));
-            for (const [ refName, schema ] of schemas) {
+            for (const [refName, schema] of schemas) {
                 allRefs[refName] = schema as JSONSchema6;
             }
         }
@@ -69,9 +68,9 @@ async function includerFunction(params: IncluderFunctionParams<OpenApiIncluderPa
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const writePath = join(writeBasePath, tocDirPath, params.item.include!.path);
 
-        await mkdir(writePath, { recursive: true });
-        await generateToc({ data, writePath, leadingPage, filter, vars });
-        await generateContent({ data, writePath, leadingPage, filter, noindex, vars, allRefs, sandbox });
+        await mkdir(writePath, {recursive: true});
+        await generateToc({data, writePath, leadingPage, filter, vars});
+        await generateContent({data, writePath, leadingPage, filter, noindex, vars, hidden, allRefs, sandbox});
     } catch (error) {
         if (error && !(error instanceof OpenApiIncluderError)) {
             // eslint-disable-next-line no-ex-assign
@@ -82,55 +81,51 @@ async function includerFunction(params: IncluderFunctionParams<OpenApiIncluderPa
     }
 }
 
-const SPEC_RENDER_MODES = new Set<string>([ LeadingPageSpecRenderMode.Default, LeadingPageSpecRenderMode.Hidden ]);
-
 function assertSpecRenderMode(mode: string) {
     const isValid = SPEC_RENDER_MODES.has(mode);
 
-    assert(isValid, `invalid spec display mode ${ mode }, available options:${ [ ...SPEC_RENDER_MODES ].join(', ') }`);
+    assert(isValid, `invalid spec display mode ${mode}, available options:${[...SPEC_RENDER_MODES].join(', ')}`);
 }
-
-const LEADING_PAGE_MODES = new Set<string>([ LeadingPageMode.Leaf, LeadingPageMode.Section ]);
 
 function assertLeadingPageMode(mode: string) {
     const isValid = LEADING_PAGE_MODES.has(mode);
 
-    assert(isValid, `invalid leading page mode ${ mode }, available options: ${ [ ...LEADING_PAGE_MODES ].join(', ') }`);
+    assert(isValid, `invalid leading page mode ${mode}, available options: ${[...LEADING_PAGE_MODES].join(', ')}`);
 }
 
-export type generateTocParams = {
-    data: any;
-    vars: Record<string, string>;
+export type GenerateTocParams = {
+    data: OpenapiSpec;
+    vars: YfmPreset;
     writePath: string;
     leadingPage: OpenApiIncluderParams['leadingPage'];
     filter: OpenApiIncluderParams['filter'];
 };
 
-async function generateToc(params: generateTocParams): Promise<any> {
-    const { data, writePath, leadingPage, filter, vars } = params;
+async function generateToc(params: GenerateTocParams): Promise<void> {
+    const {data, writePath, leadingPage, filter, vars} = params;
     const leadingPageName = leadingPage?.name ?? LEADING_PAGE_NAME_DEFAULT;
     const leadingPageMode = leadingPage?.mode ?? LeadingPageMode.Leaf;
 
     assertLeadingPageMode(leadingPageMode);
 
     const filterContent = filterUsefullContent(filter, vars);
-    const { tags, endpoints } = filterContent(parsers.paths(data, parsers.tags(data)));
+    const {tags, endpoints} = filterContent(parsers.paths(data, parsers.tags(data)));
 
     const toc: YfmTocItem & { items: YfmTocItem[] } = {
-        name,
+        name: INCLUDER_NAME,
         items: [],
     };
 
     tags.forEach((tag, id) => {
         // eslint-disable-next-line no-shadow
-        const { name, endpoints } = tag;
+        const {name, endpoints: endpointsOfTag} = tag;
 
         const section: YfmTocItem & { items: YfmTocItem[] } = {
             name,
             items: [],
         };
 
-        section.items = endpoints.map((endpoint) => handleEndpointRender(endpoint, id));
+        section.items = endpointsOfTag.map((endpoint) => handleEndpointRender(endpoint, id));
 
         addLeadingPage(section, leadingPageMode, leadingPageName, join(id, 'index.md'));
 
@@ -143,11 +138,10 @@ async function generateToc(params: generateTocParams): Promise<any> {
 
     addLeadingPage(toc, leadingPageMode, leadingPageName, 'index.md');
 
-    await mkdir(dirname(writePath), { recursive: true });
+    await mkdir(dirname(writePath), {recursive: true});
     await writeFile(join(writePath, 'toc.yaml'), dump(toc));
 }
 
-// eslint-disable-next-line no-shadow
 function addLeadingPage(section: YfmTocItem, mode: LeadingPageMode, name: string, href: string) {
     if (mode === LeadingPageMode.Leaf) {
         (section.items as YfmTocItem[]).unshift({
@@ -159,25 +153,41 @@ function addLeadingPage(section: YfmTocItem, mode: LeadingPageMode, name: string
     }
 }
 
-export type generateContentParams = {
-    data: any;
-    vars: Record<string, string>;
+export type GenerateContentParams = {
+    data: OpenapiSpec;
+    vars: YfmPreset;
     writePath: string;
     allRefs: Refs;
     leadingPage: OpenApiIncluderParams['leadingPage'];
     filter?: OpenApiIncluderParams['filter'];
     noindex?: OpenApiIncluderParams['noindex'];
     sandbox?: OpenApiIncluderParams['sandbox'];
+    hidden?: OpenApiIncluderParams['filter'];
 };
 
-async function generateContent(params: generateContentParams): Promise<void> {
-    const { data, writePath, allRefs, leadingPage, filter, noindex, vars, sandbox } = params;
+async function generateContent(params: GenerateContentParams): Promise<void> {
+    const {
+        data,
+        writePath,
+        allRefs,
+        leadingPage,
+        filter,
+        noindex,
+        hidden,
+        vars,
+        sandbox,
+    } = params;
     const filterContent = filterUsefullContent(filter, vars);
     const applyNoindex = matchFilter(noindex || {}, vars, (endpoint) => {
         endpoint.noindex = true;
     });
 
-    const leadingPageSpecRenderMode = leadingPage?.spec?.renderMode ?? LeadingPageSpecRenderMode.Default;
+    const applyHidden = matchFilter(hidden || {}, vars, (endpoint) => {
+        endpoint.hidden = true;
+    });
+
+
+    const leadingPageSpecRenderMode = leadingPage?.spec?.renderMode ?? SPEC_RENDER_MODE_DEFAULT;
     assertSpecRenderMode(leadingPageSpecRenderMode);
 
     const results = [];
@@ -189,9 +199,14 @@ async function generateContent(params: generateContentParams): Promise<void> {
         applyNoindex(spec);
     }
 
+    if (hidden) {
+        applyHidden(spec);
+    }
+
     spec = filterContent(spec);
 
-    const main: string = generators.main({ data, info, spec, leadingPageSpecRenderMode });
+
+    const main: string = generators.main({data, info, spec, leadingPageSpecRenderMode});
 
     results.push({
         path: join(writePath, 'index.md'),
@@ -199,15 +214,15 @@ async function generateContent(params: generateContentParams): Promise<void> {
     });
 
     spec.tags.forEach((tag, id) => {
-        const { endpoints } = tag;
+        const {endpoints} = tag;
+
+        endpoints.forEach((endpoint) => {
+            results.push(handleEndpointIncluder(allRefs, endpoint, join(writePath, id), sandbox));
+        });
 
         results.push({
             path: join(writePath, id, 'index.md'),
             content: generators.section(tag),
-        });
-
-        endpoints.forEach((endpoint) => {
-            results.push(handleEndpointIncluder(allRefs, endpoint, join(writePath, id), sandbox));
         });
     });
 
@@ -215,17 +230,23 @@ async function generateContent(params: generateContentParams): Promise<void> {
         results.push(handleEndpointIncluder(allRefs, endpoint, join(writePath), sandbox));
     }
 
-    for (const { path, content } of results) {
-        await mkdir(dirname(path), { recursive: true });
+    for (const {path, content} of results) {
+        await mkdir(dirname(path), {recursive: true});
         await writeFile(path, content);
     }
 }
 
-function handleEndpointIncluder(allRefs: Refs, endpoint: Endpoint, pathPrefix: string, sandbox: { host?: string } | undefined) {
+
+function handleEndpointIncluder(
+    allRefs: Refs,
+    endpoint: Endpoint,
+    pathPrefix: string,
+    sandbox?: {host?: string},
+) {
     const path = join(pathPrefix, mdPath(endpoint));
     const content = generators.endpoint(allRefs, endpoint, sandbox);
 
-    return { path, content };
+    return {path, content};
 }
 
 function handleEndpointRender(endpoint: Endpoint, pathPrefix?: string): YfmToc {
@@ -236,10 +257,11 @@ function handleEndpointRender(endpoint: Endpoint, pathPrefix?: string): YfmToc {
     return {
         href: path,
         name: sectionName(endpoint),
+        hidden: endpoint.hidden,
     } as YfmToc;
 }
 
-function filterUsefullContent(filter: OpenApiIncluderParams['filter'] | undefined, vars: Record<string, string>) {
+function filterUsefullContent(filter: OpenApiIncluderParams['filter'] | undefined, vars: YfmPreset) {
     if (!filter) {
         return (spec: Specification) => spec;
     }
@@ -256,7 +278,7 @@ function filterUsefullContent(filter: OpenApiIncluderParams['filter'] | undefine
             endpointsByTag.set(tagId, collection);
 
             if (tagId !== null) {
-                tags.set(tagId, { ...tag, endpoints: collection });
+                tags.set(tagId, {...tag, endpoints: collection});
             }
         })(spec);
 
@@ -269,13 +291,13 @@ function filterUsefullContent(filter: OpenApiIncluderParams['filter'] | undefine
 }
 
 export function sectionName(e: Endpoint): string {
-    return e.summary ?? e.operationId ?? `${ e.method } ${ e.path }`;
+    return e.summary ?? e.operationId ?? `${e.method} ${e.path}`;
 }
 
 export function mdPath(e: Endpoint): string {
-    return `${ e.id }.md`;
+    return `${e.id}.md`;
 }
 
-export { name, includerFunction };
+export {INCLUDER_NAME as name, includerFunction};
 
-export default { name, includerFunction };
+export default {name: INCLUDER_NAME, includerFunction};

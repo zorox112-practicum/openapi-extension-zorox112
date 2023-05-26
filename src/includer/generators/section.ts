@@ -1,8 +1,8 @@
 /* eslint-disable-next-line no-shadow */
-import { page, block, title, body, link, list } from './common';
-import { ENDPOINTS_SECTION_NAME } from '../constants';
+import {page, block, title, body, link, list} from './common';
+import {ENDPOINTS_SECTION_NAME} from '../constants';
 
-import { Tag, Endpoint, Endpoints } from '../../types';
+import {Tag, Endpoint, Endpoints} from '../../types';
 
 function section(tag: Tag) {
     const sectionPage = [
@@ -19,11 +19,12 @@ function description(text?: string) {
 }
 
 function endpoints(data?: Endpoints) {
-    const linkMap = ({ id, summary }: Endpoint) => link(summary ?? id, id + '.md');
+    const visibleEndpoints = data?.filter((ep) => !ep.hidden);
+    const linkMap = ({id, summary}: Endpoint) => link(summary ?? id, id + '.md');
 
-    return data?.length && block([ title(2)(ENDPOINTS_SECTION_NAME), list(data.map(linkMap)) ]);
+    return visibleEndpoints?.length && block([title(2)(ENDPOINTS_SECTION_NAME), list(visibleEndpoints.map(linkMap))]);
 }
 
-export { section };
+export {section};
 
-export default { section };
+export default {section};

@@ -1,60 +1,86 @@
-import { JSONSchema6 } from 'json-schema';
-import { table, link } from './common';
-import slugify from 'slugify';
+import {JSONSchema6} from 'json-schema';
+import {table, anchor, title} from './common';
 import stringify from 'json-stringify-safe';
 
-import { concatNewLine } from '../utils';
-import { openapiBlock } from './constants';
+import {concatNewLine} from '../utils';
+import {openapiBlock} from './constants';
+import {SUPPORTED_ENUM_TYPES, EOL} from '../constants';
 
-import { JsType, Refs } from '../../types';
+import {JsType, Refs, SupportedEnumType, OpenJSONSchema, OpenJSONSchemaDefinition} from '../../types';
 
-type TableRow = [ string, string, string ];
-
-function anchor(ref: string) {
-    return link(ref, `#${ slugify(ref).toLowerCase() }`);
-}
+type TableRow = [string, string, string];
 
 export function tableParameterName(key: string, required?: boolean) {
-    return required ? `${ key }<span class="${ openapiBlock('required') }">*</span>` : key;
+    return required ? `${key}<span class="${openapiBlock('required')}">*</span>` : key;
 }
+
+export type TableRef = {
+    reusable?: true;
+    name: string;
+};
 
 type TableFromSchemaResult = {
     content: string;
-    tableRefs: string[];
+    tableRefs: TableRef[];
+    oneOfRefs?: TableRef[];
 };
 
-export function tableFromSchema(allRefs: Refs, schema: JSONSchema6): TableFromSchemaResult {
+export function tableFromSchema(
+    allRefs: Refs,
+    schema: JSONSchema6,
+): TableFromSchemaResult {
     if (schema.enum) {
         // enum description will be in table description
         const description = prepareComplexDescription('', schema);
         const content = table([
-            [ 'Type', 'Description' ],
-            [ inferType(schema), description ],
+            ['Type', 'Description'],
+            [typeToText(schema), description],
         ]);
-        return { content, tableRefs: [] };
+        return {content, tableRefs: []};
     }
-    const { rows, refs } = prepareObjectSchemaTable(allRefs, schema);
-    const content = table([
-        [ 'Name', 'Type', 'Description' ],
-        ...rows,
-    ]);
-    return { content, tableRefs: refs };
+
+    const {rows, refs} = prepareObjectSchemaTable(allRefs, schema);
+    let content = rows.length
+        ? table([['Name', 'Type', 'Description'], ...rows])
+        : '';
+
+    if (schema.oneOf?.length) {
+        const oneOfElements = extractOneOfElements(schema);
+        const oneOfElementsRefs = (oneOfElements
+            .filter(Boolean))
+            .map((value) => ({name: findRef(allRefs, value), reusable: true}))
+            .filter(({name}) => name) as TableRef[];
+
+        content += EOL + title(4)('Or value from:') + EOL;
+        refs.push(...oneOfElementsRefs);
+
+        return {content, tableRefs: refs, oneOfRefs: oneOfElementsRefs};
+    }
+
+    return {content, tableRefs: refs};
 }
 
 type PrepareObjectSchemaTableResult = {
     rows: TableRow[];
-    refs: string[];
+    refs: TableRef[];
 };
 
-function prepareObjectSchemaTable(refs: Refs, schema: JSONSchema6): PrepareObjectSchemaTableResult {
-    const result: PrepareObjectSchemaTableResult = { rows: [], refs: [] };
+function prepareObjectSchemaTable(
+    refs: Refs,
+    schema: JSONSchema6,
+): PrepareObjectSchemaTableResult {
+    const result: PrepareObjectSchemaTableResult = {rows: [], refs: []};
     const merged = merge(schema);
-    Object.entries(merged.properties || {}).forEach(([ key, v ]) => {
+    Object.entries(merged.properties || {}).forEach(([key, v]) => {
         const value = merge(v, refs);
         const name = tableParameterName(key, isRequired(key, schema));
-        const { type, description, ref } = prepareTableRowData(refs, value, key);
+        const {type, description, ref} = prepareTableRowData(
+            refs,
+            value,
+            key,
+        );
 
-        result.rows.push([ name, type, description ]);
+        result.rows.push([name, type, description]);
 
         if (ref) {
             result.refs.push(ref);
@@ -66,58 +92,114 @@ function prepareObjectSchemaTable(refs: Refs, schema: JSONSchema6): PrepareObjec
 
         for (const element of value.oneOf) {
             const mergedInner = merge(element);
-            const { ref: innerRef } = prepareTableRowData(refs, mergedInner);
+            const {ref: innerRef} = prepareTableRowData(refs, mergedInner);
 
             if (innerRef) {
                 result.refs.push(innerRef);
             }
         }
+
     });
+
+    if (schema.oneOf?.length) {
+        const restElementsDescription = descriptionForOneOfElement(schema, refs);
+
+        result.rows.push(['...rest', 'oneOf', restElementsDescription]);
+    }
+
     return result;
+}
+
+function extractOneOfElements(from: JSONSchema6): JSONSchema6[] {
+    if (!from.oneOf?.length) {
+        return [];
+    }
+
+    const elements = from.oneOf.filter(Boolean) as JSONSchema6[];
+
+    return elements;
+}
+
+function descriptionForOneOfElement(target: JSONSchema6, allRefs?: Refs): string {
+    const elements = extractOneOfElements(target);
+
+    if (elements.length === 0) {
+        return '';
+    }
+
+    const description = elements.map((item) => createOneOfDescription(allRefs, item))
+        .filter(Boolean)
+        .join('\nor ');
+
+    return description;
 }
 
 type PrepareRowResult = {
     type: string;
     description: string;
-    ref?: string;
+    ref?: TableRef;
 };
 
-export function prepareTableRowData(allRefs: Refs, value: JSONSchema6, key?: string): PrepareRowResult {
+export function prepareTableRowData(
+    allRefs: Refs,
+    value: JSONSchema6,
+    key?: string,
+): PrepareRowResult {
     const description = value.description || '';
     const ref = findRef(allRefs, value);
     if (ref) {
-        return { type: anchor(ref), description, ref };
+        return {type: anchor(ref), description, ref: {name: ref}};
     }
     if (inferType(value) === 'array') {
-        if (!value.items || value.items === true || Array.isArray(value.items)) {
-            throw Error(`unsupported array items for ${ key }`);
+        if (
+            !value.items ||
+            value.items === true ||
+            Array.isArray(value.items)
+        ) {
+            throw Error(`unsupported array items for ${key}`);
         }
         const inner = prepareTableRowData(allRefs, value.items, key);
         return {
-            type: `${ inner.type }[]`,
+            type: `${inner.type}[]`,
             // if inner.ref present, inner description will be in separate table
-            description: inner.ref ? description : concatNewLine(description, inner.description),
+            description: inner.ref
+                ? description
+                : concatNewLine(description, inner.description),
             ref: inner.ref,
         };
     }
-    return { type: `${ inferType(value) }`, description: prepareComplexDescription(description, value) };
+    return {
+        type: typeToText(value),
+        description: prepareComplexDescription(description, value),
+    };
 }
 
-function prepareComplexDescription(baseDescription: string, value: JSONSchema6): string {
+function prepareComplexDescription(
+    baseDescription: string,
+    value: JSONSchema6,
+): string {
     let description = baseDescription;
-    const enumValues = value.enum?.map((s) => `\`${ s }\``).join(', ');
+    const enumValues = value.enum?.map((s) => `\`${s}\``).join(', ');
     if (enumValues) {
-        description = concatNewLine(description, `Enum: ${ enumValues }`);
+        description = concatNewLine(description, `Enum: ${enumValues}`);
     }
     if (value.default) {
-        description = concatNewLine(description, `Default: \`${ value.default }\``);
+        description = concatNewLine(
+            description,
+            `Default: \`${value.default}\``,
+        );
     }
     return description;
 }
 
-// find dereferenced object from schema in all components/schemas
-function findRef(allRefs: Refs, value: JSONSchema6): string | undefined {
-    for (const [ k, v ] of Object.entries(allRefs)) {
+/**
+    *  find dereferenced object from schema in all components/schemas
+    * @param allRefs - namespaces of all components
+    * @param value target spec
+    * @returns refference of target or undefiend
+*/
+export function findRef(allRefs: Refs, value: JSONSchema6): string | undefined {
+    for (const [k, v] of Object.entries(allRefs)) {
         // @apidevtools/swagger-parser guaranties, that in refs list there will be the same objects
         // but same objects can have different descriptions
         if (v.properties && v.properties === value.properties) {
@@ -136,19 +218,24 @@ function findRef(allRefs: Refs, value: JSONSchema6): string | undefined {
     return undefined;
 }
 
-type OpenJSONSchema = JSONSchema6 & { example?: any };
-type OpenJSONSchemaDefinition = OpenJSONSchema | boolean;
-
 // sample key-value JSON body
-export function prepareSampleObject(schema: OpenJSONSchema, callstack: JSONSchema6[] = []) {
+export function prepareSampleObject(
+    schema: OpenJSONSchema,
+    callstack: JSONSchema6[] = [],
+) {
     const result: { [key: string]: any } = {};
     if (schema.example) {
         return schema.example;
     }
     const merged = merge(schema);
-    Object.entries(merged.properties || {}).forEach(([ key, value ]) => {
+    Object.entries(merged.properties || {}).forEach(([key, value]) => {
         const required = isRequired(key, merged);
-        const possibleValue = prepareSampleElement(key, value, required, callstack);
+        const possibleValue = prepareSampleElement(
+            key,
+            value,
+            required,
+            callstack,
+        );
         if (possibleValue !== undefined) {
             result[key] = possibleValue;
         }
@@ -159,7 +246,8 @@ export function prepareSampleObject(schema: OpenJSONSchema, callstack: JSONSchem
 function prepareSampleElement(
     key: string,
     v: OpenJSONSchemaDefinition,
-    required: boolean, callstack: JSONSchema6[],
+    required: boolean,
+    callstack: JSONSchema6[],
 ): any {
     const value = merge(v);
     if (value.example) {
@@ -176,14 +264,31 @@ function prepareSampleElement(
         return undefined;
     }
     const downCallstack = callstack.concat(value);
-    switch (inferType(value)) {
+    let type = inferType(value);
+
+    if (isUnionType(type)) {
+        type = type.unionOf[0];
+    }
+
+    switch (type) {
         case 'object':
             return prepareSampleObject(value, downCallstack);
         case 'array':
-            if (!value.items || value.items === true || Array.isArray(value.items)) {
-                throw Error(`unsupported array items for ${ key }`);
+            if (
+                !value.items ||
+                value.items === true ||
+                Array.isArray(value.items)
+            ) {
+                throw Error(`unsupported array items for ${key}`);
             }
-            return [ prepareSampleElement(key, value.items, isRequired(key, value), downCallstack) ];
+            return [
+                prepareSampleElement(
+                    key,
+                    value.items,
+                    isRequired(key, value),
+                    downCallstack,
+                ),
+            ];
         case 'string':
             switch (value.format) {
                 case 'uuid':
@@ -220,10 +325,15 @@ function prepareSampleElement(
 //       - $ref: '#/components/schemas/TimeInterval1'
 //   description: asfsdfsdf
 //   type: object
-function merge(value: OpenJSONSchemaDefinition, allRefs?: Refs): OpenJSONSchema {
+// eslint-disable-next-line complexity
+function merge(
+    value: OpenJSONSchemaDefinition,
+    allRefs?: Refs,
+): OpenJSONSchema {
     if (typeof value === 'boolean') {
         throw Error('Boolean value isn\'t supported');
     }
+
     if (value.additionalProperties) {
         const result = value.additionalProperties;
         if (typeof result === 'boolean') {
@@ -233,13 +343,14 @@ function merge(value: OpenJSONSchemaDefinition, allRefs?: Refs): OpenJSONSchema 
 
         return merge(result);
     }
+
     if (value.items) {
         const result = value.items;
         if (Array.isArray(result)) {
             throw Error('Array in items isn\'t supported');
         }
 
-        return { ...value, items: merge(result) };
+        return {...value, items: merge(result)};
     }
 
     if (value.oneOf?.length && value.allOf?.length) {
@@ -251,25 +362,15 @@ function merge(value: OpenJSONSchemaDefinition, allRefs?: Refs): OpenJSONSchema 
     if (combiners.length === 0) {
         return value;
     }
-    if (combiners.length === 1) {
-        // save original object to search it in Refs by ===
-        return merge(combiners[0]);
-    }
 
     if (value.oneOf?.length) {
-        const description = (value.oneOf
-            // coz ts 3.9 can't recognize (OpenJSONSchema | false)[].filter(Boolean) as OpenJSONSchema[]
-            .filter(Boolean) as OpenJSONSchema[])
-            .map((item) => createOneOfDescription(allRefs, item))
-            .filter(Boolean)
-            .join('\nor ');
+        const description = descriptionForOneOfElement(value, allRefs);
 
-        return { ...value, description };
-
+        return {...value, description};
     }
 
     let description = '';
-    const properties: Record<string, any> = {};
+    const properties: Record<string, any> = value.properties || {};
 
     for (const element of value.allOf || []) {
         if (typeof element === 'boolean') {
@@ -279,16 +380,24 @@ function merge(value: OpenJSONSchemaDefinition, allRefs?: Refs): OpenJSONSchema 
             description = concatNewLine(description, element.description);
         }
         const mergedElement = merge(element);
-        for (const [ k, v ] of Object.entries(mergedElement?.properties ?? {})) {
+        for (const [k, v] of Object.entries(mergedElement?.properties ?? {})) {
             properties[k] = v;
         }
     }
 
-    return { type: 'object', description, properties, allOf: value.allOf, oneOf: value.oneOf };
+    return {
+        type: 'object',
+        description,
+        properties,
+        allOf: value.allOf,
+        oneOf: value.oneOf,
+    };
 }
 
-
-function createOneOfDescription(allRefs: Refs | undefined, item: OpenJSONSchema): string | undefined {
+function createOneOfDescription(
+    allRefs: Refs | undefined,
+    item: OpenJSONSchema,
+): string | undefined {
     const ref = allRefs && findRef(allRefs, item);
     return ref ? anchor(ref) : item.description;
 }
@@ -297,7 +406,18 @@ function isRequired(key: string, value: JSONSchema6): boolean {
     return value.required?.includes(key) ?? false;
 }
 
-function inferType(value: OpenJSONSchema): Exclude<JSONSchema6['type'], undefined> {
+type BaseJSONSchemaType = Exclude<JSONSchema6['type'], undefined>;
+type JSONSchemaUnionType = {
+    /** Not oneOf because of collision with JSONSchema6['oneOf'] */
+    unionOf: JSONSchemaType[];
+};
+type JSONSchemaType = BaseJSONSchemaType | JSONSchemaUnionType;
+
+function inferType(value: OpenJSONSchema): JSONSchemaType {
+    if (value === null) {
+        return 'null';
+    }
+
     if (value.type) {
         return value.type;
     }
@@ -308,7 +428,7 @@ function inferType(value: OpenJSONSchema): Exclude<JSONSchema6['type'], undefine
             return enumType;
         }
 
-        throw new Error(`Unsupported enum type in value: ${ stringify(value) }`);
+        throw new Error(`Unsupported enum type in value: ${stringify(value)}`);
     }
 
     if (value.default) {
@@ -316,16 +436,40 @@ function inferType(value: OpenJSONSchema): Exclude<JSONSchema6['type'], undefine
         if (isSupportedEnumType(type)) {
             return type;
         }
-    } else if (value === null) {
-        return 'null';
     }
 
-    throw new Error(`Unsupported value: ${ stringify(value) }`);
+    if (value.oneOf?.length) {
+        const types = (
+            [...new Set(value.oneOf)].filter(Boolean) as OpenJSONSchema[]
+        )
+            .map(inferType)
+            .flat();
+
+        return {
+            unionOf: types,
+        };
+    }
+
+    throw new Error(`Unsupported value: ${stringify(value)}`);
 }
 
-const SUPPORTED_ENUM_TYPES = ['string', 'number'] as const;
+function isUnionType(type: JSONSchemaType): type is JSONSchemaUnionType {
+    return (
+        typeof type === 'object' && 'unionOf' in type && type.unionOf.length > 0
+    );
+}
 
-type SupportedEnumType = typeof SUPPORTED_ENUM_TYPES[number];
+function typeToText(value: JSONSchema6): string {
+    const type = inferType(value);
+
+    if (isUnionType(type)) {
+        const {unionOf} = type;
+
+        return unionOf.join(', ');
+    }
+
+    return `${type}`;
+}
 
 function isSupportedEnumType(enumType: JsType): enumType is SupportedEnumType {
     return SUPPORTED_ENUM_TYPES.some((type) => enumType === type);

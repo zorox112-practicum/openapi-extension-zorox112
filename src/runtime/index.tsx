@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { unescape } from 'html-escaper';
+import React, {useEffect, useState} from 'react';
+import {createPortal} from 'react-dom';
+import {unescape} from 'html-escaper';
 
-import { Sandbox } from './sandbox';
+import {Sandbox} from './sandbox';
 
 import './index.scss';
 
 export const Runtime: React.FC = () => {
-    const [ sandbox, setSandbox ] = useState<HTMLElement | null>(null);
+    const [sandbox, setSandbox] = useState<HTMLElement | null>(null);
 
     useEffect(() => {
         setSandbox(document.querySelector<HTMLElement>('.yfm-sandbox-js'));

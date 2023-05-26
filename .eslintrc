@@ -1,12 +1,13 @@
 {
     "extends": ["eslint:recommended", "plugin:react/recommended"],
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "parserOptions": {
         "ecmaVersion": 2019
     },
     "env": {
         "es6": true,
-        "browser": true
+        "browser": true,
+        "node": true
     },
     "rules": {
         "no-empty": 0,
@@ -59,7 +60,6 @@
         "wrap-iife": [2, "inside"],
         "strict": 1,
         "no-label-var": 2,
-        "no-shadow": 1,
         "no-shadow-restricted-names": 2,
         "no-undef-init": 2,
         "no-use-before-define": [1, {"functions": false}],
@@ -124,7 +124,8 @@
         "files": ["*.ts", "*.tsx"],
         "parser": "@typescript-eslint/parser",
         "parserOptions": {
-            "sourceType": "module"
+            "sourceType": "module",
+            "project": ["./tsconfig.json"]
         },
         "plugins": [
             "@typescript-eslint"
@@ -146,8 +147,7 @@
             "no-use-before-define": 0,
             "@typescript-eslint/no-use-before-define": [1, {"functions": false}],
             "no-useless-constructor": 0,
-            "@typescript-eslint/no-useless-constructor": 2,
-            "@typescript-eslint/class-name-casing": 2,
+            "@typescript-eslint/no-useless-constructor": 2, 
             "@typescript-eslint/member-delimiter-style": 2,
             "@typescript-eslint/member-ordering": [2, {
                 "default": [
@@ -188,7 +188,14 @@
                         "before": false
                     }
                 }
-            }]
+            }],
+            "no-shadow": "off",
+            "@typescript-eslint/no-shadow": ["warn"],
+            "@typescript-eslint/naming-convention": ["error",
+                {"selector": "class", "format": ["PascalCase"]},
+                {"selector": "interface", "format": ["PascalCase"]},
+                {"selector": "typeAlias", "format": ["PascalCase"]}
+            ]
         }
     }],
     "settings": {

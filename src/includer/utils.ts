@@ -12,7 +12,9 @@ export function matchFilter(
 ) {
     const {endpoint: endpointExpr, tag: tagExpr} = filter || {};
     const matchTag = tagExpr ? (tag: Tag) => evalExp(tagExpr as string, {...tag, vars}) : null;
-    const matchEndpoint = endpointExpr ? (endpoint: Endpoint) => evalExp(endpointExpr as string, {...endpoint, vars}) : null;
+    const matchEndpoint = endpointExpr
+        ? (endpoint: Endpoint) => evalExp(endpointExpr, {...endpoint, vars})
+        : null;
 
     return (spec: Specification): void => {
         const {tags, endpoints} = spec;
@@ -25,16 +27,16 @@ export function matchFilter(
 
         for (const [, tag] of tags) {
             // eslint-disable-next-line no-shadow
-            const {endpoints} = tag;
+            const {endpoints: endpointsOfTag} = tag;
 
             if (matchTag && matchTag(tag)) {
-                for (const endpoint of endpoints) {
+                for (const endpoint of endpointsOfTag) {
                     action(endpoint, tag);
                 }
             }
 
             if (matchEndpoint) {
-                for (const endpoint of endpoints) {
+                for (const endpoint of endpointsOfTag) {
                     if (matchEndpoint(endpoint)) {
                         action(endpoint, tag);
                     }

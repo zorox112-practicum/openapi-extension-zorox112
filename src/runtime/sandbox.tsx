@@ -1,11 +1,11 @@
-import type { FormState } from './types';
-import React, { useState, useRef } from 'react';
-import { Button } from '@gravity-ui/uikit';
-import { Column, Params, Body, Result } from './components';
+import type {FormState} from './types';
+import React, {useState, useRef} from 'react';
+import {Button} from '@gravity-ui/uikit';
+import {Column, Params, Body, Result} from './components';
 
-import { SandboxProps } from '../../types';
-import { Text, yfmSandbox } from '../constants';
-import { prepareRequest, prepareHeaders, collectValues, collectErrors } from './utils';
+import {SandboxProps} from '../types';
+import {Text, yfmSandbox} from '../plugin/constants';
+import {prepareRequest, prepareHeaders, collectValues, collectErrors} from './utils';
 
 import './sandbox.scss';
 
@@ -17,7 +17,7 @@ export const Sandbox: React.FC<SandboxProps> = (props) => {
         headers: useRef(null),
         body: useRef(null),
     };
-    const [ request, setRequest ] = useState<Promise<Response> | null>(null);
+    const [request, setRequest] = useState<Promise<Response> | null>(null);
 
     const onSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -27,7 +27,7 @@ export const Sandbox: React.FC<SandboxProps> = (props) => {
         }
 
         const values = collectValues(refs) as FormState;
-        const { url, headers, body } = prepareRequest((props.host ?? '') + '/' + props.path, values);
+        const {url, headers, body} = prepareRequest((props.host ?? '') + '/' + props.path, values);
 
         setRequest(fetch(url, {
             method: props.method,

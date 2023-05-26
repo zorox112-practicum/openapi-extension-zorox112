@@ -1,4 +1,5 @@
 import {JSONSchema6} from 'json-schema';
+import {SPEC_RENDER_MODE_DEFAULT, SPEC_RENDER_MODE_HIDDEN, SUPPORTED_ENUM_TYPES} from './includer/constants';
 
 export const titleDepths = [1, 2, 3, 4, 5, 6] as const;
 
@@ -31,7 +32,11 @@ export type OpenapiOperation = {
     servers?: Servers;
     parameters?: Parameters;
     responses?: {};
-    requestBody?: any;
+    requestBody?: {
+        required?: boolean;
+        description?: string;
+        content: { [ContentType: string]: { schema: JSONSchema6} };
+    };
     security?: Array<Record<string, Security>>;
     'x-navtitle': string[];
 };
@@ -68,6 +73,7 @@ export type Tag = {
 
 export type Endpoints = Endpoint[];
 
+
 export type Endpoint = {
     id: string;
     operationId?: string;
@@ -82,6 +88,7 @@ export type Endpoint = {
     requestBody?: Schema;
     security: Security[];
     noindex?: boolean;
+    hidden?: boolean;
 };
 
 export type Specification = {
@@ -146,14 +153,20 @@ export type Refs = { [typeName: string]: JSONSchema6 };
 
 export type JsType = 'string' | 'number' | 'bigint' | 'boolean' | 'symbol' | 'undefined' | 'object' | 'function';
 
-export enum LeadingPageSpecRenderMode {
-    Default = 'inline',
-    Hidden = 'hidden'
-}
+export type LeadingPageSpecRenderMode = typeof SPEC_RENDER_MODE_DEFAULT | typeof SPEC_RENDER_MODE_HIDDEN;
 
 export enum LeadingPageMode {
     Section = 'section',
     Leaf = 'leaf',
+}
+
+export type SupportedEnumType = typeof SUPPORTED_ENUM_TYPES[number];
+
+export enum Stage {
+    NEW = 'new',
+    PREVIEW = 'preview',
+    TECH_PREVIEW = 'tech-preview',
+    SKIP = 'skip',
 }
 
 export type LeadingPageParams = {
@@ -174,8 +187,12 @@ export type OpenApiIncluderParams = {
     leadingPage?: LeadingPageParams;
     filter?: OpenApiFilter;
     noindex?: OpenApiFilter;
+    hidden?: OpenApiFilter;
     sandbox?: {
         tabName?: string;
         host?: string;
     };
 };
+
+export type OpenJSONSchema = JSONSchema6 & { example?: any };
+export type OpenJSONSchemaDefinition = OpenJSONSchema | boolean;

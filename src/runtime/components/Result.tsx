@@ -1,8 +1,8 @@
-import type { ResponseState, ErrorState } from '../types';
-import React, { useState, useEffect } from 'react';
-import { Loader } from './Loader';
-import { Response } from './Response';
-import { Error } from './Error';
+import type {ResponseState, ErrorState} from '../types';
+import React, {useState, useEffect} from 'react';
+import {Loader} from './Loader';
+import {Response} from './Response';
+import {Error} from './Error';
 
 export const getAttachName = (response: Response): string => {
     const unknownName = 'unknown file';
@@ -52,9 +52,9 @@ async function processResponse(response: Response): Promise<ResponseState> {
 
 export const Result: React.FC<{
     request: Promise<Response>;
-}> = ({ request }) => {
-    const [ response, setResponse ] = useState<ResponseState | null>(null);
-    const [ error, setError ] = useState<ErrorState | null>(null);
+}> = ({request}) => {
+    const [response, setResponse] = useState<ResponseState | null>(null);
+    const [error, setError] = useState<ErrorState | null>(null);
 
     useEffect(() => {
         const scope = request;
@@ -69,7 +69,7 @@ export const Result: React.FC<{
             setResponse(null);
             setError(null);
         };
-    }, [ request ]);
+    }, [request]);
 
     return (
         <>

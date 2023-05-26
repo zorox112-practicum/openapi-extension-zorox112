@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Text, Card, ClipboardButton } from '@gravity-ui/uikit';
+import React, {useState, useEffect} from 'react';
+import {Text, Card, ClipboardButton} from '@gravity-ui/uikit';
 
-import type { ResponseState } from '../types';
-import { Text as TextEnum, yfmSandbox } from '../../constants';
-import { Column } from './';
+import type {ResponseState} from '../types';
+import {Text as TextEnum, yfmSandbox} from '../../plugin/constants';
+import {Column} from '.';
 
 export const Response: React.FC<{
     response: ResponseState;
-}> = ({ response }) => {
-    const { url, status, file, text } = response;
+}> = ({response}) => {
+    const {url, status, file, text} = response;
 
-    const [ fileUrl, setFileUrl ] = useState<string | null>(null);
+    const [fileUrl, setFileUrl] = useState<string | null>(null);
 
     useEffect(() => {
         if (file) {
@@ -22,7 +22,7 @@ export const Response: React.FC<{
                 window.URL.revokeObjectURL(fileUrl);
             }
         };
-    }, [ file ]);
+    }, [file]);
 
     return <Column gap={ 10 }>
         <Text variant="header-2">{ TextEnum.RESPONSE_SECTION_TITLE }</Text>

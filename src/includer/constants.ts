@@ -1,4 +1,5 @@
 import {JSONSchema6} from 'json-schema';
+import {LeadingPageMode} from '../types';
 
 export const EOL = '\n';
 export const TAG_NAMES_FIELD = 'x-navtitle';
@@ -20,6 +21,10 @@ export const DISABLE_LINTER_DIRECTIVE = 'markdownlint-disable-file';
 export const SPEC_SECTION_NAME = 'Specification';
 export const SPEC_SECTION_TYPE = 'Open API';
 export const LEADING_PAGE_NAME_DEFAULT = 'Overview';
-
+export const SPEC_RENDER_MODE_HIDDEN = 'hidden';
+export const SPEC_RENDER_MODE_DEFAULT = 'inline';
+export const SUPPORTED_ENUM_TYPES = ['string', 'number'] as const;
 export const PRIMITIVE_JSON6_SCHEMA_TYPES =
     new Set<JSONSchema6['type']>(['string', 'boolean', 'null', 'number', 'integer']);
+export const SPEC_RENDER_MODES = new Set<string>([SPEC_RENDER_MODE_DEFAULT, SPEC_RENDER_MODE_HIDDEN]);
+export const LEADING_PAGE_MODES = new Set<string>([LeadingPageMode.Leaf, LeadingPageMode.Section]);

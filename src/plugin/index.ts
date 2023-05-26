@@ -1,7 +1,7 @@
 import type StateBlock from 'markdown-it/lib/rules_block/state_block';
 import type Token from 'markdown-it/lib/token';
-import type { MarkdownItPluginCb } from '@doc-tools/transform/lib/plugins/typings';
-import { escape } from 'html-escaper';
+import type {MarkdownItPluginCb} from '@doc-tools/transform/lib/plugins/typings';
+import {escape} from 'html-escaper';
 
 const startMark = '{% openapi sandbox %}';
 const endMark = '{% end openapi sandbox %}';
@@ -60,7 +60,7 @@ function parserOpenapiSandboxBlock(state: StateBlock, start: number, end: number
     token.content = (firstLine ? firstLine + '\n' : '')
         + state.getLines(start + 1, next, state.tShift[start], true)
         + (lastLine ? lastLine : '');
-    token.map = [ start, state.line ];
+    token.map = [start, state.line];
     token.markup = startMark;
     return true;
 }
@@ -69,7 +69,7 @@ const openapiSandboxBlock = (jsonString: string) => {
     try {
         const props = escape(jsonString);
 
-        return `<div class="yfm-sandbox-js" data-props="${ props }"></div>`;
+        return `<div class="yfm-sandbox-js" data-props="${props}"></div>`;
     } catch (error) {
         console.log(error);
         return jsonString;
@@ -89,5 +89,6 @@ const openapiSandboxPlugin: MarkdownItPluginCb = (md) => {
 
     md.renderer.rules.openapi_sandbox_block = openapiSandboxRenderer;
 };
+
 
 export default openapiSandboxPlugin;

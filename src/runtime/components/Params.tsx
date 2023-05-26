@@ -1,11 +1,11 @@
-import type { Field, Nullable } from '../types';
+import type {Field, Nullable} from '../types';
 import React from 'react';
-import { TextInput, Text } from '@gravity-ui/uikit';
+import {TextInput, Text} from '@gravity-ui/uikit';
 
-import { Primitive, Parameter, Parameters } from '../../../types';
+import {Primitive, Parameter, Parameters} from '../../types';
 
-import { Column } from './Column';
-import { merge } from '../utils';
+import {Column} from './Column';
+import {merge} from '../utils';
 
 function validate(
     params: Parameters | undefined,
@@ -13,7 +13,7 @@ function validate(
 ): Nullable<Record<string, string>> {
     const errors = merge(params || [], (param) => (
         param.required && !values[param.name]
-            ? { [param.name]: 'Required' }
+            ? {[param.name]: 'Required'}
             : undefined
     ));
 
@@ -50,8 +50,8 @@ export class Params extends React.Component<{
     }
 
     render() {
-        const { params, title } = this.props;
-        const { values, errors } = this.state;
+        const {params, title} = this.props;
+        const {values, errors} = this.state;
 
         if (!params || !params.length) {
             return null;
@@ -85,7 +85,7 @@ export class Params extends React.Component<{
     validate() {
         const errors = validate(this.props.params, this.state.values);
 
-        this.setState({ errors });
+        this.setState({errors});
 
         return errors;
     }

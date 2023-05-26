@@ -1,6 +1,6 @@
-import type { RefObject } from 'react';
-import type { Parameters, Security } from '../../types';
-import type { Field, FormState } from './types';
+import type {RefObject} from 'react';
+import type {Parameters, Security} from '../types';
+import type {Field, FormState} from './types';
 
 export const merge = <T, R>(items: T[], iterator: (item: T) => Record<string, R> | undefined) => {
     return (items).reduce(
@@ -9,13 +9,13 @@ export const merge = <T, R>(items: T[], iterator: (item: T) => Record<string, R>
     );
 };
 
-export const prepareRequest = (urlTemplate: string, { search, headers, path, body }: FormState) => {
-    const requestUrl = Object.entries(path).reduce((acc, [ key, value ]) => {
-        return acc.replace(`{${ key }}`, encodeURIComponent(value));
+export const prepareRequest = (urlTemplate: string, {search, headers, path, body}: FormState) => {
+    const requestUrl = Object.entries(path).reduce((acc, [key, value]) => {
+        return acc.replace(`{${key}}`, encodeURIComponent(value));
     }, urlTemplate);
 
     const searchParams = new URLSearchParams();
-    Object.entries(search).forEach(([ key, value ]) => {
+    Object.entries(search).forEach(([key, value]) => {
         searchParams.append(key, value);
     });
 
@@ -24,19 +24,19 @@ export const prepareRequest = (urlTemplate: string, { search, headers, path, bod
 
     return {
         url,
-        headers: body ? { ...headers, 'Content-Type': 'application/json' } : headers,
+        headers: body ? {...headers, 'Content-Type': 'application/json'} : headers,
         // TODO: match request types (www-form-url-encoded should be handled too)
-        body: body ? { body } : {},
+        body: body ? {body} : {},
     };
 };
 
-export const prepareHeaders = ({ headers, security }: {
+export const prepareHeaders = ({headers, security}: {
     security?: Security[];
     headers?: Parameters;
 }) => {
-    const preparedHeaders = headers ? [ ...headers ] : [];
+    const preparedHeaders = headers ? [...headers] : [];
 
-    const hasOAuth2 = security?.find(({ type }) => type === 'oauth2');
+    const hasOAuth2 = security?.find(({type}) => type === 'oauth2');
     if (hasOAuth2) {
         preparedHeaders.push({
             name: 'Authorization',

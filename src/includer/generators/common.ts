@@ -7,7 +7,8 @@ import {
 } from '../constants';
 
 
-import { TitleDepth } from '../../types';
+import {TitleDepth} from '../../types';
+import slugify from 'slugify';
 
 function meta(content: (string | boolean | undefined)[]) {
     const entries = content.filter(Boolean);
@@ -16,19 +17,19 @@ function meta(content: (string | boolean | undefined)[]) {
         return [];
     }
 
-    return EOL + [ '---', ...content.filter(Boolean), '---' ].join(EOL) + EOL;
+    return EOL + ['---', ...content.filter(Boolean), '---'].join(EOL) + EOL;
 }
 
 function list(items: string[]) {
-    return items.map((item) => `- ${ item }`).join(EOL) + EOL;
+    return items.map((item) => `- ${item}`).join(EOL) + EOL;
 }
 
 function link(text: string, src: string) {
-    return `[${ text }](${ src })`;
+    return `[${text}](${src})`;
 }
 
 function title(depth: TitleDepth) {
-    return (content?: string) => content?.length && '#'.repeat(depth) + ` ${ content }`;
+    return (content?: string) => content?.length && '#'.repeat(depth) + ` ${content}`;
 }
 
 function body(text?: string) {
@@ -36,31 +37,31 @@ function body(text?: string) {
 }
 
 function mono(text: string) {
-    return `##${ text }##`;
+    return `##${text}##`;
 }
 
 function bold(text: string) {
-    return `**${ text }**`;
+    return `**${text}**`;
 }
 
 function code(text: string) {
-    return EOL + [ '```', text, '```' ].join(EOL) + EOL;
+    return EOL + ['```', text, '```'].join(EOL) + EOL;
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 function table(data: any[][]) {
-    const [ names, ...rest ] = data;
+    const [names, ...rest] = data;
 
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    const colgen = (col: any) => (Array.isArray(col) ? `${ EOL }${ table(col) }${ EOL }` : escapeTableColContent(` ${ col } `));
+    const colgen = (col: any) => (Array.isArray(col) ? `${EOL}${table(col)}${EOL}` : escapeTableColContent(` ${col} `));
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    const rowgen = (row: any) => `||${ row.map(colgen).join('|') }||`;
+    const rowgen = (row: any) => `||${row.map(colgen).join('|')}||`;
 
-    return `#|${ block([ names.map(bold), ...rest ].map(rowgen)) }|#`;
+    return `#|${block([names.map(bold), ...rest].map(rowgen))}|#`;
 }
 
 function cut(text: string, heading = '') {
-    return block([ `{% cut "${ heading }" %}`, text, '{% endcut %}' ]) + EOL;
+    return block([`{% cut "${heading}" %}`, text, '{% endcut %}']) + EOL;
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -74,20 +75,24 @@ function escapeTableColContent(cellContent: string) {
 }
 
 function page(content: string) {
-    return `${ content }\n${ HTML_COMMENTS_OPEN_DIRECTIVE } ${ DISABLE_LINTER_DIRECTIVE } ${ HTML_COMMENTS_CLOSE_DIRECTIVE }`;
+    return `${content}\n${HTML_COMMENTS_OPEN_DIRECTIVE} ${DISABLE_LINTER_DIRECTIVE} ${HTML_COMMENTS_CLOSE_DIRECTIVE}`;
 }
 
 function tabs(tabsObj: Record<string, string>) {
     return block([
         '{% list tabs %}',
-        Object.entries(tabsObj).map(([ title, value ]) => `- ${ title }
+        Object.entries(tabsObj).map(([tab, value]) => `- ${tab}
 
-  ${ value.replace(/\n/g, '\n  ') }
+  ${value.replace(/\n/g, '\n  ')}
         `).join('\n\n'),
         '{% endlist %}\n',
     ]);
 }
 
-export { meta, list, link, title, body, mono, bold, table, code, cut, block, page, tabs };
+function anchor(ref: string) {
+    return link(ref, `#${slugify(ref).toLowerCase()}`);
+}
 
-export default { meta, list, link, title, body, mono, bold, table, code, cut, block, tabs };
+export {meta, list, link, title, body, mono, bold, table, code, cut, block, page, tabs, anchor};
+
+export default {meta, list, link, title, body, mono, bold, table, code, cut, block, tabs, anchor};

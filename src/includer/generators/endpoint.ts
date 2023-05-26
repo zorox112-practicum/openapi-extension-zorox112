@@ -1,7 +1,7 @@
-import { JSONSchema6 } from 'json-schema';
+import {JSONSchema6} from 'json-schema';
 import stringify from 'json-stringify-safe';
 
-import { meta, page, block, title, body, table, code, cut, tabs, bold } from './common';
+import {meta, page, block, title, body, table, code, cut, tabs, bold} from './common';
 import {
     INFO_TAB_NAME,
     SANDBOX_TAB_NAME,
@@ -25,11 +25,11 @@ import {
     Server,
     Security,
 } from '../../types';
-import { prepareTableRowData, prepareSampleObject, tableFromSchema, tableParameterName } from './traverse';
-import { concatNewLine } from '../utils';
-import { openapiBlock } from './constants';
+import {prepareTableRowData, prepareSampleObject, tableFromSchema, tableParameterName, TableRef} from './traverse';
+import {concatNewLine} from '../utils';
+import {openapiBlock} from './constants';
 
-function endpoint(allRefs: Refs, data: Endpoint, sandboxPlugin: { host?: string; tabName?: string } | undefined) {
+function endpoint(allRefs: Refs, data: Endpoint, sandboxPlugin: {host?: string; tabName?: string} | undefined) {
     // try to remember, which tables we are already printed on page
     const pagePrintedRefs = new Set<string>();
 
@@ -62,25 +62,25 @@ function endpoint(allRefs: Refs, data: Endpoint, sandboxPlugin: { host?: string;
         meta([
             data.noindex && 'noIndex: true',
         ]),
-        `<div class="${ openapiBlock() }">`,
+        `<div class="${openapiBlock()}">`,
         page(endpointPage),
         '</div>',
     ]).trim();
 }
 
 function sandbox({
-                     params,
-                     host,
-                     path,
-                     security,
-                     requestBody,
-                     method,
-                 }: {
+    params,
+    host,
+    path,
+    security,
+    requestBody,
+    method,
+}: {
     params?: Parameters;
     host?: string;
     path: string;
     security: Security[];
-    requestBody?: any;
+    requestBody?: Schema;
     method: string;
 }) {
     const pathParams = params?.filter((param: Parameter) => param.in === 'path');
@@ -110,17 +110,17 @@ function sandbox({
 }
 
 function request(data: Endpoint) {
-    const { path, method, servers } = data;
-    const requestTableCols = [ 'method', 'url' ];
+    const {path, method, servers} = data;
+    const requestTableCols = ['method', 'url'];
 
-    const hrefs = block(servers.map(({ url }) => code(url + '/' + path)));
+    const hrefs = block(servers.map(({url}) => code(url + '/' + path)));
 
-    const requestTableRow = [ code(method.toUpperCase()), hrefs ];
+    const requestTableRow = [code(method.toUpperCase()), hrefs];
 
     if (servers.every((server: Server) => server.description)) {
         requestTableCols.push('description');
 
-        const descriptions = block(servers.map(({ description }) => code(description as string)));
+        const descriptions = block(servers.map(({description}) => code(description as string)));
 
         requestTableRow.push(descriptions);
     }
@@ -144,13 +144,13 @@ function parameters(allRefs: Refs, pagePrintedRefs: Set<string>, params?: Parame
         'cookie': COOKIES_SECTION_NAME,
     };
     const tables = [];
-    for (const [ inValue, heading ] of Object.entries(sections)) {
+    for (const [inValue, heading] of Object.entries(sections)) {
         const inParams = params?.filter((param: Parameter) => param.in === inValue);
         if (inParams?.length) {
             const rows: string[][] = [];
-            const tableRefs: string[] = [];
+            const tableRefs: TableRef[] = [];
             for (const param of inParams) {
-                const { cells, ref } = parameterRow(allRefs, param);
+                const {cells, ref} = parameterRow(allRefs, param);
                 rows.push(cells);
                 if (ref) {
                     // there may be enums, which should be printed in separate tables
@@ -159,7 +159,7 @@ function parameters(allRefs: Refs, pagePrintedRefs: Set<string>, params?: Parame
             }
             tables.push(title(3)(heading));
             tables.push(table([
-                [ 'Name', 'Type', 'Description' ],
+                ['Name', 'Type', 'Description'],
                 ...rows,
             ]));
             tables.push(...printAllTables(allRefs, pagePrintedRefs, tableRefs));
@@ -168,7 +168,7 @@ function parameters(allRefs: Refs, pagePrintedRefs: Set<string>, params?: Parame
     return block(tables);
 }
 
-function parameterRow(allRefs: Refs, param: Parameter): { cells: string[]; ref?: string } {
+function parameterRow(allRefs: Refs, param: Parameter): {cells: string[]; ref?: TableRef} {
     const row = prepareTableRowData(allRefs, param.schema, param.name);
     let description = param.description ?? '';
     if (!row.ref && row.description.length) {
@@ -176,13 +176,13 @@ function parameterRow(allRefs: Refs, param: Parameter): { cells: string[]; ref?:
         description = concatNewLine(description, row.description);
     }
     if (param.example !== undefined) {
-        description = concatNewLine(description, `Example: \`${ param.example }\``);
+        description = concatNewLine(description, `Example: \`${param.example}\``);
     }
     if (param.default !== undefined) {
-        description = concatNewLine(description, `Default: \`${ param.default }\``);
+        description = concatNewLine(description, `Default: \`${param.default}\``);
     }
     return {
-        cells: [ tableParameterName(param.name, param.required), row.type, description ],
+        cells: [tableParameterName(param.name, param.required), row.type, description],
         ref: row.ref,
     };
 }
@@ -192,7 +192,7 @@ function openapiBody(allRefs: Refs, pagePrintedRefs: Set<string>, obj?: Schema) 
         return '';
     }
 
-    const { type = 'schema', schema } = obj;
+    const {type = 'schema', schema} = obj;
     const sectionTitle = title(4)('Body');
 
     let result = [
@@ -203,16 +203,16 @@ function openapiBody(allRefs: Refs, pagePrintedRefs: Set<string>, obj?: Schema) 
         result = [
             ...result,
             type,
-            `${ bold('Type:') } ${ schema.type }`,
-            schema.format && `${ bold('Format:') } ${ schema.format }`,
-            schema.description && `${ bold('Description:') } ${ schema.description }`,
+            `${bold('Type:')} ${schema.type}`,
+            schema.format && `${bold('Format:')} ${schema.format}`,
+            schema.description && `${bold('Description:')} ${schema.description}`,
         ];
 
 
         return block(result);
     }
 
-    const { content, tableRefs } = tableFromSchema(allRefs, schema);
+    const {content, tableRefs} = tableFromSchema(allRefs, schema);
     const parsedSchema = prepareSampleObject(schema);
 
     result = [
@@ -230,21 +230,33 @@ function isPrimitive(type: JSONSchema6['type']) {
     return PRIMITIVE_JSON6_SCHEMA_TYPES.has(type);
 }
 
-function printAllTables(allRefs: Refs, pagePrintedRefs: Set<string>, tableRefs: string[]): string[] {
+function printAllTables(allRefs: Refs, pagePrintedRefs: Set<string>, tableRefs: TableRef[]): string[] {
     const result = [];
+
     while (tableRefs.length > 0) {
         const tableRef = tableRefs.shift();
-        if (tableRef && !pagePrintedRefs.has(tableRef)) {
-            const ref = allRefs[tableRef];
-            const schemaTable = tableFromSchema(allRefs, ref);
-            result.push(block([
-                title(3)(tableRef),
-                ref.description,
-                schemaTable.content,
-            ]));
-            tableRefs.push(...schemaTable.tableRefs);
-            pagePrintedRefs.add(tableRef);
+
+        if (!tableRef) {
+            continue;
         }
+
+        const {reusable, name} = tableRef;
+        const shouldRender = reusable || !pagePrintedRefs.has(name);
+        if (!shouldRender) {
+            continue;
+        }
+
+        const schema = allRefs[name];
+        const schemaTable = tableFromSchema(allRefs, schema);
+
+        result.push(block([
+            title(3)(name),
+            schema.description,
+            schemaTable.content,
+        ]));
+        tableRefs.push(...schemaTable.tableRefs);
+        pagePrintedRefs.add(name);
+
     }
     return result;
 }
@@ -260,7 +272,7 @@ function response(allRefs: Refs, visited: Set<string>, resp: Response) {
     let header = resp.code;
 
     if (resp.statusText.length) {
-        header += ` ${ resp.statusText }`;
+        header += ` ${resp.statusText}`;
     }
 
     return block([
@@ -270,6 +282,6 @@ function response(allRefs: Refs, visited: Set<string>, resp: Response) {
     ]);
 }
 
-export { endpoint };
+export {endpoint};
 
-export default { endpoint };
+export default {endpoint};

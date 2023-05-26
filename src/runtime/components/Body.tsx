@@ -1,10 +1,10 @@
-import type { Field, Nullable } from '../types';
+import type {Field, Nullable} from '../types';
 import React from 'react';
-import { TextInput, Text } from '@gravity-ui/uikit';
+import {TextInput, Text} from '@gravity-ui/uikit';
 
-import { Text as TextEnum } from '../../constants';
+import {Text as TextEnum} from '../../plugin/constants';
 
-import { Column } from './Column';
+import {Column} from './Column';
 
 type Props = {
     value: Nullable<string>;
@@ -26,7 +26,7 @@ export class Body extends React.Component<Props, State> implements Field<string,
     }
 
     render() {
-        const { error, value } = this.state;
+        const {error, value} = this.state;
 
         if (value === undefined || value === null) {
             return null;
@@ -57,7 +57,7 @@ export class Body extends React.Component<Props, State> implements Field<string,
     validate() {
         const error = this.isRequired && !this.state.value ? 'Required' : undefined;
 
-        this.setState({ error });
+        this.setState({error});
 
         return error;
     }

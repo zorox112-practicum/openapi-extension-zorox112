@@ -9,6 +9,7 @@ esbuild.build({
     bundle: true,
     sourcemap: true,
     entryPoints: ['src/plugin/index.ts'],
+    target: '',
     outfile: 'plugin/index.js',
 });
 
@@ -17,8 +18,16 @@ esbuild.build({
     platform: 'browser',
     bundle: true,
     sourcemap: true,
-    entryPoints: ['src/plugin/public/index.tsx'],
-    outfile: 'plugin/public/index.js',
+    entryPoints: ['src/runtime/index.tsx'],
+    outfile: 'runtime/index.js',
     external: external,
-    plugins: [sassPlugin()]
+    plugins: [sassPlugin()],
+});
+
+esbuild.build({
+    tsconfig: './tsconfig.json',
+    platform: 'node',
+    sourcemap: true,
+    entryPoints: ['src/includer/index.ts'],
+    outfile: 'includer/index.js',
 });
