@@ -4,3 +4,7 @@
 /runtime
 /index.d.ts
 /types.d.ts
+/types.js
+
+.vscode
+.idea

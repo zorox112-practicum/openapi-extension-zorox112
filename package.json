@@ -1,17 +1,29 @@
 {
   "name": "@diplodoc/openapi-extension",
-  "version": "1.0.10",
+  "version": "1.0.19",
   "description": "OpenAPI plugin for Diplodoc transformer and builder",
   "main": "index.js",
   "types": "index.d.ts",
   "exports": {
-    ".": "./plugin/index.js",
-    "./includer": "./includer/index.js",
-    "./runtime": "./runtime/index.js"
+    ".": {
+      "default": "./plugin/index.min.js",
+      "production": "./plugin/index.min.js",
+      "development": "./plugin/index.js"
+    },
+    "./includer": {
+      "node": "./includer/index.js"
+    },
+    "./runtime": {
+      "default": "./runtime/index.min.js",
+      "production": "./runtime/index.min.js",
+      "development": "./runtime/index.js"
+    }
   },
   "scripts": {
     "build": "run-p build:*",
-    "build:plugin": "node ./esbuild/plugin.js",
+    "build:plugin": "node esbuild",
+    "build:common": "swc src/types.ts --out-dir .",
+    "build:includer": "swc --only src/includer/**/* src/includer/* --out-dir .",
     "build:declarations": "tsc --emitDeclarationOnly --outDir .",
     "prepublish": "npm run build",
     "test": "jest",
@@ -27,7 +39,9 @@
   "files": [
     "plugin",
     "runtime",
-    "includer"
+    "includer",
+    "types.js",
+    "types.d.ts"
   ],
   "peerDependencies": {
     "@gravity-ui/uikit": "^4.8.1",
@@ -38,6 +52,8 @@
     "@babel/eslint-parser": "^7.21.8",
     "@doc-tools/transform": "^2.16.4",
     "@gravity-ui/uikit": "^4.8.1",
+    "@swc/cli": "^0.1.62",
+    "@swc/core": "^1.3.60",
     "@types/html-escaper": "^3.0.0",
     "@types/js-yaml": "^4.0.5",
     "@types/json-schema": "^7.0.11",
@@ -57,7 +73,7 @@
     "npm-run-all": "^4.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.4"
   },
   "dependencies": {
     "@apidevtools/swagger-parser": "^10.1.0",

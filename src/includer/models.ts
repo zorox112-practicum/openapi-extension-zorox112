@@ -54,7 +54,7 @@ export interface YfmTocInclude {
 export type YfmTocIncluders = YfmTocIncluder[];
 
 export type YfmTocIncluder = {
-    name: string;
+    name: 'openapi';
     // arbitrary includer parameters
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } & Record<string, unknown>;
@@ -62,7 +62,7 @@ export type YfmTocIncluder = {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Includer<FnParams = any> = {
-    name: string;
+    name: 'openapi';
     includerFunction: IncluderFunction<FnParams>;
 };
 

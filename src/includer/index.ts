@@ -165,6 +165,12 @@ export type GenerateContentParams = {
     hidden?: OpenApiIncluderParams['filter'];
 };
 
+
+type EndpointRoute = {
+    path: string;
+    content: string;
+};
+
 async function generateContent(params: GenerateContentParams): Promise<void> {
     const {
         data,
@@ -190,7 +196,7 @@ async function generateContent(params: GenerateContentParams): Promise<void> {
     const leadingPageSpecRenderMode = leadingPage?.spec?.renderMode ?? SPEC_RENDER_MODE_DEFAULT;
     assertSpecRenderMode(leadingPageSpecRenderMode);
 
-    const results = [];
+    const results: EndpointRoute[] = [];
 
     const info: Info = parsers.info(data);
     let spec = parsers.paths(data, parsers.tags(data));

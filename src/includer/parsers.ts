@@ -127,7 +127,7 @@ function pathsFromSpec(spec: OpenapiSpec, tagsByID: Map<string, Tag>): Specifica
             requestBody,
             security = [],
         } = endpoint;
-        console.log('WTF??? ', requestBody);
+
         const parsedSecurity = [...security, ...globalSecurity].reduce((arr, item) => {
             arr.push(...Object.keys(item).reduce((acc, key) => {
                 // @ts-ignore
