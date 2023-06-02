@@ -1,32 +1,36 @@
 {
   "name": "@diplodoc/openapi-extension",
-  "version": "1.0.19",
+  "version": "1.1.3",
   "description": "OpenAPI plugin for Diplodoc transformer and builder",
   "main": "index.js",
   "types": "index.d.ts",
   "exports": {
     ".": {
+      "require": "./plugin/cjs/index.min.js",
       "default": "./plugin/index.min.js",
       "production": "./plugin/index.min.js",
       "development": "./plugin/index.js"
     },
     "./includer": {
-      "node": "./includer/index.js"
+      "require": "./includer/index.js",
+      "default": "./includer/index.js"
     },
     "./runtime": {
+      "require": "./runtime/cjs/index.min.js",
       "default": "./runtime/index.min.js",
       "production": "./runtime/index.min.js",
       "development": "./runtime/index.js"
     }
   },
   "scripts": {
+    "prebuild": "rimraf plugin includer runtime",
     "build": "run-p build:*",
-    "build:plugin": "node esbuild",
-    "build:common": "swc src/types.ts --out-dir .",
-    "build:includer": "swc --only src/includer/**/* src/includer/* --out-dir .",
+    "build:plugin": "node build/esbuild.js",
+    "build:includer": "node build/includer.js",
     "build:declarations": "tsc --emitDeclarationOnly --outDir .",
     "prepublish": "npm run build",
     "test": "jest",
+    "version": "1.0.20",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "typecheck": "tsc --noEmit"
@@ -39,9 +43,7 @@
   "files": [
     "plugin",
     "runtime",
-    "includer",
-    "types.js",
-    "types.d.ts"
+    "includer"
   ],
   "peerDependencies": {
     "@gravity-ui/uikit": "^4.8.1",
@@ -50,6 +52,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.21.8",
+    "@babel/preset-env": "^7.22.4",
     "@doc-tools/transform": "^2.16.4",
     "@gravity-ui/uikit": "^4.8.1",
     "@swc/cli": "^0.1.62",
@@ -68,11 +71,13 @@
     "esbuild-sass-plugin": "^2.8.0",
     "eslint": "^8.41.0",
     "eslint-plugin-react": "^7.32.2",
+    "glob": "^10.2.6",
     "jest": "^29.5.0",
     "markdown-it": "^13.0.1",
     "npm-run-all": "^4.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "rimraf": "^5.0.1",
     "typescript": "^5.0.4"
   },
   "dependencies": {
