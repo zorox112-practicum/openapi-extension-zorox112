@@ -33,7 +33,7 @@
     "build:plugin": "node build/esbuild.js",
     "build:includer": "node build/includer.js",
     "build:declarations": "tsc --emitDeclarationOnly --outDir .",
-    "prepublish": "npm run build",
+    "prepublish": "git clean -fdx && npm run build",
     "test": "jest",
     "version": "1.0.20",
     "lint": "eslint .",
