@@ -7,9 +7,9 @@
   "exports": {
     ".": {
       "require": "./plugin/cjs/index.min.js",
-      "default": "./plugin/index.min.js",
       "production": "./plugin/index.min.js",
-      "development": "./plugin/index.js"
+      "development": "./plugin/index.js",
+      "default": "./plugin/index.min.js"
     },
     "./includer": {
       "require": "./includer/index.js",
@@ -17,9 +17,9 @@
     },
     "./runtime": {
       "require": "./runtime/cjs/index.min.js",
-      "default": "./runtime/index.min.js",
       "production": "./runtime/index.min.js",
-      "development": "./runtime/index.js"
+      "development": "./runtime/index.js",
+      "default": "./runtime/index.min.js"
     },
     "./runtime/styles": {
       "production": "./runtime/index.min.css",
