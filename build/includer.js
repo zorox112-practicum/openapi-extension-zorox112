@@ -4,15 +4,16 @@ const esbuild = require('esbuild')
 
 const IN_PATH = path.resolve('src', 'includer')
 const OUT_PATH = 'includer'
+const FORMATS = ['cjs', 'esm']
 
 const tsFiles = globSync(`${IN_PATH}/**/*.ts`)
 
-const builds = Promise.all(tsFiles.map((name) => {
-    const newFilePath = path.resolve(OUT_PATH, name.substring(IN_PATH.length + 1))
+const build = (files, format) => Promise.all(files.map((name) => {
+    const newFilePath = path.resolve(OUT_PATH, format, name.substring(IN_PATH.length + 1))
     const jsFile = newFilePath.replace('.ts', '.js')
 
     return esbuild.build({
-            format: 'cjs',
+            format,
             target: 'es2016',
             entryPoints: [name],
             outfile: jsFile,
@@ -20,4 +21,4 @@ const builds = Promise.all(tsFiles.map((name) => {
     })
 }))
 
-builds.then((result) => console.log(`Compiled ${result.length} files`))
+const result = Promise.all(FORMATS.map((format) => build(tsFiles, format)))

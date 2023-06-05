@@ -1,6 +1,6 @@
 {
   "name": "@diplodoc/openapi-extension",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "OpenAPI plugin for Diplodoc transformer and builder",
   "main": "index.js",
   "types": "index.d.ts",
@@ -12,8 +12,9 @@
       "default": "./plugin/index.min.js"
     },
     "./includer": {
-      "require": "./includer/index.js",
-      "default": "./includer/index.js"
+      "require": "./includer/cjs/index.js",
+      "default": "./includer/esm/index.js",
+      "types": "./includer/index.d.ts"
     },
     "./runtime": {
       "require": "./runtime/cjs/index.min.js",
@@ -32,6 +33,7 @@
     "build": "run-p build:*",
     "build:plugin": "node build/esbuild.js",
     "build:includer": "node build/includer.js",
+    "build:common": "tsc src/types.ts --outDir .",
     "build:declarations": "tsc --emitDeclarationOnly --outDir .",
     "prepublish": "npm run build",
     "test": "jest",
@@ -48,7 +50,9 @@
   "files": [
     "plugin",
     "runtime",
-    "includer"
+    "includer",
+    "types.js",
+    "types.d.ts"
   ],
   "peerDependencies": {
     "@gravity-ui/uikit": "^4.8.1",
