@@ -6,7 +6,7 @@ import {concatNewLine} from '../utils';
 import {openapiBlock} from './constants';
 import {SUPPORTED_ENUM_TYPES, EOL} from '../constants';
 
-import {JsType, Refs, SupportedEnumType, OpenJSONSchema, OpenJSONSchemaDefinition} from '../../types';
+import {JsType, Refs, SupportedEnumType, OpenJSONSchema, OpenJSONSchemaDefinition} from '../models';
 
 type TableRow = [string, string, string];
 

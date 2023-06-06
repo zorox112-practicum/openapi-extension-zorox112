@@ -1,6 +1,9 @@
 import {JSONSchema6} from 'json-schema';
-import {LeadingPageMode} from '../types';
 
+export enum LeadingPageMode {
+    Section = 'section',
+    Leaf = 'leaf',
+}
 export const EOL = '\n';
 export const TAG_NAMES_FIELD = 'x-navtitle';
 export const BLOCK = EOL.repeat(2);

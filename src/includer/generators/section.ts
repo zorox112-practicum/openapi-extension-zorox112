@@ -2,7 +2,7 @@
 import {page, block, title, body, link, list} from './common';
 import {ENDPOINTS_SECTION_NAME} from '../constants';
 
-import {Tag, Endpoint, Endpoints} from '../../types';
+import {Tag, Endpoint, Endpoints} from '../models';
 
 function section(tag: Tag) {
     const sectionPage = [

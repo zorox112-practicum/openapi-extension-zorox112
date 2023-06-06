@@ -16,7 +16,7 @@ import {
     Response,
     Endpoint,
     Specification,
-} from '../types';
+} from './models';
 
 function info(spec: OpenapiSpec): Info {
     const {info: {title, description, version, termsOfService, license, contact}} = spec;
@@ -71,7 +71,9 @@ function tagsFromSpec(spec: OpenapiSpec): Map<string, Tag> {
     }
 
     for (const tag of tags) {
-        if (!tag?.name?.length) { continue; }
+        if (!tag?.name?.length) {
+            continue;
+        }
 
         const id = slugify(tag.name);
 

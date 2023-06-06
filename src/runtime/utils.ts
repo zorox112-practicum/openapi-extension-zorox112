@@ -1,6 +1,5 @@
 import type {RefObject} from 'react';
-import type {Parameters, Security} from '../types';
-import type {Field, FormState} from './types';
+import type {Field, FormState, Parameters, Security} from './types';
 
 export const merge = <T, R>(items: T[], iterator: (item: T) => Record<string, R> | undefined) => {
     return (items).reduce(

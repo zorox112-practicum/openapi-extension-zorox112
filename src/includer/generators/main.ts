@@ -12,7 +12,7 @@ import {
     SPEC_SECTION_TYPE,
 } from '../constants';
 
-import {Info, Contact, ContactSource, Tag, Specification, LeadingPageSpecRenderMode} from '../../types';
+import {Info, Contact, ContactSource, Tag, Specification, LeadingPageSpecRenderMode} from '../models';
 import {mdPath, sectionName} from '../index';
 
 export type MainParams = {

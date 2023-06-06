@@ -7,7 +7,7 @@ import {
 } from '../constants';
 
 
-import {TitleDepth} from '../../types';
+import {TitleDepth} from '../models';
 import slugify from 'slugify';
 
 function meta(content: (string | boolean | undefined)[]) {

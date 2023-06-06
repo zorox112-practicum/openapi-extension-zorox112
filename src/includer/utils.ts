@@ -1,4 +1,4 @@
-import {Endpoint, OpenApiIncluderParams, Specification, Tag} from '../types';
+import {Endpoint, OpenApiIncluderParams, Specification, Tag} from './models';
 import {evalExp} from '@doc-tools/transform/lib/liquid/evaluation';
 
 export function concatNewLine(prefix: string, suffix: string) {

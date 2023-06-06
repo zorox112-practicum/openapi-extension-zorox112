@@ -8,13 +8,29 @@ import {dump} from 'js-yaml';
 import parsers from './parsers';
 import generators from './generators';
 
-import {IncluderFunctionParams, YfmPreset, YfmToc, YfmTocItem} from './models';
 import SwaggerParser from '@apidevtools/swagger-parser';
 import {JSONSchema6} from 'json-schema';
 
-import {LEADING_PAGE_NAME_DEFAULT, SPEC_RENDER_MODES, SPEC_RENDER_MODE_DEFAULT, LEADING_PAGE_MODES} from './constants';
+import {
+    LEADING_PAGE_NAME_DEFAULT,
+    SPEC_RENDER_MODES,
+    SPEC_RENDER_MODE_DEFAULT,
+    LEADING_PAGE_MODES,
+    LeadingPageMode,
+} from './constants';
 
-import {Endpoint, Info, Refs, Specification, LeadingPageMode, OpenApiIncluderParams, OpenapiSpec} from '../types';
+import {
+    IncluderFunctionParams,
+    YfmPreset,
+    YfmToc,
+    YfmTocItem,
+    Endpoint,
+    Info,
+    Refs,
+    Specification,
+    OpenApiIncluderParams,
+    OpenapiSpec,
+} from './models';
 
 const INCLUDER_NAME = 'openapi';
 

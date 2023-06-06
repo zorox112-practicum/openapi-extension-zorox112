@@ -1,9 +1,8 @@
-import type {FormState} from './types';
+import type {FormState, SandboxProps} from './types';
 import React, {useState, useRef} from 'react';
 import {Button} from '@gravity-ui/uikit';
 import {Column, Params, Body, Result} from './components';
 
-import {SandboxProps} from '../types';
 import {Text, yfmSandbox} from '../plugin/constants';
 import {prepareRequest, prepareHeaders, collectValues, collectErrors} from './utils';
 

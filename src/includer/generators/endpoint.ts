@@ -24,7 +24,7 @@ import {
     Refs,
     Server,
     Security,
-} from '../../types';
+} from '../models';
 import {prepareTableRowData, prepareSampleObject, tableFromSchema, tableParameterName, TableRef} from './traverse';
 import {concatNewLine} from '../utils';
 import {openapiBlock} from './constants';
