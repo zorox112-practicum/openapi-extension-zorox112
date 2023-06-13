@@ -363,6 +363,15 @@ function merge(
         return value;
     }
 
+    if (combiners.length === 1) {
+        const result = merge(combiners[0]);
+        if (value.description && result.description !== undefined) {
+            result.description = value.description;
+        }
+
+        return result;
+    }
+
     if (value.oneOf?.length) {
         const description = descriptionForOneOfElement(value, allRefs);
 
