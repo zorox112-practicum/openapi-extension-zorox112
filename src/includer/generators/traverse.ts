@@ -71,6 +71,7 @@ function prepareObjectSchemaTable(
 ): PrepareObjectSchemaTableResult {
     const result: PrepareObjectSchemaTableResult = {rows: [], refs: []};
     const merged = merge(schema);
+
     Object.entries(merged.properties || {}).forEach(([key, v]) => {
         const value = merge(v, refs);
         const name = tableParameterName(key, isRequired(key, schema));
@@ -147,9 +148,11 @@ export function prepareTableRowData(
 ): PrepareRowResult {
     const description = value.description || '';
     const ref = findRef(allRefs, value);
+
     if (ref) {
         return {type: anchor(ref), description, ref: {name: ref}};
     }
+
     if (inferType(value) === 'array') {
         if (
             !value.items ||
@@ -363,29 +366,20 @@ function merge(
         return value;
     }
 
-    if (combiners.length === 1) {
-        const result = merge(combiners[0]);
-        if (value.description && result.description !== undefined) {
-            result.description = value.description;
-        }
-
-        return result;
-    }
-
     if (value.oneOf?.length) {
         const description = descriptionForOneOfElement(value, allRefs);
 
         return {...value, description};
     }
 
-    let description = '';
+    let description = value.description || '';
     const properties: Record<string, any> = value.properties || {};
 
     for (const element of value.allOf || []) {
         if (typeof element === 'boolean') {
             throw Error('Boolean in allOf isn\'t supported');
         }
-        if (element.description) {
+        if (element.description?.length) {
             description = concatNewLine(description, element.description);
         }
         const mergedElement = merge(element);
