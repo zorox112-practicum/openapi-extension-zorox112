@@ -240,22 +240,20 @@ function printAllTables(allRefs: Refs, pagePrintedRefs: Set<string>, tableRefs: 
             continue;
         }
 
-        const {reusable, name} = tableRef;
-        const shouldRender = reusable || !pagePrintedRefs.has(name);
-        if (!shouldRender) {
+        if (pagePrintedRefs.has(tableRef)) {
             continue;
         }
 
-        const schema = allRefs[name];
+        const schema = allRefs[tableRef];
         const schemaTable = tableFromSchema(allRefs, schema);
 
         result.push(block([
-            title(3)(name),
+            title(3)(tableRef),
             schema.description,
             schemaTable.content,
         ]));
         tableRefs.push(...schemaTable.tableRefs);
-        pagePrintedRefs.add(name);
+        pagePrintedRefs.add(tableRef);
 
     }
     return result;
