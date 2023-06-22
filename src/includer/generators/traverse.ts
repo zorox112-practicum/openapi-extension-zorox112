@@ -66,7 +66,7 @@ function prepareObjectSchemaTable(
     schema: JSONSchema6,
 ): PrepareObjectSchemaTableResult {
     const result: PrepareObjectSchemaTableResult = {rows: [], refs: []};
-    const merged = merge(schema);
+    const merged = merge(schema, refs, false);
 
     Object.entries(merged.properties || {}).forEach(([key, v]) => {
         const value = merge(v, refs);
@@ -328,6 +328,7 @@ function prepareSampleElement(
 function merge(
     value: OpenJSONSchemaDefinition,
     allRefs?: Refs,
+    needToSaveRef = true,
 ): OpenJSONSchema {
     if (typeof value === 'boolean') {
         throw Error('Boolean value isn\'t supported');
@@ -360,6 +361,15 @@ function merge(
 
     if (combiners.length === 0) {
         return value;
+    }
+
+    if (needToSaveRef && combiners.length === 1) {
+        const inner = combiners[0];
+        const merged = merge(inner);
+
+        merged.description = merged.description || (inner as JSONSchema6).description;
+
+        return merged;
     }
 
     if (value.oneOf?.length) {
