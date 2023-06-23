@@ -14,10 +14,7 @@ export function tableParameterName(key: string, required?: boolean) {
     return required ? `${key}<span class="${openapiBlock('required')}">*</span>` : key;
 }
 
-export type TableRef = {
-    reusable?: true;
-    name: string;
-};
+export type TableRef = string;
 
 type TableFromSchemaResult = {
     content: string;
@@ -46,10 +43,9 @@ export function tableFromSchema(
 
     if (schema.oneOf?.length) {
         const oneOfElements = extractOneOfElements(schema);
-        const oneOfElementsRefs = (oneOfElements
-            .filter(Boolean))
-            .map((value) => ({name: findRef(allRefs, value), reusable: true}))
-            .filter(({name}) => name) as TableRef[];
+        const oneOfElementsRefs = oneOfElements
+            .map((value) => (value && findRef(allRefs, value)))
+            .filter(Boolean) as string[];
 
         content += EOL + title(4)('Or value from:') + EOL;
         refs.push(...oneOfElementsRefs);
@@ -70,7 +66,7 @@ function prepareObjectSchemaTable(
     schema: JSONSchema6,
 ): PrepareObjectSchemaTableResult {
     const result: PrepareObjectSchemaTableResult = {rows: [], refs: []};
-    const merged = merge(schema);
+    const merged = merge(schema, refs, false);
 
     Object.entries(merged.properties || {}).forEach(([key, v]) => {
         const value = merge(v, refs);
@@ -150,7 +146,7 @@ export function prepareTableRowData(
     const ref = findRef(allRefs, value);
 
     if (ref) {
-        return {type: anchor(ref), description, ref: {name: ref}};
+        return {type: anchor(ref), description, ref};
     }
 
     if (inferType(value) === 'array') {
@@ -332,6 +328,7 @@ function prepareSampleElement(
 function merge(
     value: OpenJSONSchemaDefinition,
     allRefs?: Refs,
+    needToSaveRef = true,
 ): OpenJSONSchema {
     if (typeof value === 'boolean') {
         throw Error('Boolean value isn\'t supported');
@@ -364,6 +361,15 @@ function merge(
 
     if (combiners.length === 0) {
         return value;
+    }
+
+    if (needToSaveRef && combiners.length === 1) {
+        const inner = combiners[0];
+        const merged = merge(inner);
+
+        merged.description = merged.description || (inner as JSONSchema6).description;
+
+        return merged;
     }
 
     if (value.oneOf?.length) {
