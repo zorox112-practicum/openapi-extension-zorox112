@@ -167,8 +167,11 @@ export function prepareTableRowData(
             ref: inner.ref,
         };
     }
+
+    const format = value.format === undefined ? '' : `&lt;${value.format}&gt;`;
+
     return {
-        type: typeToText(value),
+        type: typeToText(value) + format,
         description: prepareComplexDescription(description, value),
     };
 }
