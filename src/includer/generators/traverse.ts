@@ -178,19 +178,21 @@ export function prepareTableRowData(
 
 function prepareComplexDescription(
     baseDescription: string,
-    value: JSONSchema6,
+    value: OpenJSONSchema,
 ): string {
     let description = baseDescription;
     const enumValues = value.enum?.map((s) => `\`${s}\``).join(', ');
     if (enumValues) {
-        description = concatNewLine(description, `Enum: ${enumValues}`);
+        description = concatNewLine(description, `<span style="color:gray;">Enum</span>: ${enumValues}`);
     }
     if (value.default) {
-        description = concatNewLine(
-            description,
-            `Default: \`${value.default}\``,
-        );
+        description = concatNewLine(description, `<span style="color:gray;">Default</span>: \`${value.default}\``);
     }
+
+    if (value.example) {
+        description = concatNewLine(description, `<span style="color:gray;">Example</span>: \`${value.example}\``);
+    }
+
     return description;
 }
 
