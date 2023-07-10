@@ -1,7 +1,6 @@
 name: OpenapiTests
 
 on:
-  push:
   pull_request:
 
 jobs:

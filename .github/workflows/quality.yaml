@@ -1,7 +1,6 @@
 name: Openapi code quality
 
 on:
-  push:
   pull_request:
 
 jobs:
