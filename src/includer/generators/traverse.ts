@@ -389,7 +389,7 @@ function merge(
 
     let description = value.description || '';
     const properties: Record<string, any> = value.properties || {};
-    const required: string[] = [];
+    const required: string[] = value.required || [];
 
     for (const element of value.allOf || []) {
         if (typeof element === 'boolean') {
