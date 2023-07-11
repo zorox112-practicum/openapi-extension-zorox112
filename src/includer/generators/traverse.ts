@@ -70,7 +70,7 @@ function prepareObjectSchemaTable(
 
     Object.entries(merged.properties || {}).forEach(([key, v]) => {
         const value = merge(v, refs);
-        const name = tableParameterName(key, isRequired(key, schema));
+        const name = tableParameterName(key, isRequired(key, merged));
         const {type, description, ref} = prepareTableRowData(
             refs,
             value,
@@ -385,6 +385,7 @@ function merge(
 
     let description = value.description || '';
     const properties: Record<string, any> = value.properties || {};
+    const required: string[] = [];
 
     for (const element of value.allOf || []) {
         if (typeof element === 'boolean') {
@@ -397,12 +398,15 @@ function merge(
         for (const [k, v] of Object.entries(mergedElement?.properties ?? {})) {
             properties[k] = v;
         }
+
+        required.push(...element.required || []);
     }
 
     return {
         type: 'object',
         description,
         properties,
+        required,
         allOf: value.allOf,
         oneOf: value.oneOf,
     };
