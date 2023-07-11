@@ -6,7 +6,7 @@ import {escape} from 'html-escaper';
 const startMark = '{% openapi sandbox %}';
 const endMark = '{% end openapi sandbox %}';
 
-function parserOpenapiSandboxBlock(state: StateBlock, start: number, end: number, silent: boolean) {
+function parserOpenAPISandboxBlock(state: StateBlock, start: number, end: number, silent: boolean) {
     let firstLine, lastLine, next, lastPos, found = false,
         pos = state.bMarks[start] + state.tShift[start],
         max = state.eMarks[start];
@@ -82,9 +82,9 @@ const openapiSandboxRenderer = (tokens: Token[], idx: number) => {
 
 const openapiSandboxPlugin: MarkdownItPluginCb = (md) => {
     try {
-        md.block.ruler.before('meta', 'openapi_sandbox_block', parserOpenapiSandboxBlock);
+        md.block.ruler.before('meta', 'openapi_sandbox_block', parserOpenAPISandboxBlock);
     } catch (e) {
-        md.block.ruler.push('openapi_sandbox_block', parserOpenapiSandboxBlock);
+        md.block.ruler.push('openapi_sandbox_block', parserOpenAPISandboxBlock);
     }
 
     md.renderer.rules.openapi_sandbox_block = openapiSandboxRenderer;

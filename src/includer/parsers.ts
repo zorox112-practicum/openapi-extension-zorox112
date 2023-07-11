@@ -5,8 +5,8 @@ import {getStatusText} from 'http-status-codes';
 import {TAG_NAMES_FIELD} from './constants';
 
 import {
-    OpenapiSpec,
-    OpenapiOperation,
+    OpenAPISpec,
+    OpenAPIOperation,
     Info,
     Tag,
     Endpoints,
@@ -18,7 +18,7 @@ import {
     Specification,
 } from './models';
 
-function info(spec: OpenapiSpec): Info {
+function info(spec: OpenAPISpec): Info {
     const {info: {title, description, version, termsOfService, license, contact}} = spec;
 
     const parsed: Info = {
@@ -61,7 +61,7 @@ function info(spec: OpenapiSpec): Info {
     return parsed;
 }
 
-function tagsFromSpec(spec: OpenapiSpec): Map<string, Tag> {
+function tagsFromSpec(spec: OpenAPISpec): Map<string, Tag> {
     const {tags, paths} = spec;
 
     const parsed = new Map();
@@ -110,7 +110,7 @@ function tagsFromSpec(spec: OpenapiSpec): Map<string, Tag> {
 const opid = (path: string, method: string, id?: string) =>
     slugify(id ?? ([path, method].join('-')));
 
-function pathsFromSpec(spec: OpenapiSpec, tagsByID: Map<string, Tag>): Specification {
+function pathsFromSpec(spec: OpenAPISpec, tagsByID: Map<string, Tag>): Specification {
     const endpoints: Endpoints = [];
     const {
         paths,
@@ -213,7 +213,7 @@ function trimSlash(str: string) {
     return str.replace(/^\/|\/$/g, '');
 }
 
-type VisiterParams = {path: string; method: Method; endpoint: OpenapiOperation};
+type VisiterParams = {path: string; method: Method; endpoint: OpenAPIOperation};
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 function visitPaths<T>(paths: {[key: string]: any}, visiter: (params: VisiterParams) => T): T[] {

@@ -29,7 +29,7 @@ import {
     Refs,
     Specification,
     OpenApiIncluderParams,
-    OpenapiSpec,
+    OpenAPISpec,
 } from './models';
 
 const INCLUDER_NAME = 'openapi';
@@ -110,7 +110,7 @@ function assertLeadingPageMode(mode: string) {
 }
 
 export type GenerateTocParams = {
-    data: OpenapiSpec;
+    data: OpenAPISpec;
     vars: YfmPreset;
     writePath: string;
     leadingPage: OpenApiIncluderParams['leadingPage'];
@@ -170,7 +170,7 @@ function addLeadingPage(section: YfmTocItem, mode: LeadingPageMode, name: string
 }
 
 export type GenerateContentParams = {
-    data: OpenapiSpec;
+    data: OpenAPISpec;
     vars: YfmPreset;
     writePath: string;
     allRefs: Refs;
