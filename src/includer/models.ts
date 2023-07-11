@@ -99,7 +99,7 @@ export type SandboxProps = {
     security?: Security[];
 };
 
-export type OpenapiSpec = {
+export type OpenAPISpec = {
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     [key: string]: any;
     security?: Array<Record<string, Security>>;
@@ -107,7 +107,7 @@ export type OpenapiSpec = {
 
 export type Security = {type: string; description: string};
 
-export type OpenapiOperation = {
+export type OpenAPIOperation = {
     summary?: string;
     description?: string;
     operationId?: string;
