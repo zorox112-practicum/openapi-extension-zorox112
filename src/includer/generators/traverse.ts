@@ -488,6 +488,11 @@ function inferType(value: OpenJSONSchema): JSONSchemaType {
         };
     }
 
+    if (value.allOf?.length) {
+        // @todo @v8tenko infer allOf type as ts-like (string & number)
+        return 'object';
+    }
+
     return 'any';
 }
 
