@@ -139,6 +139,8 @@ export async function run(spec: OpenAPIV3.Document) {
         },
     });
 
+    jest.clearAllMocks();
+
     return fs;
 }
 
