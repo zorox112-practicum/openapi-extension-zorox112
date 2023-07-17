@@ -1,19 +1,10 @@
-import {OpenapiMDSections} from './typings';
 import {splitBySections} from './md/splitBySections';
-import {BasicFS} from '../../includer';
 
-type VirtualFS = {
-    sections(path: string): OpenapiMDSections;
-    match(path: string): string;
-    reset(): void;
-    get pages(): Record<string, string>;
-} & BasicFS;
-
-function virtualFS(): VirtualFS {
+function virtualFS() {
     /** virtual fs record with 1 depth */
     let pages: Record<string, string> = {};
 
-    const fs: VirtualFS = {
+    const fs = {
         mkdir() {},
         readFile: jest.fn((path) => {
             return pages[path];
@@ -21,7 +12,7 @@ function virtualFS(): VirtualFS {
         writeFile: jest.fn((path, content) => {
             pages[path] = content;
         }),
-        match(target) {
+        match(target: string) {
             const paths = Object.keys(pages);
             const closest = paths.find((path) => path.includes(target));
 
@@ -33,7 +24,7 @@ function virtualFS(): VirtualFS {
 
             return page;
         },
-        sections(target) {
+        sections(target: string) {
             const page = fs.match(target);
 
             return splitBySections(page);

@@ -1,34 +1,43 @@
-import {MDSections} from './__helpers__/constants';
 import {fs} from './__helpers__/virtualFS';
-import {runPreset} from './run';
+import {DocumentBuilder, run} from './__helpers__/run';
 
-describe('basci openapi project', () => {
-    beforeEach(async () => {
-        fs.reset();
-    });
-
+describe('basic openapi project', () => {
     it('renders description', async () => {
-        await runPreset(__dirname);
+        const spec = new DocumentBuilder('basic')
+            .response(200, {
+                description: 'Base 200 response',
+                schema: {
+                    type: 'object',
+                    properties: {
+                        type: {
+                            type: 'string',
+                        },
+                        foo: {
+                            type: 'string',
+                        },
+                    },
+                },
+            })
+            .response(404, {
+                description: 'Base 200 response',
+                schema: {
+                    type: 'object',
+                    properties: {
+                        type: {
+                            type: 'string',
+                        },
+                        bar: {
+                            type: 'string',
+                        },
+                    },
+                },
+            })
+            .build();
 
-        const sections = fs.sections('basic.md');
+        await run(spec);
 
-        expect(sections[MDSections.TITLE]).toMatchSnapshot();
-    });
+        const page = fs.match('basic');
 
-    it('renders request url', async () => {
-        await runPreset(__dirname);
-
-        const sections = fs.sections('basic.md');
-
-        expect(sections[MDSections.REQUEST]).toMatchSnapshot();
-    });
-
-    it('renders different components', async () => {
-        await runPreset(__dirname);
-
-        const sections = fs.sections('basic.md');
-
-        expect(sections[MDSections.OK]).toMatchSnapshot();
-        expect(sections[MDSections.NOT_FOUND]).toMatchSnapshot();
+        expect(page).toMatchSnapshot();
     });
 });
