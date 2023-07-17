@@ -41,7 +41,5 @@ function virtualFS() {
 }
 
 
-const fs = virtualFS();
-
-export {fs};
-export default {fs};
+export {virtualFS};
+export default {virtualFS};

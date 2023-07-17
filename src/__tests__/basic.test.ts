@@ -1,4 +1,3 @@
-import {fs} from './__helpers__/virtualFS';
 import {DocumentBuilder, run} from './__helpers__/run';
 
 describe('basic openapi project', () => {
@@ -34,7 +33,7 @@ describe('basic openapi project', () => {
             })
             .build();
 
-        await run(spec);
+        const fs = await run(spec);
 
         const page = fs.match('basic');
 

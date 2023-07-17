@@ -3,7 +3,7 @@ import {OpenAPIV3} from 'openapi-types';
 import {includerFunction} from '../../includer';
 import {when} from 'jest-when';
 import {dump} from 'js-yaml';
-import {fs} from './virtualFS';
+import {virtualFS} from './virtualFS';
 import nodeFS from 'fs';
 
 export const PERSET_PATH = path.resolve('spec.yaml');
@@ -104,11 +104,10 @@ export class DocumentBuilder {
 
 }
 
-export function run(spec: OpenAPIV3.Document) {
+export async function run(spec: OpenAPIV3.Document) {
     const id = Date.now().toString();
     const yaml = dump(spec);
-
-    console.log(yaml);
+    const fs = virtualFS();
 
     when(jest.spyOn(nodeFS, 'readFile')).mockImplementation((_, callback) => {
         callback(null, Buffer.from(yaml, 'utf-8'));
@@ -120,7 +119,7 @@ export function run(spec: OpenAPIV3.Document) {
 
     when(jest.spyOn(nodeFS.promises, 'mkdir')).mockImplementation(async () => undefined);
 
-    return includerFunction({
+    await includerFunction({
         index: 0,
         readBasePath: '',
         writeBasePath: '',
@@ -139,5 +138,7 @@ export function run(spec: OpenAPIV3.Document) {
             items: [],
         },
     });
+
+    return fs;
 }
 
