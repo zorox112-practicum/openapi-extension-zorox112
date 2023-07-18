@@ -27,14 +27,6 @@ type Schema = {
 } & OpenAPIV3.MediaTypeObject;
 
 export class DocumentBuilder {
-    static oneOf<T extends unknown[]>(...variants: T): T {
-        return variants;
-    }
-
-    static allOf<T extends unknown[]>(...variants: T): T {
-        return variants;
-    }
-
     private id: string;
     private responses: [code: number, response: OpenAPIV3.ResponseObject][] = [];
     private parameters: OpenAPIV3.ParameterObject[] = [];
