@@ -469,7 +469,9 @@ function inferType(value: OpenJSONSchema): JSONSchemaType {
         };
     }
 
-    throw new Error(`Unsupported value: ${stringify(value)}`);
+    console.warn(`OpenAPI includer warn: can't infer type of ${stringify(value)}.\nFallback to any.`);
+
+    return 'any';
 }
 
 function isUnionType(type: JSONSchemaType): type is JSONSchemaUnionType {
