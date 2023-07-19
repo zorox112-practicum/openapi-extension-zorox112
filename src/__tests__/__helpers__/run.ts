@@ -74,12 +74,12 @@ export class DocumentBuilder {
         return this;
     }
 
-    build(): OpenAPIV3.Document {
+    build(): string {
         if (!this.responses.length) {
             throw new Error('Test case error: endpoint can\'t have no responses');
         }
 
-        return {
+        const spec: OpenAPIV3.Document = {
             ...baseDocument,
             paths: {
                 '/test': {
@@ -92,17 +92,18 @@ export class DocumentBuilder {
                 },
             },
         };
+
+        return dump(spec);
     }
 
 }
 
-export async function run(spec: OpenAPIV3.Document) {
+export async function run(spec: string) {
     const id = Date.now().toString();
-    const yaml = dump(spec);
     const fs = virtualFS();
 
     when(jest.spyOn(nodeFS, 'readFile')).mockImplementation((_, callback) => {
-        callback(null, Buffer.from(yaml, 'utf-8'));
+        callback(null, Buffer.from(spec, 'utf-8'));
     });
 
     when(jest.spyOn(nodeFS.promises, 'writeFile')).mockImplementation(async (file, content) => {
