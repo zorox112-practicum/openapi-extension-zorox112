@@ -469,7 +469,7 @@ function inferType(value: OpenJSONSchema): JSONSchemaType {
         };
     }
 
-    throw new Error(`Unsupported value: ${stringify(value)}`);
+    return 'any';
 }
 
 function isUnionType(type: JSONSchemaType): type is JSONSchemaUnionType {
