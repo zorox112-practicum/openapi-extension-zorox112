@@ -22,31 +22,30 @@ const baseDocument = {
     ],
 };
 
-type Schema = {
+
+type WithDescription<T> = T & {
     description?: string;
-} & OpenAPIV3.MediaTypeObject;
-
-type Component = {
-    name: string;
-    schema: OpenAPIV3.SchemaObject;
 };
 
-type WithComponent<Acc extends OpenAPIV3.Document, Value extends Component> = Acc & {
-    components: {
-        schemas: {
-            [key in Value['name']]: Value['schema'];
-        };
-    };
-};
+type Schema = WithDescription<OpenAPIV3.MediaTypeObject>;
 
 
 export class DocumentBuilder {
+
+    static ref(target: string, description?: string): WithDescription<OpenAPIV3.ReferenceObject> {
+        return {
+            $ref: `#/components/schemas/${target}`,
+            description,
+        };
+    }
+
     private id: string;
     private responses: [code: number, response: OpenAPIV3.ResponseObject][] =
         [];
     private parameters: OpenAPIV3.ParameterObject[] = [];
     private components: Record<string, OpenAPIV3.SchemaObject> = {};
     private requestBody?: OpenAPIV3.RequestBodyObject = undefined;
+
 
     constructor(id: string) {
         this.id = id;
@@ -92,9 +91,8 @@ export class DocumentBuilder {
     }
 
 
-    component<T extends [string, OpenAPIV3.SchemaObject]>(...[name, schema]: T): WithComponent<typeof this, T> {
+    component(name: string, schema: OpenAPIV3.SchemaObject) {
         this.components[name] = schema;
-
 
         return this;
     }
@@ -117,6 +115,9 @@ export class DocumentBuilder {
                     },
                     parameters: this.parameters,
                 },
+            },
+            components: {
+                schemas: this.components,
             },
         };
 
