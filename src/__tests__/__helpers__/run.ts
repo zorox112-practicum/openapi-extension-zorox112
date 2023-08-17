@@ -26,10 +26,26 @@ type Schema = {
     description?: string;
 } & OpenAPIV3.MediaTypeObject;
 
+type Component = {
+    name: string;
+    schema: OpenAPIV3.SchemaObject;
+};
+
+type WithComponent<Acc extends OpenAPIV3.Document, Value extends Component> = Acc & {
+    components: {
+        schemas: {
+            [key in Value['name']]: Value['schema'];
+        };
+    };
+};
+
+
 export class DocumentBuilder {
     private id: string;
-    private responses: [code: number, response: OpenAPIV3.ResponseObject][] = [];
+    private responses: [code: number, response: OpenAPIV3.ResponseObject][] =
+        [];
     private parameters: OpenAPIV3.ParameterObject[] = [];
+    private components: Record<string, OpenAPIV3.SchemaObject> = {};
     private requestBody?: OpenAPIV3.RequestBodyObject = undefined;
 
     constructor(id: string) {
@@ -52,14 +68,15 @@ export class DocumentBuilder {
 
     request(skeleton: Schema) {
         if (this.requestBody) {
-            throw new Error('Test case error: request can\'t have several requests');
+            throw new Error(
+                'Test case error: request can\'t have several requests',
+            );
         }
         const {description, ...schema} = skeleton;
         const request: OpenAPIV3.RequestBodyObject = {
             description: description,
             content: {
                 'application/json': schema,
-
             },
         };
 
@@ -74,9 +91,19 @@ export class DocumentBuilder {
         return this;
     }
 
+
+    component<T extends [string, OpenAPIV3.SchemaObject]>(...[name, schema]: T): WithComponent<typeof this, T> {
+        this.components[name] = schema;
+
+
+        return this;
+    }
+
     build(): string {
         if (!this.responses.length) {
-            throw new Error('Test case error: endpoint can\'t have no responses');
+            throw new Error(
+                'Test case error: endpoint can\'t have no responses',
+            );
         }
 
         const spec: OpenAPIV3.Document = {
@@ -95,7 +122,6 @@ export class DocumentBuilder {
 
         return dump(spec);
     }
-
 }
 
 export async function run(spec: string) {
@@ -106,11 +132,15 @@ export async function run(spec: string) {
         callback(null, Buffer.from(spec, 'utf-8'));
     });
 
-    when(jest.spyOn(nodeFS.promises, 'writeFile')).mockImplementation(async (file, content) => {
-        fs.writeFile(file.toString(), content);
-    });
+    when(jest.spyOn(nodeFS.promises, 'writeFile')).mockImplementation(
+        async (file, content) => {
+            fs.writeFile(file.toString(), content);
+        },
+    );
 
-    when(jest.spyOn(nodeFS.promises, 'mkdir')).mockImplementation(async () => undefined);
+    when(jest.spyOn(nodeFS.promises, 'mkdir')).mockImplementation(
+        async () => undefined,
+    );
 
     await includerFunction({
         index: 0,
@@ -136,4 +166,3 @@ export async function run(spec: string) {
 
     return fs;
 }
-
