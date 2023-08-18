@@ -1,4 +1,4 @@
-import {JSONSchema6} from 'json-schema';
+import {JSONSchema6, JSONSchema6Definition} from 'json-schema';
 import {LeadingPageMode, SPEC_RENDER_MODE_DEFAULT, SPEC_RENDER_MODE_HIDDEN, SUPPORTED_ENUM_TYPES} from './constants';
 
 export type VarsPreset = 'internal'|'external';
@@ -273,5 +273,11 @@ export type OpenApiIncluderParams = {
     };
 };
 
-export type OpenJSONSchema = JSONSchema6 & { example?: any };
+export type OpenJSONSchema = JSONSchema6 & { example?: any } & {
+    properties?: {
+        [key: string]: JSONSchema6Definition & {
+            'x-internal'?: boolean;
+        };
+    };
+};
 export type OpenJSONSchemaDefinition = OpenJSONSchema | boolean;

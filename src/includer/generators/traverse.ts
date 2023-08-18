@@ -331,32 +331,35 @@ function prepareSampleElement(
 //   type: object
 // eslint-disable-next-line complexity
 function merge(
-    value: OpenJSONSchemaDefinition,
+    schema: OpenJSONSchemaDefinition,
     allRefs?: Refs,
     needToSaveRef = true,
 ): OpenJSONSchema {
-    if (typeof value === 'boolean') {
+    if (typeof schema === 'boolean') {
         throw Error('Boolean value isn\'t supported');
     }
 
-    if (value.additionalProperties) {
-        const result = value.additionalProperties;
+    if (schema.additionalProperties) {
+        const result = schema.additionalProperties;
         if (typeof result === 'boolean') {
             throw Error('Boolean in additionalProperties isn\'t supported');
         }
-        result.description = value.description;
+        result.description = schema.description;
 
         return merge(result);
     }
 
-    if (value.items) {
-        const result = value.items;
+    if (schema.items) {
+        const result = schema.items;
         if (Array.isArray(result)) {
             throw Error('Array in items isn\'t supported');
         }
 
-        return {...value, items: merge(result)};
+        return {...schema, items: merge(result)};
     }
+
+
+    const value = removeInternalProperty(schema);
 
     if (value.oneOf?.length && value.allOf?.length) {
         throw Error('Object can\'t have both allOf and oneOf');
@@ -411,6 +414,22 @@ function merge(
         allOf: value.allOf,
         oneOf: value.oneOf,
     };
+}
+
+
+function removeInternalProperty(schema: OpenJSONSchema): OpenJSONSchema {
+    const internalPropertyTag = 'x-internal';
+    const cleared = {...schema};
+
+    cleared.properties = {};
+
+    Object.keys(schema.properties || {}).forEach((key) => {
+        if (!schema.properties?.[key][internalPropertyTag]) {
+            cleared.properties![key] = schema.properties![key];
+        }
+    });
+
+    return cleared;
 }
 
 function createOneOfDescription(
