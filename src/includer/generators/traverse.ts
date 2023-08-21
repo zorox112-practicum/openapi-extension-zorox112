@@ -418,7 +418,7 @@ function merge(
 
 
 function removeInternalProperty(schema: OpenJSONSchema): OpenJSONSchema {
-    const internalPropertyTag = 'x-internal';
+    const internalPropertyTag = 'x-hidden';
     const cleared = {...schema};
 
     cleared.properties = {};

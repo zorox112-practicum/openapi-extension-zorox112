@@ -276,7 +276,7 @@ export type OpenApiIncluderParams = {
 export type OpenJSONSchema = JSONSchema6 & { example?: any } & {
     properties?: {
         [key: string]: JSONSchema6Definition & {
-            'x-internal'?: boolean;
+            'x-hidden'?: boolean;
         };
     };
 };
