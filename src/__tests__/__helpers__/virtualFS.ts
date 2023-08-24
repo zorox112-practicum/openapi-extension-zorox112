@@ -1,5 +1,3 @@
-import {splitBySections} from './md/splitBySections';
-
 function virtualFS() {
     /** virtual fs record with 1 depth */
     let pages: Record<string, string> = {};
@@ -23,11 +21,6 @@ function virtualFS() {
             const page = pages[closest];
 
             return page;
-        },
-        sections(target: string) {
-            const page = fs.match(target);
-
-            return splitBySections(page);
         },
         reset() {
             pages = {};
