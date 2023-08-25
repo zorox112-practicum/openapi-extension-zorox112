@@ -71,7 +71,6 @@ async function includerFunction(params: IncluderFunctionParams<OpenApiIncluderPa
     const parser = new SwaggerParser();
 
     try {
-        debugger
         const data = await parser.validate(contentPath, {validate: {spec: true}}) as OpenAPISpec;
 
         const allRefs: Refs = {};
