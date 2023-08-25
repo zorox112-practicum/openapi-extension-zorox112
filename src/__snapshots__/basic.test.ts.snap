@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basic openapi project renders description 1`] = `
+"<div class="openapi">
+
+# basic
+
+## Request
+
+#||| **method** | **url** | **description** ||
+
+|| 
+\`\`\`
+POST
+\`\`\`
+ | 
+\`\`\`
+http://localhost:8080/test
+\`\`\`
+ | 
+\`\`\`
+Generated server url
+\`\`\`
+ |||#
+
+## Responses
+
+## 200 OK
+
+Base 200 response
+
+#### Body
+
+{% cut "application/json" %}
+
+
+\`\`\`
+{
+    "type": "string",
+    "foo": "string"
+}
+\`\`\`
+
+
+{% endcut %}
+
+
+#||| **Name** | **Type** | **Description** ||
+
+|| type | string |  ||
+
+|| foo | string |  |||#
+
+## 404 Not Found
+
+Base 200 response
+
+#### Body
+
+{% cut "application/json" %}
+
+
+\`\`\`
+{
+    "type": "string",
+    "bar": "string"
+}
+\`\`\`
+
+
+{% endcut %}
+
+
+#||| **Name** | **Type** | **Description** ||
+
+|| type | string |  ||
+
+|| bar | string |  |||#
+<!-- markdownlint-disable-file -->
+
+</div>"
+`;

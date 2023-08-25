@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basic openapi project renders description 1`] = `
+"<div class="openapi">
+
+# basic
+
+## Request
+
+#||| **method** | **url** | **description** ||
+
+|| 
+\`\`\`
+POST
+\`\`\`
+ | 
+\`\`\`
+http://localhost:8080/test
+\`\`\`
+ | 
+\`\`\`
+Generated server url
+\`\`\`
+ |||#
+
+#### Body
+
+{% cut "application/json" %}
+
+
+\`\`\`
+{
+    "name": "b",
+    "age": 0
+}
+\`\`\`
+
+
+{% endcut %}
+
+
+#||| **Name** | **Type** | **Description** ||
+
+|| name | string | <span style="color:gray;">Default</span>: \`b\` ||
+
+|| age | number, boolean |  ||
+
+|| ...rest | oneOf | [Dog](#dog)
+or [Cat](#cat) |||#
+#### Or value from:
+
+
+### Dog
+
+Dog class
+
+#||| **Name** | **Type** | **Description** ||
+
+|| type | string |  ||
+
+|| bar | string |  |||#
+
+### Cat
+
+Cat class
+
+#||| **Name** | **Type** | **Description** ||
+
+|| type | string |  ||
+
+|| foo | string |  |||#
+
+## Responses
+
+## 200 OK
+
+Base 200 response
+
+#### Body
+
+{% cut "application/json" %}
+
+
+\`\`\`
+{
+    "name": "b",
+    "age": 0
+}
+\`\`\`
+
+
+{% endcut %}
+
+
+#||| **Name** | **Type** | **Description** ||
+
+|| name | string | <span style="color:gray;">Default</span>: \`b\` ||
+
+|| age | number, boolean |  ||
+
+|| ...rest | oneOf | [Dog](#dog)
+or [Cat](#cat) |||#
+#### Or value from:
+
+<!-- markdownlint-disable-file -->
+
+</div>"
+`;

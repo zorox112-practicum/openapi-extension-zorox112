@@ -1,9 +1,4 @@
 node_modules
-build
-tests
-/plugin
-/includer
-/runtime
-
-/types.d.ts
-/types.js
+includer
+plugin
+runtime

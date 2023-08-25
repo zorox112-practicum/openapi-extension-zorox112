@@ -144,6 +144,7 @@ export function prepareTableRowData(
 ): PrepareRowResult {
     const description = value.description || '';
     const ref = findRef(allRefs, value);
+    debugger;
 
     if (ref) {
         return {type: anchor(ref), description, ref};
@@ -339,11 +340,9 @@ function merge(
         throw Error('Boolean value isn\'t supported');
     }
 
-    if (schema.additionalProperties) {
+    if (schema.additionalProperties && typeof schema.additionalProperties === 'object') {
         const result = schema.additionalProperties;
-        if (typeof result === 'boolean') {
-            throw Error('Boolean in additionalProperties isn\'t supported');
-        }
+
         result.description = schema.description;
 
         return merge(result);
@@ -357,7 +356,6 @@ function merge(
 
         return {...schema, items: merge(result)};
     }
-
 
     const value = removeInternalProperty(schema);
 
@@ -389,7 +387,7 @@ function merge(
 
     let description = value.description || '';
     const properties: Record<string, any> = value.properties || {};
-    const required: string[] = [];
+    const required: string[] = value.required || [];
 
     for (const element of value.allOf || []) {
         if (typeof element === 'boolean') {
@@ -419,17 +417,14 @@ function merge(
 
 function removeInternalProperty(schema: OpenJSONSchema): OpenJSONSchema {
     const internalPropertyTag = 'x-hidden';
-    const cleared = {...schema};
-
-    cleared.properties = {};
 
     Object.keys(schema.properties || {}).forEach((key) => {
-        if (!schema.properties?.[key][internalPropertyTag]) {
-            cleared.properties![key] = schema.properties![key];
+        if (schema.properties?.[key][internalPropertyTag]) {
+            delete schema.properties![key];
         }
     });
 
-    return cleared;
+    return schema;
 }
 
 function createOneOfDescription(
@@ -478,14 +473,20 @@ function inferType(value: OpenJSONSchema): JSONSchemaType {
 
     if (value.oneOf?.length) {
         const types = (
-            [...new Set(value.oneOf)].filter(Boolean) as OpenJSONSchema[]
+            value.oneOf.filter(Boolean) as OpenJSONSchema[]
         )
             .map(inferType)
             .flat();
 
         return {
-            unionOf: types,
+            unionOf: [... new Set(types)],
         };
+    }
+
+    if (value.allOf?.length === 1) {
+        // @todo @v8tenko infer allOf type as ts-like (string & number)
+
+        return inferType(value.allOf[0] as JSONSchema6);
     }
 
     return 'any';

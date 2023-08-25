@@ -71,7 +71,7 @@ async function includerFunction(params: IncluderFunctionParams<OpenApiIncluderPa
     const parser = new SwaggerParser();
 
     try {
-        const data = await parser.validate(contentPath, {validate: {spec: true}});
+        const data = await parser.validate(contentPath, {validate: {spec: true}}) as OpenAPISpec;
 
         const allRefs: Refs = {};
         for (const file of Object.values(parser.$refs.values())) {

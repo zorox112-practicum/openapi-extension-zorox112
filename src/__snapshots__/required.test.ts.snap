@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`description renders correct description 1`] = `
+"<div class="openapi">
+
+# description
+
+## Request
+
+#||| **method** | **url** | **description** ||
+
+|| 
+\`\`\`
+POST
+\`\`\`
+ | 
+\`\`\`
+http://localhost:8080/test
+\`\`\`
+ | 
+\`\`\`
+Generated server url
+\`\`\`
+ |||#
+
+#### Body
+
+{% cut "application/json" %}
+
+
+\`\`\`
+{
+    "d": 0,
+    "e": 0
+}
+\`\`\`
+
+
+{% endcut %}
+
+
+#||| **Name** | **Type** | **Description** ||
+
+|| a<span class="openapi__required">*</span> | number |  ||
+
+|| b<span class="openapi__required">*</span> | number |  ||
+
+|| c | number |  ||
+
+|| d<span class="openapi__required">*</span> | number |  ||
+
+|| e | number |  |||#
+
+## Responses
+
+## 200 OK
+
+Cat class
+
+#### Body
+
+{% cut "application/json" %}
+
+
+\`\`\`
+{
+    "type": "string",
+    "foo": "string"
+}
+\`\`\`
+
+
+{% endcut %}
+
+
+#||| **Name** | **Type** | **Description** ||
+
+|| type | string |  ||
+
+|| foo | string |  |||#
+<!-- markdownlint-disable-file -->
+
+</div>"
+`;

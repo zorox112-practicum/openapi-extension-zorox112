@@ -16,10 +16,15 @@
     "noEmitOnError": true,
     "experimentalDecorators": true,
     "allowJs": true,
-    "declaration": true
+    "declaration": true,
+    "isolatedModules": true,
+    "noUnusedLocals": true
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "src/__tests__"
   ],
   "ts-node": {
     "esm": true,

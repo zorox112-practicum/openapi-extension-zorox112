@@ -138,10 +138,10 @@ function request(data: Endpoint) {
 
 function parameters(allRefs: Refs, pagePrintedRefs: Set<string>, params?: Parameters) {
     const sections = {
-        'path': PATH_PARAMETERS_SECTION_NAME,
-        'query': QUERY_PARAMETERS_SECTION_NAME,
-        'header': HEADERS_SECTION_NAME,
-        'cookie': COOKIES_SECTION_NAME,
+        path: PATH_PARAMETERS_SECTION_NAME,
+        query: QUERY_PARAMETERS_SECTION_NAME,
+        header: HEADERS_SECTION_NAME,
+        cookie: COOKIES_SECTION_NAME,
     };
     const tables = [];
     for (const [inValue, heading] of Object.entries(sections)) {
