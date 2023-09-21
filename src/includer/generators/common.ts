@@ -44,8 +44,13 @@ function bold(text: string) {
     return `**${text}**`;
 }
 
-function code(text: string) {
-    return EOL + ['```', text, '```'].join(EOL) + EOL;
+function code(text: string, type: string = '') {
+    const appliedType = (type && text.length <= 200) ? type : ''
+    return EOL + ['```' + appliedType, text, '```'].join(EOL) + EOL;
+}
+
+function method(text: string) {
+    return `${text.toUpperCase()} {.openapi__method}`
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -93,6 +98,6 @@ function anchor(ref: string) {
     return link(ref, `#${slugify(ref).toLowerCase()}`);
 }
 
-export {meta, list, link, title, body, mono, bold, table, code, cut, block, page, tabs, anchor};
+export {meta, list, link, title, body, mono, bold, table, code, cut, block, page, tabs, anchor, method};
 
-export default {meta, list, link, title, body, mono, bold, table, code, cut, block, tabs, anchor};
+export default {meta, list, link, title, body, mono, bold, table, code, cut, block, tabs, anchor, method};

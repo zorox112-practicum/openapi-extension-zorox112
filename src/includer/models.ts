@@ -156,7 +156,6 @@ export type Tag = {
 
 export type Endpoints = Endpoint[];
 
-
 export type Endpoint = {
     id: string;
     operationId?: string;
@@ -172,6 +171,7 @@ export type Endpoint = {
     security: Security[];
     noindex?: boolean;
     hidden?: boolean;
+    deprecated?: boolean;
 };
 
 export type Specification = {

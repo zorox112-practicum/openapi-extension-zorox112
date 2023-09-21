@@ -7,28 +7,30 @@ exports[`basic openapi project renders description 1`] = `
 
 ## Request
 
-#||| **method** | **url** | **description** ||
+<div class="openapi__request__wrapper">
 
-|| 
-\`\`\`
-POST
-\`\`\`
- | 
+<div class="openapi__request" style="--method: var(--dc-openapi-methods-post)">
+
+POST {.openapi__method}
+
+
 \`\`\`
 http://localhost:8080/test
 \`\`\`
- | 
-\`\`\`
-Generated server url
-\`\`\`
- |||#
+
+
+</div>
+
+</div>
+
+Generated server url{.openapi__request__description}
 
 #### Body
 
 {% cut "application/json" %}
 
 
-\`\`\`
+\`\`\`json
 {
     "name": "b",
     "age": 0
@@ -72,6 +74,8 @@ Cat class
 
 ## Responses
 
+<div class="openapi__response__code__200">
+
 ## 200 OK
 
 Base 200 response
@@ -81,7 +85,7 @@ Base 200 response
 {% cut "application/json" %}
 
 
-\`\`\`
+\`\`\`json
 {
     "name": "b",
     "age": 0
@@ -102,6 +106,8 @@ Base 200 response
 or [Cat](#cat) |||#
 #### Or value from:
 
+
+</div>
 <!-- markdownlint-disable-file -->
 
 </div>"

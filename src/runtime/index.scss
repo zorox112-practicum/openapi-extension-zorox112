@@ -1,5 +1,110 @@
 .openapi {
+    --dc-openapi-methods-post: rgb(45, 139, 93);
+    --dc-openapi-methods-put: rgb(48, 170, 110);
+    --dc-openapi-methods-get: rgb(52, 139, 220);
+    --dc-openapi-methods-patch: rgb(189, 142, 75);
+    --dc-openapi-methods-delete: rgb(233, 3, 58);
+
+    --dc-openapi-status-code-ok: rgb(48, 170, 110);
+    --dc-openapi-status-code-redirect: rgb(52, 139, 220);
+    --dc-openapi-status-code-client: rgb(233, 3, 58);
+    --dc-openapi-status-code-server: rgb(255, 190, 92);
+
+    --dc-openapi-highlight: rgb(233, 174, 86);
+    
     &__required {
         color: var(--yc-color-text-danger);
+    }
+
+    & #request {
+        margin-top: 0;
+    }
+
+    & .openapi__deprecated {
+        text-decoration: line-through;
+    }
+
+    &  &__request {
+        display: inline-flex;
+        align-items: center;
+        overflow-y: scroll;
+        max-width: 100%;
+
+        &__wrapper {
+            position: relative;
+            max-width: 100%;
+            display: inline-block;  
+        }
+
+        & * {
+            margin: 0;
+        }
+
+        & > .openapi__method {
+            background-color: var(--method);
+            padding: 8px 16px;
+            color: #fff;
+            border-radius: 5px 0 0 5px;
+        }
+
+         & > .yfm-clipboard {
+            border: 2px solid var(--method);
+            border-radius: 0 5px 5px 0;
+            white-space: nowrap;
+            overflow: visible;
+            position: initial;
+
+            code {
+                padding: 6px 20px 6px 6px;
+            }
+
+            pre, code {
+                border-radius: 0;
+                overflow: visible;
+            }
+
+            svg {
+                display: block;
+                opacity: 0;
+                transition: opacity 100ms;
+                position: absolute;
+                right: -8px;
+                top: 10px;
+            }
+
+            &:hover svg {
+                opacity: 1;
+            }
+        }
+
+    }
+
+    & h3 {
+        transition: color 100ms;
+
+        &.highlight {
+            color: var(--dc-openapi-highlight);
+        }
+    }
+
+    & .openapi__request__description {
+        margin: 20px 0 0 0;
+        font-size: 1.1em;
+    }
+
+    & h2[id^="2"] {
+        color: var(--dc-openapi-status-code-ok);
+    }
+
+    & h2[id^="3"] {
+        color: var(--dc-openapi-status-code-redirect);
+    }
+
+    & h2[id^="4"] {
+        color: var(--dc-openapi-status-code-client);
+    }
+
+    & h2[id^="5"] {
+        color: var(--dc-openapi-status-code-server);
     }
 }

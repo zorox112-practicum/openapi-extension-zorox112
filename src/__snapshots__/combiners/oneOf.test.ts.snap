@@ -7,28 +7,30 @@ exports[`oneOf operator support renders empty 1`] = `
 
 ## Request
 
-#||| **method** | **url** | **description** ||
+<div class="openapi__request__wrapper">
 
-|| 
-\`\`\`
-POST
-\`\`\`
- | 
+<div class="openapi__request" style="--method: var(--dc-openapi-methods-post)">
+
+POST {.openapi__method}
+
+
 \`\`\`
 http://localhost:8080/test
 \`\`\`
- | 
-\`\`\`
-Generated server url
-\`\`\`
- |||#
+
+
+</div>
+
+</div>
+
+Generated server url{.openapi__request__description}
 
 #### Body
 
 {% cut "application/json" %}
 
 
-\`\`\`
+\`\`\`json
 {}
 \`\`\`
 
@@ -65,6 +67,8 @@ Cat class
 
 ## Responses
 
+<div class="openapi__response__code__200">
+
 ## 200 OK
 
 #### Body
@@ -72,7 +76,7 @@ Cat class
 {% cut "application/json" %}
 
 
-\`\`\`
+\`\`\`json
 {}
 \`\`\`
 
@@ -86,6 +90,8 @@ Cat class
 or [Cat](#cat) |||#
 #### Or value from:
 
+
+</div>
 <!-- markdownlint-disable-file -->
 
 </div>"
@@ -98,28 +104,30 @@ exports[`oneOf operator support renders filled 1`] = `
 
 ## Request
 
-#||| **method** | **url** | **description** ||
+<div class="openapi__request__wrapper">
 
-|| 
-\`\`\`
-POST
-\`\`\`
- | 
+<div class="openapi__request" style="--method: var(--dc-openapi-methods-post)">
+
+POST {.openapi__method}
+
+
 \`\`\`
 http://localhost:8080/test
 \`\`\`
- | 
-\`\`\`
-Generated server url
-\`\`\`
- |||#
+
+
+</div>
+
+</div>
+
+Generated server url{.openapi__request__description}
 
 #### Body
 
 {% cut "application/json" %}
 
 
-\`\`\`
+\`\`\`json
 {
     "name": "string",
     "age": 0
@@ -163,6 +171,8 @@ Cat class
 
 ## Responses
 
+<div class="openapi__response__code__200">
+
 ## 200 OK
 
 #### Body
@@ -170,7 +180,7 @@ Cat class
 {% cut "application/json" %}
 
 
-\`\`\`
+\`\`\`json
 {
     "name": "string",
     "age": 0
@@ -191,6 +201,8 @@ Cat class
 or [Cat](#cat) |||#
 #### Or value from:
 
+
+</div>
 <!-- markdownlint-disable-file -->
 
 </div>"
@@ -203,28 +215,30 @@ exports[`oneOf operator support renders parameter 1`] = `
 
 ## Request
 
-#||| **method** | **url** | **description** ||
+<div class="openapi__request__wrapper">
 
-|| 
-\`\`\`
-POST
-\`\`\`
- | 
+<div class="openapi__request" style="--method: var(--dc-openapi-methods-post)">
+
+POST {.openapi__method}
+
+
 \`\`\`
 http://localhost:8080/test
 \`\`\`
- | 
-\`\`\`
-Generated server url
-\`\`\`
- |||#
+
+
+</div>
+
+</div>
+
+Generated server url{.openapi__request__description}
 
 #### Body
 
 {% cut "application/json" %}
 
 
-\`\`\`
+\`\`\`json
 {
     "pet": {}
 }
@@ -266,6 +280,8 @@ Cat class
 
 ## Responses
 
+<div class="openapi__response__code__200">
+
 ## 200 OK
 
 #### Body
@@ -273,7 +289,7 @@ Cat class
 {% cut "application/json" %}
 
 
-\`\`\`
+\`\`\`json
 {
     "pet": {}
 }
@@ -292,6 +308,8 @@ or [Cat](#cat) ||
 or [Cat](#cat) |||#
 #### Or value from:
 
+
+</div>
 <!-- markdownlint-disable-file -->
 
 </div>"

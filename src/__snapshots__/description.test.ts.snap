@@ -7,23 +7,27 @@ exports[`description renders correct description 1`] = `
 
 ## Request
 
-#||| **method** | **url** | **description** ||
+<div class="openapi__request__wrapper">
 
-|| 
-\`\`\`
-POST
-\`\`\`
- | 
+<div class="openapi__request" style="--method: var(--dc-openapi-methods-post)">
+
+POST {.openapi__method}
+
+
 \`\`\`
 http://localhost:8080/test
 \`\`\`
- | 
-\`\`\`
-Generated server url
-\`\`\`
- |||#
+
+
+</div>
+
+</div>
+
+Generated server url{.openapi__request__description}
 
 ## Responses
+
+<div class="openapi__response__code__200">
 
 ## 200 OK
 
@@ -83,6 +87,8 @@ Dog class
 || type | string |  ||
 
 || bar | string |  |||#
+
+</div>
 <!-- markdownlint-disable-file -->
 
 </div>"
