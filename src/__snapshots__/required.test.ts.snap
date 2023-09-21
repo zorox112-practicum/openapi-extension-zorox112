@@ -7,28 +7,30 @@ exports[`description renders correct description 1`] = `
 
 ## Request
 
-#||| **method** | **url** | **description** ||
+<div class="openapi__request__wrapper">
 
-|| 
-\`\`\`
-POST
-\`\`\`
- | 
+<div class="openapi__request" style="--method: var(--dc-openapi-methods-post)">
+
+POST {.openapi__method}
+
+
 \`\`\`
 http://localhost:8080/test
 \`\`\`
- | 
-\`\`\`
-Generated server url
-\`\`\`
- |||#
+
+
+</div>
+
+</div>
+
+Generated server url{.openapi__request__description}
 
 #### Body
 
 {% cut "application/json" %}
 
 
-\`\`\`
+\`\`\`json
 {
     "d": 0,
     "e": 0
@@ -53,6 +55,8 @@ Generated server url
 
 ## Responses
 
+<div class="openapi__response__code__200">
+
 ## 200 OK
 
 Cat class
@@ -62,7 +66,7 @@ Cat class
 {% cut "application/json" %}
 
 
-\`\`\`
+\`\`\`json
 {
     "type": "string",
     "foo": "string"
@@ -78,6 +82,8 @@ Cat class
 || type | string |  ||
 
 || foo | string |  |||#
+
+</div>
 <!-- markdownlint-disable-file -->
 
 </div>"

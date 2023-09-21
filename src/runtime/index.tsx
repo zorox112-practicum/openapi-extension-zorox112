@@ -1,13 +1,37 @@
-import React, {useEffect, useState} from 'react';
-import {createPortal} from 'react-dom';
-import {unescape} from 'html-escaper';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { unescape } from 'html-escaper';
 
-import {Sandbox} from './sandbox';
+import { Sandbox } from './sandbox';
 
 import './index.scss';
 
 export const Runtime: React.FC = () => {
     const [sandbox, setSandbox] = useState<HTMLElement | null>(null);
+
+    useEffect(() => {
+        document.addEventListener('click', (event: any) => {
+            if (!event?.target?.closest('.openapi')) {
+                return;
+            }
+
+            const id = event?.target?.hash;
+
+            if (!id) {
+                return;
+            }
+
+            const anchor = document.querySelector(id);
+
+            if (anchor.classList.contains('highlight')) {
+                return;
+            }
+
+            anchor.classList.toggle('highlight');
+
+            setTimeout(() => anchor.classList.toggle('highlight'), 1_000)
+        })
+    }, []);
 
     useEffect(() => {
         setSandbox(document.querySelector<HTMLElement>('.yfm-sandbox-js'));
@@ -20,7 +44,7 @@ export const Runtime: React.FC = () => {
     try {
         const props = JSON.parse(unescape(sandbox.dataset.props));
 
-        return createPortal(<Sandbox { ...props } />, sandbox);
+        return createPortal(<Sandbox {...props} />, sandbox);
     } catch (error) {
         console.log(error);
 

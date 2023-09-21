@@ -1,7 +1,7 @@
 import {JSONSchema6} from 'json-schema';
 import stringify from 'json-stringify-safe';
 
-import {meta, page, block, title, body, table, code, cut, tabs, bold} from './common';
+import {meta, page, block, title, body, table, code, cut, tabs, bold, method} from './common';
 import {
     INFO_TAB_NAME,
     SANDBOX_TAB_NAME,
@@ -110,30 +110,36 @@ function sandbox({
 }
 
 function request(data: Endpoint) {
-    const {path, method, servers} = data;
-    const requestTableCols = ['method', 'url'];
+    const {path, method: type, servers} = data;
+    let description: string | undefined;
 
-    const hrefs = block(servers.map(({url}) => code(url + '/' + path)));
+    const url = block(servers.map(({url}) => code(url + '/' + path)));
 
-    const requestTableRow = [code(method.toUpperCase()), hrefs];
+    const requestTableRow = [method(type), `${url}`];
+
 
     if (servers.every((server: Server) => server.description)) {
-        requestTableCols.push('description');
-
-        const descriptions = block(servers.map(({description}) => code(description as string)));
-
-        requestTableRow.push(descriptions);
+        description = block(servers.map(({description}) => description));
     }
 
-    const requestTable = table([
-        requestTableCols,
-        requestTableRow,
-    ]);
+    const requestTable = block([
+        '<div class="openapi__request__wrapper">',
+        `<div class="openapi__request" style="--method: var(--dc-openapi-methods-${type})">`,
+        ...requestTableRow,
+        '</div>',
+        '</div>'
+    ])
 
-    return block([
+    const result = [
         title(2)(REQUEST_SECTION_NAME),
         requestTable,
-    ]);
+    ]
+
+    if (description) {
+        result.push(`${description}{.openapi__request__description}`)
+    }
+
+    return block(result);
 }
 
 function parameters(allRefs: Refs, pagePrintedRefs: Set<string>, params?: Parameters) {
@@ -195,7 +201,7 @@ function openapiBody(allRefs: Refs, pagePrintedRefs: Set<string>, obj?: Schema) 
     const {type = 'schema', schema} = obj;
     const sectionTitle = title(4)('Body');
 
-    let result = [
+    let result: any[] = [
         sectionTitle,
     ];
 
@@ -217,7 +223,7 @@ function openapiBody(allRefs: Refs, pagePrintedRefs: Set<string>, obj?: Schema) 
 
     result = [
         ...result,
-        cut(code(stringify(parsedSchema, null, 4)), type),
+        cut(code(stringify(parsedSchema, null, 4), 'json'), type),
         content,
     ];
 
@@ -274,9 +280,11 @@ function response(allRefs: Refs, visited: Set<string>, resp: Response) {
     }
 
     return block([
+        `<div class="openapi__response__code__${resp.code}">`,
         title(2)(header),
         body(resp.description),
         resp.schemas?.length && block(resp.schemas.map((s) => openapiBody(allRefs, visited, s))),
+        '</div>'
     ]);
 }
 
