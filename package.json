@@ -52,6 +52,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.2",
     "@babel/eslint-parser": "^7.22.15",
     "@diplodoc/eslint-config": "^1.0.3",
     "@diplodoc/tsconfig": "^1.0.2",

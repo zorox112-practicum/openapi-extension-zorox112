@@ -1,15 +1,19 @@
-name: Release
-
 on:
   push:
-    branches: [main]
+    branches: [master]
+
+name: release
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-    - uses: yandex-cloud/ui-release-action@main
-      with:
-        github-token: ${{ secrets.DIPLODOC_BOT_GITHUB_TOKEN }}
-        npm-token: ${{ secrets.DIPLODOC_BOT_NPM_TOKEN }}
-        node-version: 14
+      - uses: yandex-cloud/ui-release-action@main
+        with:
+          github-token: ${{ secrets.YC_UI_BOT_GITHUB_TOKEN }}
+          npm-token: ${{ secrets.ROBOT_DATAUI_NPM_TOKEN }}
+          node-version: 14
