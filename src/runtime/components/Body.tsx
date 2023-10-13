@@ -1,6 +1,6 @@
 import type {Field, Nullable} from '../types';
 import React from 'react';
-import {TextInput, Text} from '@gravity-ui/uikit';
+import {TextArea, Text} from '@gravity-ui/uikit';
 
 import {Text as TextEnum} from '../../plugin/constants';
 
@@ -42,9 +42,8 @@ export class Body extends React.Component<Props, State> implements Field<string,
         return (
             <Column gap={ 10 }>
                 <Text variant="header-1">{ TextEnum.BODY_INPUT_LABEL }</Text>
-                <TextInput
+                <TextArea
                     error={ error || false }
-                    multiline
                     rows={ 10 }
                     name="body"
                     value={ value }
