@@ -9,9 +9,6 @@ jobs:
       contents: write
       pull-requests: write
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -19,7 +16,7 @@ jobs:
       - name: Use Node.js 14
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 18
       - name: Diplodoc build action
         uses: v8tenko/diplodoc-playground@v2.3
         with:
