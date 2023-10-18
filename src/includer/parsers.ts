@@ -5,17 +5,17 @@ import {getStatusText} from 'http-status-codes';
 import {TAG_NAMES_FIELD} from './constants';
 
 import {
-    OpenAPISpec,
-    OpenAPIOperation,
-    Info,
-    Tag,
-    Endpoints,
-    Method,
-    Server,
-    Responses,
-    Response,
     Endpoint,
+    Endpoints,
+    Info,
+    Method,
+    OpenAPIOperation,
+    OpenAPISpec,
+    Response,
+    Responses,
+    Server,
     Specification,
+    Tag,
 } from './models';
 
 function info(spec: OpenAPISpec): Info {

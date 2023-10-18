@@ -1,8 +1,8 @@
 /* eslint-disable-next-line no-shadow */
-import {page, block, title, body, link, list} from './common';
+import {block, body, link, list, page, title} from './common';
 import {ENDPOINTS_SECTION_NAME} from '../constants';
 
-import {Tag, Endpoint, Endpoints} from '../models';
+import {Endpoint, Endpoints, Tag} from '../models';
 
 function section(tag: Tag) {
     const sectionPage = [

@@ -1,5 +1,5 @@
-import type {ResponseState, ErrorState} from '../types';
-import React, {useState, useEffect} from 'react';
+import type {ErrorState, ResponseState} from '../types';
+import React, {useEffect, useState} from 'react';
 import {Loader} from './Loader';
 import {Response} from './Response';
 import {Error} from './Error';

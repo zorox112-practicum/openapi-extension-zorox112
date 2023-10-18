@@ -1,9 +1,9 @@
 import {
-    EOL,
     BLOCK,
-    HTML_COMMENTS_OPEN_DIRECTIVE,
-    HTML_COMMENTS_CLOSE_DIRECTIVE,
     DISABLE_LINTER_DIRECTIVE,
+    EOL,
+    HTML_COMMENTS_CLOSE_DIRECTIVE,
+    HTML_COMMENTS_OPEN_DIRECTIVE,
 } from '../constants';
 
 
@@ -44,7 +44,7 @@ function bold(text: string) {
     return `**${text}**`;
 }
 
-function code(text: string, type: string = '') {
+function code(text: string, type = '') {
     const appliedType = (type && text.length <= 200) ? type : ''
     return EOL + ['```' + appliedType, text, '```'].join(EOL) + EOL;
 }

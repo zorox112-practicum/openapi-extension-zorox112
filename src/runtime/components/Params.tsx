@@ -1,6 +1,6 @@
-import type {Field, Nullable, Primitive, Parameter, Parameters} from '../types';
+import type {Field, Nullable, Parameter, Parameters, Primitive} from '../types';
 import React from 'react';
-import {TextInput, Text} from '@gravity-ui/uikit';
+import {Text, TextInput} from '@gravity-ui/uikit';
 
 import {Column} from './Column';
 import {merge} from '../utils';

@@ -12,7 +12,8 @@ function virtualFS() {
         }),
         match(target: string) {
             const paths = Object.keys(pages);
-            const closest = paths.find((path) => path.includes(target));
+            const closest = paths.find( 
+                (path) => path.includes(target));
 
             if (!closest) {
                 throw new Error(`There is not page with path: ${target}.\nPages: ${Object.keys(pages).join('\n')}`);

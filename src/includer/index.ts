@@ -1,5 +1,5 @@
 import assert from 'assert';
-import {resolve, join, dirname} from 'path';
+import {dirname, join, resolve} from 'path';
 import {mkdir, writeFile} from 'fs/promises';
 import {matchFilter} from './utils';
 
@@ -12,24 +12,24 @@ import SwaggerParser from '@apidevtools/swagger-parser';
 import {JSONSchema6} from 'json-schema';
 
 import {
+    LEADING_PAGE_MODES,
     LEADING_PAGE_NAME_DEFAULT,
+    LeadingPageMode,
     SPEC_RENDER_MODES,
     SPEC_RENDER_MODE_DEFAULT,
-    LEADING_PAGE_MODES,
-    LeadingPageMode,
 } from './constants';
 
 import {
+    Endpoint,
     IncluderFunctionParams,
+    Info,
+    OpenAPISpec,
+    OpenApiIncluderParams,
+    Refs,
+    Specification,
     YfmPreset,
     YfmToc,
     YfmTocItem,
-    Endpoint,
-    Info,
-    Refs,
-    Specification,
-    OpenApiIncluderParams,
-    OpenAPISpec,
 } from './models';
 
 const INCLUDER_NAME = 'openapi';

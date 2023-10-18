@@ -2,17 +2,17 @@ import {sep} from 'path';
 
 import stringify from 'json-stringify-safe';
 
-import {page, block, title, body, mono, link, list, cut, code} from './common';
+import {block, body, code, cut, link, list, mono, page, title} from './common';
 import {
     CONTACTS_SECTION_NAME,
-    TAGS_SECTION_NAME,
     ENDPOINTS_SECTION_NAME,
     SPEC_RENDER_MODE_DEFAULT,
     SPEC_SECTION_NAME,
     SPEC_SECTION_TYPE,
+    TAGS_SECTION_NAME,
 } from '../constants';
 
-import {Info, Contact, ContactSource, Tag, Specification, LeadingPageSpecRenderMode} from '../models';
+import {Contact, ContactSource, Info, LeadingPageSpecRenderMode, Specification, Tag} from '../models';
 import {mdPath, sectionName} from '../index';
 
 export type MainParams = {

@@ -1,31 +1,31 @@
 import {JSONSchema6} from 'json-schema';
 import stringify from 'json-stringify-safe';
 
-import {meta, page, block, title, body, table, code, cut, tabs, bold, method} from './common';
+import {block, body, bold, code, cut, meta, method, page, table, tabs, title} from './common';
 import {
-    INFO_TAB_NAME,
-    SANDBOX_TAB_NAME,
     COOKIES_SECTION_NAME,
     HEADERS_SECTION_NAME,
+    INFO_TAB_NAME,
     PATH_PARAMETERS_SECTION_NAME,
+    PRIMITIVE_JSON6_SCHEMA_TYPES,
     QUERY_PARAMETERS_SECTION_NAME,
     REQUEST_SECTION_NAME,
     RESPONSES_SECTION_NAME,
-    PRIMITIVE_JSON6_SCHEMA_TYPES,
+    SANDBOX_TAB_NAME,
 } from '../constants';
 
 import {
     Endpoint,
-    Parameters,
     Parameter,
-    Responses,
-    Response,
-    Schema,
+    Parameters,
     Refs,
-    Server,
+    Response,
+    Responses,
+    Schema,
     Security,
+    Server,
 } from '../models';
-import {prepareTableRowData, prepareSampleObject, tableFromSchema, tableParameterName, TableRef} from './traverse';
+import {TableRef, prepareSampleObject, prepareTableRowData, tableFromSchema, tableParameterName} from './traverse';
 import {concatNewLine} from '../utils';
 import {openapiBlock} from './constants';
 

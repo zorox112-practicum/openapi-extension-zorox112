@@ -1,12 +1,12 @@
 import {JSONSchema6} from 'json-schema';
-import {table, anchor, title} from './common';
+import {anchor, table, title} from './common';
 import stringify from 'json-stringify-safe';
 
 import {concatNewLine} from '../utils';
 import {openapiBlock} from './constants';
-import {SUPPORTED_ENUM_TYPES, EOL} from '../constants';
+import {EOL, SUPPORTED_ENUM_TYPES} from '../constants';
 
-import {JsType, Refs, SupportedEnumType, OpenJSONSchema, OpenJSONSchemaDefinition} from '../models';
+import {JsType, OpenJSONSchema, OpenJSONSchemaDefinition, Refs, SupportedEnumType} from '../models';
 
 type TableRow = [string, string, string];
 
@@ -144,7 +144,6 @@ export function prepareTableRowData(
 ): PrepareRowResult {
     const description = value.description || '';
     const ref = findRef(allRefs, value);
-    debugger;
 
     if (ref) {
         return {type: anchor(ref), description, ref};

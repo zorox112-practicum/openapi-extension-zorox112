@@ -1,6 +1,6 @@
 import type {Field, Nullable} from '../types';
 import React from 'react';
-import {TextArea, Text} from '@gravity-ui/uikit';
+import {Text, TextArea} from '@gravity-ui/uikit';
 
 import {Text as TextEnum} from '../../plugin/constants';
 

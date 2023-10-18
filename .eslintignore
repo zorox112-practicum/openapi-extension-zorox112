@@ -1,7 +1,7 @@
 node_modules
-includer
-plugin
-runtime
+/includer
+/plugin
+/runtime
 jest.snapshots.js
 jest.config.js
 build

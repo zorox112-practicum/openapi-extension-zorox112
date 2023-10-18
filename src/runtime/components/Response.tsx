@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Text, Card, ClipboardButton} from '@gravity-ui/uikit';
+import React, {useEffect, useState} from 'react';
+import {Card, ClipboardButton, Text} from '@gravity-ui/uikit';
 
 import type {ResponseState} from '../types';
 import {Text as TextEnum, yfmSandbox} from '../../plugin/constants';

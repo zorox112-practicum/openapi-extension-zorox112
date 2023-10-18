@@ -1,12 +1,9 @@
-import path from 'node:path';
 import {OpenAPIV3} from 'openapi-types';
 import {includerFunction} from '../../includer';
 import {when} from 'jest-when';
 import {dump} from 'js-yaml';
 import {virtualFS} from './virtualFS';
 import nodeFS from 'fs';
-
-export const PERSET_PATH = path.resolve('spec.yaml');
 
 const baseDocument = {
     openapi: '3.0.2',
