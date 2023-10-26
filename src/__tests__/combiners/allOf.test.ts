@@ -28,9 +28,7 @@ describe('allOf operator support', () => {
                 description: 'Dog class',
             })
             .component('Mice', {
-                allOf: [
-                    DocumentBuilder.ref('Cat'),
-                ],
+                allOf: [DocumentBuilder.ref('Cat')],
             })
             .request({
                 schema: {
@@ -55,9 +53,7 @@ describe('allOf operator support', () => {
                             default: 'a',
                         },
                     },
-                    allOf: [
-                        DocumentBuilder.ref('Dog'),
-                    ],
+                    allOf: [DocumentBuilder.ref('Dog')],
                 },
             })
             .build();
@@ -96,17 +92,13 @@ describe('allOf operator support', () => {
                 description: 'Dog class',
             })
             .component('Mice', {
-                allOf: [
-                    DocumentBuilder.ref('Cat'),
-                ],
+                allOf: [DocumentBuilder.ref('Cat')],
             })
             .request({
                 schema: {
                     properties: {
                         pet: {
-                            allOf: [
-                                DocumentBuilder.ref('Mice'),
-                            ],
+                            allOf: [DocumentBuilder.ref('Mice')],
                         },
                     },
                 },
@@ -116,9 +108,7 @@ describe('allOf operator support', () => {
                 schema: {
                     properties: {
                         pet: {
-                            allOf: [
-                                DocumentBuilder.ref('Mice'),
-                            ],
+                            allOf: [DocumentBuilder.ref('Mice')],
                         },
                     },
                 },

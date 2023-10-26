@@ -29,18 +29,13 @@ describe('oneOf operator support', () => {
             })
             .request({
                 schema: {
-                    oneOf: [
-                        DocumentBuilder.ref('Dog'),
-                        DocumentBuilder.ref('Cat'),
-                    ],
-                }})
+                    oneOf: [DocumentBuilder.ref('Dog'), DocumentBuilder.ref('Cat')],
+                },
+            })
             .response(200, {
                 schema: {
                     description: 'Base 200 response',
-                    oneOf: [
-                        DocumentBuilder.ref('Dog'),
-                        DocumentBuilder.ref('Cat'),
-                    ],
+                    oneOf: [DocumentBuilder.ref('Dog'), DocumentBuilder.ref('Cat')],
                 },
             })
             .build();
@@ -88,11 +83,9 @@ describe('oneOf operator support', () => {
                             type: 'number',
                         },
                     },
-                    oneOf: [
-                        DocumentBuilder.ref('Dog'),
-                        DocumentBuilder.ref('Cat'),
-                    ],
-                }})
+                    oneOf: [DocumentBuilder.ref('Dog'), DocumentBuilder.ref('Cat')],
+                },
+            })
             .response(200, {
                 schema: {
                     description: 'Base 200 response',
@@ -104,10 +97,7 @@ describe('oneOf operator support', () => {
                             type: 'number',
                         },
                     },
-                    oneOf: [
-                        DocumentBuilder.ref('Dog'),
-                        DocumentBuilder.ref('Cat'),
-                    ],
+                    oneOf: [DocumentBuilder.ref('Dog'), DocumentBuilder.ref('Cat')],
                 },
             })
             .build();
@@ -149,32 +139,21 @@ describe('oneOf operator support', () => {
                 schema: {
                     properties: {
                         pet: {
-                            oneOf: [
-                                DocumentBuilder.ref('Dog'),
-                                DocumentBuilder.ref('Cat'),
-                            ],
+                            oneOf: [DocumentBuilder.ref('Dog'), DocumentBuilder.ref('Cat')],
                         },
                     },
-                    oneOf: [
-                        DocumentBuilder.ref('Dog'),
-                        DocumentBuilder.ref('Cat'),
-                    ],
-                }})
+                    oneOf: [DocumentBuilder.ref('Dog'), DocumentBuilder.ref('Cat')],
+                },
+            })
             .response(200, {
                 schema: {
                     description: 'Base 200 response',
                     properties: {
                         pet: {
-                            oneOf: [
-                                DocumentBuilder.ref('Dog'),
-                                DocumentBuilder.ref('Cat'),
-                            ],
+                            oneOf: [DocumentBuilder.ref('Dog'), DocumentBuilder.ref('Cat')],
                         },
                     },
-                    oneOf: [
-                        DocumentBuilder.ref('Dog'),
-                        DocumentBuilder.ref('Cat'),
-                    ],
+                    oneOf: [DocumentBuilder.ref('Dog'), DocumentBuilder.ref('Cat')],
                 },
             })
             .build();

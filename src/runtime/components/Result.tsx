@@ -58,12 +58,11 @@ export const Result: React.FC<{
 
     useEffect(() => {
         const scope = request;
-        const onResponse = (result: ResponseState) => scope === request ? setResponse(result) : null;
-        const onError = (result: ErrorState) => scope === request ? setError(result) : null;
+        const onResponse = (result: ResponseState) =>
+            scope === request ? setResponse(result) : null;
+        const onError = (result: ErrorState) => (scope === request ? setError(result) : null);
 
-        request
-            .then(processResponse)
-            .then(onResponse, onError);
+        request.then(processResponse).then(onResponse, onError);
 
         return () => {
             setResponse(null);
@@ -73,9 +72,9 @@ export const Result: React.FC<{
 
     return (
         <>
-            { !response && !error && <Loader/> }
-            { response && <Response response={ response }/> }
-            { error && <Error message={ error.message }/> }
+            {!response && !error && <Loader />}
+            {response && <Response response={response} />}
+            {error && <Error message={error.message} />}
         </>
     );
 };

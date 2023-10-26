@@ -9,30 +9,29 @@ function validate(
     params: Parameters | undefined,
     values: Record<string, Nullable<Primitive>>,
 ): Nullable<Record<string, string>> {
-    const errors = merge(params || [], (param) => (
-        param.required && !values[param.name]
-            ? {[param.name]: 'Required'}
-            : undefined
-    ));
+    const errors = merge(params || [], (param) =>
+        param.required && !values[param.name] ? {[param.name]: 'Required'} : undefined,
+    );
 
-    return Object.keys(errors).length
-        ? errors
-        : undefined;
+    return Object.keys(errors).length ? errors : undefined;
 }
 
-export class Params extends React.Component<{
-    title: string;
-    params?: Array<Parameter & { placeholder?: string }>;
-}, {
-    values: Record<string, Nullable<Primitive>>;
-    errors: Nullable<Record<string, string>>;
-}> implements Field<Record<string, Nullable<Primitive>>, Record<string, string>> {
+export class Params
+    extends React.Component<
+        {
+            title: string;
+            params?: Array<Parameter & {placeholder?: string}>;
+        },
+        {
+            values: Record<string, Nullable<Primitive>>;
+            errors: Nullable<Record<string, string>>;
+        }
+    >
+    implements Field<Record<string, Nullable<Primitive>>, Record<string, string>>
+{
     private onchange: Record<string, (value: string) => void>;
 
-    constructor(props: {
-        title: string;
-        params?: Array<Parameter & { placeholder?: string }>;
-    }) {
+    constructor(props: {title: string; params?: Array<Parameter & {placeholder?: string}>}) {
         super(props);
 
         this.state = {
@@ -56,25 +55,30 @@ export class Params extends React.Component<{
         }
 
         return (
-            <Column gap={ 15 }>
-                <Text variant="header-1">{ title }</Text>
-                <Column gap={ 10 }>
-                    { params.map((param, index) => (
-                        <Column gap={ 5 } key={ index }>
+            <Column gap={15}>
+                <Text variant="header-1">{title}</Text>
+                <Column gap={10}>
+                    {params.map((param, index) => (
+                        <Column gap={5} key={index}>
                             <Text variant="body-2">
-                                { param.name }
-                                { Boolean(param.required) && <Text variant="body-2" color="danger">*</Text> }:
+                                {param.name}
+                                {Boolean(param.required) && (
+                                    <Text variant="body-2" color="danger">
+                                        *
+                                    </Text>
+                                )}
+                                :
                             </Text>
 
                             <TextInput
-                                value={ values[param.name] as string }
-                                name={ param.name }
-                                placeholder={ param.placeholder }
-                                onUpdate={ this.onchange[param.name] }
-                                error={ errors && errors[param.name] || false }
+                                value={values[param.name] as string}
+                                name={param.name}
+                                placeholder={param.placeholder}
+                                onUpdate={this.onchange[param.name]}
+                                error={(errors && errors[param.name]) || false}
                             />
                         </Column>
-                    )) }
+                    ))}
                 </Column>
             </Column>
         );

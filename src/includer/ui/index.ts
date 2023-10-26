@@ -1,6 +1,8 @@
-import {main} from './main';
-import {section} from './section';
+export * from './common';
+
 import {endpoint} from './endpoint';
+import {section} from './section';
+import {main} from './main';
 
 export {main, section, endpoint};
 

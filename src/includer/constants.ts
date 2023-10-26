@@ -1,4 +1,4 @@
-import {JSONSchema6} from 'json-schema';
+import {OpenJSONSchema} from './models';
 
 export enum LeadingPageMode {
     Section = 'section',
@@ -27,7 +27,15 @@ export const LEADING_PAGE_NAME_DEFAULT = 'Overview';
 export const SPEC_RENDER_MODE_HIDDEN = 'hidden';
 export const SPEC_RENDER_MODE_DEFAULT = 'inline';
 export const SUPPORTED_ENUM_TYPES = ['string', 'number'] as const;
-export const PRIMITIVE_JSON6_SCHEMA_TYPES =
-    new Set<JSONSchema6['type']>(['string', 'boolean', 'null', 'number', 'integer']);
-export const SPEC_RENDER_MODES = new Set<string>([SPEC_RENDER_MODE_DEFAULT, SPEC_RENDER_MODE_HIDDEN]);
+export const PRIMITIVE_JSON6_SCHEMA_TYPES = new Set<OpenJSONSchema['type']>([
+    'string',
+    'boolean',
+    'null',
+    'number',
+    'integer',
+]);
+export const SPEC_RENDER_MODES = new Set<string>([
+    SPEC_RENDER_MODE_DEFAULT,
+    SPEC_RENDER_MODE_HIDDEN,
+]);
 export const LEADING_PAGE_MODES = new Set<string>([LeadingPageMode.Leaf, LeadingPageMode.Section]);

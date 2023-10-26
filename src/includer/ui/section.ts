@@ -22,7 +22,10 @@ function endpoints(data?: Endpoints) {
     const visibleEndpoints = data?.filter((ep) => !ep.hidden);
     const linkMap = ({id, summary}: Endpoint) => link(summary ?? id, id + '.md');
 
-    return visibleEndpoints?.length && block([title(2)(ENDPOINTS_SECTION_NAME), list(visibleEndpoints.map(linkMap))]);
+    return (
+        visibleEndpoints?.length &&
+        block([title(2)(ENDPOINTS_SECTION_NAME), list(visibleEndpoints.map(linkMap))])
+    );
 }
 
 export {section};

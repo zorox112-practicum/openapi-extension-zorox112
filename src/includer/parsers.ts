@@ -19,7 +19,9 @@ import {
 } from './models';
 
 function info(spec: OpenAPISpec): Info {
-    const {info: {title, description, version, termsOfService, license, contact}} = spec;
+    const {
+        info: {title, description, version, termsOfService, license, contact},
+    } = spec;
 
     const parsed: Info = {
         name: title,
@@ -54,7 +56,10 @@ function info(spec: OpenAPISpec): Info {
         }
 
         if (contact.email) {
-            parsed.contact.sources.push({type: 'email', url: new URL('mailto:' + contact.email).href});
+            parsed.contact.sources.push({
+                type: 'email',
+                url: new URL('mailto:' + contact.email).href,
+            });
         }
     }
 
@@ -107,17 +112,11 @@ function tagsFromSpec(spec: OpenAPISpec): Map<string, Tag> {
 
     return parsed;
 }
-const opid = (path: string, method: string, id?: string) =>
-    slugify(id ?? ([path, method].join('-')));
+const opid = (path: string, method: string, id?: string) => slugify(id ?? [path, method].join('-'));
 
 function pathsFromSpec(spec: OpenAPISpec, tagsByID: Map<string, Tag>): Specification {
     const endpoints: Endpoints = [];
-    const {
-        paths,
-        servers,
-        components = {},
-        security: globalSecurity = [],
-    } = spec;
+    const {paths, servers, components = {}, security: globalSecurity = []} = spec;
     const visiter = ({path, method, endpoint}: VisiterParams) => {
         const {
             summary,
@@ -131,20 +130,23 @@ function pathsFromSpec(spec: OpenAPISpec, tagsByID: Map<string, Tag>): Specifica
         } = endpoint;
 
         const parsedSecurity = [...security, ...globalSecurity].reduce((arr, item) => {
-            arr.push(...Object.keys(item).reduce((acc, key) => {
-                // @ts-ignore
-                acc.push(components.securitySchemes[key]);
-                return acc;
-            }, []));
+            arr.push(
+                ...Object.keys(item).reduce((acc, key) => {
+                    // @ts-ignore
+                    acc.push(components.securitySchemes[key]);
+                    return acc;
+                }, []),
+            );
             return arr;
         }, []);
 
-        const parsedServers = (endpoint.servers || servers || [{url: '/'}])
-            .map((server: Server) => {
+        const parsedServers = (endpoint.servers || servers || [{url: '/'}]).map(
+            (server: Server) => {
                 server.url = trimSlash(server.url);
 
                 return server;
-            });
+            },
+        );
 
         /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
         const parseResponse = ([code, response]: [string, {[key: string]: any}]) => {
@@ -158,16 +160,18 @@ function pathsFromSpec(spec: OpenAPISpec, tagsByID: Map<string, Tag>): Specifica
 
             if (response.content) {
                 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-                parsed.schemas = Object.entries<{[key: string]: any}>(response.content)
-                    .map(([type, schema]) => ({type, schema: schema?.schema || {}}));
+                parsed.schemas = Object.entries<{[key: string]: any}>(response.content).map(
+                    ([type, schema]) => ({type, schema: schema?.schema || {}}),
+                );
             }
 
             return parsed as Response;
         };
 
         /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-        const parsedResponses: Responses = Object.entries<{[key: string]: any}>(responses ?? {})
-            .map(parseResponse);
+        const parsedResponses: Responses = Object.entries<{[key: string]: any}>(
+            responses ?? {},
+        ).map(parseResponse);
 
         const contentType = requestBody ? Object.keys(requestBody.content)[0] : undefined;
 
@@ -182,10 +186,13 @@ function pathsFromSpec(spec: OpenAPISpec, tagsByID: Map<string, Tag>): Specifica
             operationId,
             tags: tags.map((tag) => slugify(tag)),
             id: opid(path, method, operationId),
-            requestBody: (contentType && requestBody) ? {
-                type: contentType,
-                schema: requestBody.content[contentType].schema,
-            } : undefined,
+            requestBody:
+                contentType && requestBody
+                    ? {
+                          type: contentType,
+                          schema: requestBody.content[contentType].schema,
+                      }
+                    : undefined,
             security: parsedSecurity,
         };
 

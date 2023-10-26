@@ -29,10 +29,7 @@ describe('basic openapi project', () => {
             })
             .request({
                 schema: {
-                    oneOf: [
-                        DocumentBuilder.ref('Dog'),
-                        DocumentBuilder.ref('Cat'),
-                    ],
+                    oneOf: [DocumentBuilder.ref('Dog'), DocumentBuilder.ref('Cat')],
                     properties: {
                         name: {
                             type: 'string',
@@ -63,14 +60,12 @@ describe('basic openapi project', () => {
                             ],
                         },
                     },
-                }})
+                },
+            })
             .response(200, {
                 description: 'Base 200 response',
                 schema: {
-                    oneOf: [
-                        DocumentBuilder.ref('Dog'),
-                        DocumentBuilder.ref('Cat'),
-                    ],
+                    oneOf: [DocumentBuilder.ref('Dog'), DocumentBuilder.ref('Cat')],
                     properties: {
                         name: {
                             type: 'string',

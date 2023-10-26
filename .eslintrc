@@ -1,4 +1,0 @@
-{
-    "extends": ["@diplodoc/eslint-config"],
-    "root": true
-}
