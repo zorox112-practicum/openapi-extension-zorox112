@@ -10,15 +10,14 @@ describe('description', () => {
                     type: 'number',
                 },
             })
-            .parameter(
-                {
-                    name: 'b',
-                    in: 'query',
-                    required: false,
-                    schema: {
-                        type: 'number',
-                    },
-                })
+            .parameter({
+                name: 'b',
+                in: 'query',
+                required: false,
+                schema: {
+                    type: 'number',
+                },
+            })
             .parameter({
                 name: 'c',
                 in: 'query',
@@ -27,37 +26,36 @@ describe('description', () => {
                     type: 'number',
                 },
             })
-            .request({schema: {
-                type: 'object',
-                properties: {
-                    a: {
-                        type: 'number',
-                    },
-                    b: {
-                        type: 'number',
-                    },
-                    c: {
-                        type: 'number',
-                    },
-                },
-                required: [
-                    'a',
-                ],
-                allOf: [{
+            .request({
+                schema: {
+                    type: 'object',
                     properties: {
-                        d: {
+                        a: {
                             type: 'number',
                         },
-                        e: {
+                        b: {
+                            type: 'number',
+                        },
+                        c: {
                             type: 'number',
                         },
                     },
-                    required: [
-                        'b',
-                        'd',
+                    required: ['a'],
+                    allOf: [
+                        {
+                            properties: {
+                                d: {
+                                    type: 'number',
+                                },
+                                e: {
+                                    type: 'number',
+                                },
+                            },
+                            required: ['b', 'd'],
+                        },
                     ],
-                }],
-            }})
+                },
+            })
             .response(200, {
                 schema: {
                     type: 'object',
@@ -71,15 +69,11 @@ describe('description', () => {
                     },
                 },
                 description: 'Cat class',
-            })
-            ;
-
-
+            });
         const fs = await run(spec.build());
 
         const page = fs.match('description.md');
 
         expect(page).toMatchSnapshot();
     });
-
 });

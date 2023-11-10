@@ -1,8 +1,9 @@
-import {sep} from 'path';
-
 import stringify from 'json-stringify-safe';
 
-import {block, body, code, cut, link, list, mono, page, title} from './common';
+import {sep} from 'path';
+
+import {block, body, code, cut, link, list, mono, page, title} from '.';
+
 import {
     CONTACTS_SECTION_NAME,
     ENDPOINTS_SECTION_NAME,
@@ -12,11 +13,19 @@ import {
     TAGS_SECTION_NAME,
 } from '../constants';
 
-import {Contact, ContactSource, Info, LeadingPageSpecRenderMode, Specification, Tag} from '../models';
+import {
+    Contact,
+    ContactSource,
+    Info,
+    LeadingPageSpecRenderMode,
+    Specification,
+    Tag,
+} from '../models';
+
 import {mdPath, sectionName} from '../index';
 
 export type MainParams = {
-    data: any;
+    data: unknown;
     info: Info;
     spec: Specification;
     leadingPageSpecRenderMode: LeadingPageSpecRenderMode;
@@ -42,12 +51,11 @@ function main(params: MainParams) {
 }
 
 function contact(data?: Contact) {
-    return data?.name.length &&
-           data?.sources.length &&
-           block([
-               title(2)(CONTACTS_SECTION_NAME),
-               list(data.sources.map(contactSource(data))),
-           ]);
+    return (
+        data?.name.length &&
+        data?.sources.length &&
+        block([title(2)(CONTACTS_SECTION_NAME), list(data.sources.map(contactSource(data)))])
+    );
 }
 
 function contactSource(data: Contact) {
@@ -62,28 +70,28 @@ function sections({tags, endpoints}: Specification) {
     const content = [];
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-    const taggedLinks = Array.from(tags).map(([_, {name, id}]: [any, Tag]) => link(name, id + sep + 'index.md'));
+    const taggedLinks = Array.from(tags).map(([_, {name, id}]: [any, Tag]) =>
+        link(name, id + sep + 'index.md'),
+    );
     if (taggedLinks.length) {
-        content.push(
-            title(2)(TAGS_SECTION_NAME),
-            list(taggedLinks),
-        );
+        content.push(title(2)(TAGS_SECTION_NAME), list(taggedLinks));
     }
 
-    const untaggedLinks = endpoints.map((endpoint) => link(sectionName(endpoint), mdPath(endpoint)));
+    const untaggedLinks = endpoints.map((endpoint) =>
+        link(sectionName(endpoint), mdPath(endpoint)),
+    );
     if (untaggedLinks.length) {
-        content.push(
-            title(2)(ENDPOINTS_SECTION_NAME),
-            list(untaggedLinks),
-        );
+        content.push(title(2)(ENDPOINTS_SECTION_NAME), list(untaggedLinks));
     }
 
     return content.length && block(content);
 }
 
-function specification(data: any, renderMode: LeadingPageSpecRenderMode) {
-    return renderMode === SPEC_RENDER_MODE_DEFAULT &&
-        block([title(2)(SPEC_SECTION_NAME), cut(code(stringify(data, null, 4)), SPEC_SECTION_TYPE)]);
+function specification(data: unknown, renderMode: LeadingPageSpecRenderMode) {
+    return (
+        renderMode === SPEC_RENDER_MODE_DEFAULT &&
+        block([title(2)(SPEC_SECTION_NAME), cut(code(stringify(data, null, 4)), SPEC_SECTION_TYPE)])
+    );
 }
 
 export {main};

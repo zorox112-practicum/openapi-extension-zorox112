@@ -19,16 +19,13 @@ const baseDocument = {
     ],
 };
 
-
 type WithDescription<T> = T & {
     description?: string;
 };
 
 type Schema = WithDescription<OpenAPIV3.MediaTypeObject>;
 
-
 export class DocumentBuilder {
-
     static ref(target: string, description?: string): WithDescription<OpenAPIV3.ReferenceObject> {
         return {
             $ref: `#/components/schemas/${target}`,
@@ -37,12 +34,10 @@ export class DocumentBuilder {
     }
 
     private id: string;
-    private responses: [code: number, response: OpenAPIV3.ResponseObject][] =
-        [];
+    private responses: [code: number, response: OpenAPIV3.ResponseObject][] = [];
     private parameters: OpenAPIV3.ParameterObject[] = [];
     private components: Record<string, OpenAPIV3.SchemaObject> = {};
     private requestBody?: OpenAPIV3.RequestBodyObject = undefined;
-
 
     constructor(id: string) {
         this.id = id;
@@ -64,9 +59,7 @@ export class DocumentBuilder {
 
     request(skeleton: Schema) {
         if (this.requestBody) {
-            throw new Error(
-                'Test case error: request can\'t have several requests',
-            );
+            throw new Error("Test case error: request can't have several requests");
         }
         const {description, ...schema} = skeleton;
         const request: OpenAPIV3.RequestBodyObject = {
@@ -87,7 +80,6 @@ export class DocumentBuilder {
         return this;
     }
 
-
     component(name: string, schema: OpenAPIV3.SchemaObject) {
         this.components[name] = schema;
 
@@ -96,9 +88,7 @@ export class DocumentBuilder {
 
     build(): string {
         if (!this.responses.length) {
-            throw new Error(
-                'Test case error: endpoint can\'t have no responses',
-            );
+            throw new Error("Test case error: endpoint can't have no responses");
         }
 
         const spec: OpenAPIV3.Document = {
@@ -130,15 +120,11 @@ export async function run(spec: string) {
         callback(null, Buffer.from(spec, 'utf-8'));
     });
 
-    when(jest.spyOn(nodeFS.promises, 'writeFile')).mockImplementation(
-        async (file, content) => {
-            fs.writeFile(file.toString(), content);
-        },
-    );
+    when(jest.spyOn(nodeFS.promises, 'writeFile')).mockImplementation(async (file, content) => {
+        fs.writeFile(file.toString(), content);
+    });
 
-    when(jest.spyOn(nodeFS.promises, 'mkdir')).mockImplementation(
-        async () => undefined,
-    );
+    when(jest.spyOn(nodeFS.promises, 'mkdir')).mockImplementation(async () => undefined);
 
     await includerFunction({
         index: 0,

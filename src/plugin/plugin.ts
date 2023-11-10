@@ -7,7 +7,11 @@ const startMark = '{% openapi sandbox %}';
 const endMark = '{% end openapi sandbox %}';
 
 function parserOpenAPISandboxBlock(state: StateBlock, start: number, end: number, silent: boolean) {
-    let firstLine, lastLine, next, lastPos, found = false,
+    let firstLine,
+        lastLine,
+        next,
+        lastPos,
+        found = false,
         pos = state.bMarks[start] + state.tShift[start],
         max = state.eMarks[start];
 
@@ -31,7 +35,7 @@ function parserOpenAPISandboxBlock(state: StateBlock, start: number, end: number
         found = true;
     }
 
-    for (next = start; !found;) {
+    for (next = start; !found; ) {
         next++;
 
         if (next >= end) {
@@ -57,9 +61,10 @@ function parserOpenAPISandboxBlock(state: StateBlock, start: number, end: number
 
     const token = state.push('openapi_sandbox_block', 'openapi_sandbox', 0);
     token.block = true;
-    token.content = (firstLine ? firstLine + '\n' : '')
-        + state.getLines(start + 1, next, state.tShift[start], true)
-        + (lastLine ? lastLine : '');
+    token.content =
+        (firstLine ? firstLine + '\n' : '') +
+        state.getLines(start + 1, next, state.tShift[start], true) +
+        (lastLine ? lastLine : '');
     token.map = [start, state.line];
     token.markup = startMark;
     return true;

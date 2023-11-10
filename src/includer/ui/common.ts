@@ -1,3 +1,6 @@
+import slugify from 'slugify';
+import bem from 'bem-cn-lite';
+
 import {
     BLOCK,
     DISABLE_LINTER_DIRECTIVE,
@@ -6,9 +9,9 @@ import {
     HTML_COMMENTS_OPEN_DIRECTIVE,
 } from '../constants';
 
-
 import {TitleDepth} from '../models';
-import slugify from 'slugify';
+
+const openapiBlock = bem('openapi');
 
 function meta(content: (string | boolean | undefined)[]) {
     const entries = content.filter(Boolean);
@@ -45,12 +48,12 @@ function bold(text: string) {
 }
 
 function code(text: string, type = '') {
-    const appliedType = (type && text.length <= 200) ? type : ''
+    const appliedType = type && text.length <= 2000 ? type : '';
     return EOL + ['```' + appliedType, text, '```'].join(EOL) + EOL;
 }
 
 function method(text: string) {
-    return `${text.toUpperCase()} {.openapi__method}`
+    return `${text.toUpperCase()} {.openapi__method}`;
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -58,7 +61,8 @@ function table(data: any[][]) {
     const [names, ...rest] = data;
 
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    const colgen = (col: any) => (Array.isArray(col) ? `${EOL}${table(col)}${EOL}` : escapeTableColContent(` ${col} `));
+    const colgen = (col: any) =>
+        Array.isArray(col) ? `${EOL}${table(col)}${EOL}` : escapeTableColContent(` ${col} `);
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const rowgen = (row: any) => `||${row.map(colgen).join('|')}||`;
 
@@ -86,18 +90,61 @@ function page(content: string) {
 function tabs(tabsObj: Record<string, string>) {
     return block([
         '{% list tabs %}',
-        Object.entries(tabsObj).map(([tab, value]) => `- ${tab}
+        Object.entries(tabsObj)
+            .map(
+                ([tab, value]) => `- ${tab}
 
   ${value.replace(/\n/g, '\n  ')}
-        `).join('\n\n'),
+        `,
+            )
+            .join('\n\n'),
         '{% endlist %}\n',
     ]);
 }
 
-function anchor(ref: string) {
-    return link(ref, `#${slugify(ref).toLowerCase()}`);
+function anchor(ref: string, name?: string) {
+    return link(name || ref, `#${slugify(ref).toLowerCase()}`);
 }
 
-export {meta, list, link, title, body, mono, bold, table, code, cut, block, page, tabs, anchor, method};
+function tableParameterName(key: string, required?: boolean) {
+    return required ? `${key}<span class="${openapiBlock('required')}">*</span>` : key;
+}
 
-export default {meta, list, link, title, body, mono, bold, table, code, cut, block, tabs, anchor, method};
+export {
+    meta,
+    list,
+    link,
+    title,
+    body,
+    mono,
+    bold,
+    table,
+    code,
+    cut,
+    block,
+    page,
+    tabs,
+    anchor,
+    method,
+    tableParameterName,
+    openapiBlock,
+};
+
+export default {
+    meta,
+    list,
+    link,
+    title,
+    body,
+    mono,
+    bold,
+    table,
+    code,
+    cut,
+    block,
+    tabs,
+    anchor,
+    method,
+    tableParameterName,
+    openapiBlock,
+};

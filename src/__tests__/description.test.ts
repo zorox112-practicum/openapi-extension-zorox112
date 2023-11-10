@@ -4,9 +4,7 @@ describe('description', () => {
     it('renders correct description', async () => {
         const spec = new DocumentBuilder('description')
             .component('Pet', {
-                allOf: [
-                    DocumentBuilder.ref('Cat', 'From allOf in Pet'),
-                ],
+                allOf: [DocumentBuilder.ref('Cat', 'From allOf in Pet')],
                 description: 'From pet',
             })
             .component('Cat', {
@@ -33,29 +31,25 @@ describe('description', () => {
                 },
                 description: 'Dog class',
             })
-            .response(200, {schema: {
-                properties: {
-                    pet: {
-                        allOf: [
-                            DocumentBuilder.ref('Pet', 'From response'),
-                        ],
-                    },
-                    petWithoutDescription: {
-                        allOf: [
-                            DocumentBuilder.ref('Cat'),
-                        ],
-                    },
-                    refToSchemaWithDescription: {
-                        allOf: [
-                            DocumentBuilder.ref('Dog'),
-                        ],
-                    },
-                    simpleDescription: {
-                        type: 'object',
-                        description: 'Simple description',
+            .response(200, {
+                schema: {
+                    properties: {
+                        pet: {
+                            allOf: [DocumentBuilder.ref('Pet', 'From response')],
+                        },
+                        petWithoutDescription: {
+                            allOf: [DocumentBuilder.ref('Cat')],
+                        },
+                        refToSchemaWithDescription: {
+                            allOf: [DocumentBuilder.ref('Dog')],
+                        },
+                        simpleDescription: {
+                            type: 'object',
+                            description: 'Simple description',
+                        },
                     },
                 },
-            }});
+            });
 
         const fs = await run(spec.build());
 
@@ -63,5 +57,4 @@ describe('description', () => {
 
         expect(page).toMatchSnapshot();
     });
-
 });

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { unescape } from 'html-escaper';
+import React, {useEffect, useState} from 'react';
+import {createPortal} from 'react-dom';
+import {unescape} from 'html-escaper';
 
-import { Sandbox } from './sandbox';
+import {Sandbox} from './sandbox';
 
 import './index.scss';
 
@@ -29,8 +29,8 @@ export const Runtime: React.FC = () => {
 
             anchor.classList.toggle('highlight');
 
-            setTimeout(() => anchor.classList.toggle('highlight'), 1_000)
-        })
+            setTimeout(() => anchor.classList.toggle('highlight'), 1_000);
+        });
     }, []);
 
     useEffect(() => {

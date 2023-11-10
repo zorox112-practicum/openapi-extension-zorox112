@@ -1,4 +1,4 @@
-import {JSONSchema6} from 'json-schema';
+import {OpenJSONSchema} from '../includer/models';
 
 export interface Field<T = unknown, E = unknown> {
     validate(): Nullable<E>;
@@ -30,7 +30,7 @@ export type Nullable<T> = T | null | undefined;
 
 export const titleDepths = [1, 2, 3, 4, 5, 6] as const;
 
-export type TitleDepth = typeof titleDepths[number];
+export type TitleDepth = (typeof titleDepths)[number];
 
 export type SandboxProps = {
     path: string;
@@ -62,7 +62,7 @@ export type OpenAPIOperation = {
     requestBody?: {
         required?: boolean;
         description?: string;
-        content: { [ContentType: string]: { schema: JSONSchema6} };
+        content: {[ContentType: string]: {schema: OpenJSONSchema}};
     };
     security?: Array<Record<string, Security>>;
     'x-navtitle': string[];
@@ -133,7 +133,7 @@ export const methods = [
     'trace',
 ] as const;
 
-export type Method = typeof methods[number];
+export type Method = (typeof methods)[number];
 
 export type Servers = Server[];
 
@@ -155,7 +155,7 @@ export type Parameter = {
     description?: string;
     example?: Primitive;
     default?: Primitive;
-    schema: JSONSchema6;
+    schema: OpenJSONSchema;
 };
 
 export type Responses = Response[];
@@ -172,9 +172,17 @@ export type Schemas = Schema[];
 
 export type Schema = {
     type: string;
-    schema: JSONSchema6;
+    schema: OpenJSONSchema;
 };
 
-export type Refs = { [typeName: string]: JSONSchema6 };
+export type Refs = {[typeName: string]: OpenJSONSchema};
 
-export type JsType = 'string' | 'number' | 'bigint' | 'boolean' | 'symbol' | 'undefined' | 'object' | 'function';
+export type JsType =
+    | 'string'
+    | 'number'
+    | 'bigint'
+    | 'boolean'
+    | 'symbol'
+    | 'undefined'
+    | 'object'
+    | 'function';

@@ -36,7 +36,7 @@ Generated server url{.openapi__request__description}
 {% cut "application/json" %}
 
 
-\`\`\`
+\`\`\`json
 {
     "pet": {
         "type": "string",

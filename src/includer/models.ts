@@ -1,7 +1,13 @@
 import {JSONSchema6, JSONSchema6Definition} from 'json-schema';
-import {LeadingPageMode, SPEC_RENDER_MODE_DEFAULT, SPEC_RENDER_MODE_HIDDEN, SUPPORTED_ENUM_TYPES} from './constants';
 
-export type VarsPreset = 'internal'|'external';
+import {
+    LeadingPageMode,
+    SPEC_RENDER_MODE_DEFAULT,
+    SPEC_RENDER_MODE_HIDDEN,
+    SUPPORTED_ENUM_TYPES,
+} from './constants';
+
+export type VarsPreset = 'internal' | 'external';
 
 export type YfmPreset = Record<string, string>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -10,11 +16,11 @@ export type Metadata = Record<string, any>;
 export enum IncludeMode {
     ROOT_MERGE = 'root_merge',
     MERGE = 'merge',
-    LINK = 'link'
+    LINK = 'link',
 }
 
 export interface Filter {
-    when?: boolean|string;
+    when?: boolean | string;
     [key: string]: unknown;
 }
 
@@ -60,14 +66,15 @@ export type YfmTocIncluder = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } & Record<string, unknown>;
 
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Includer<FnParams = any> = {
     name: 'openapi';
     includerFunction: IncluderFunction<FnParams>;
 };
 
-export type IncluderFunction<PassedParams> = (args: IncluderFunctionParams<PassedParams>) => Promise<void>;
+export type IncluderFunction<PassedParams> = (
+    args: IncluderFunctionParams<PassedParams>,
+) => Promise<void>;
 
 export type IncluderFunctionParams<PassedParams> = {
     /** item that contains include that uses includer */
@@ -86,7 +93,7 @@ export type IncluderFunctionParams<PassedParams> = {
 
 export const titleDepths = [1, 2, 3, 4, 5, 6] as const;
 
-export type TitleDepth = typeof titleDepths[number];
+export type TitleDepth = (typeof titleDepths)[number];
 
 export type SandboxProps = {
     path: string;
@@ -118,7 +125,7 @@ export type OpenAPIOperation = {
     requestBody?: {
         required?: boolean;
         description?: string;
-        content: { [ContentType: string]: { schema: JSONSchema6} };
+        content: {[ContentType: string]: {schema: OpenJSONSchema}};
     };
     security?: Array<Record<string, Security>>;
     'x-navtitle': string[];
@@ -190,7 +197,7 @@ export const methods = [
     'trace',
 ] as const;
 
-export type Method = typeof methods[number];
+export type Method = (typeof methods)[number];
 
 export type Servers = Server[];
 
@@ -212,7 +219,7 @@ export type Parameter = {
     description?: string;
     example?: Primitive;
     default?: Primitive;
-    schema: JSONSchema6;
+    schema: OpenJSONSchema;
 };
 
 export type Responses = Response[];
@@ -229,17 +236,26 @@ export type Schemas = Schema[];
 
 export type Schema = {
     type: string;
-    schema: JSONSchema6;
+    schema: OpenJSONSchema;
 };
 
-export type Refs = { [typeName: string]: JSONSchema6 };
+export type Refs = {[typeName: string]: OpenJSONSchema};
 
-export type JsType = 'string' | 'number' | 'bigint' | 'boolean' | 'symbol' | 'undefined' | 'object' | 'function';
+export type JsType =
+    | 'string'
+    | 'number'
+    | 'bigint'
+    | 'boolean'
+    | 'symbol'
+    | 'undefined'
+    | 'object'
+    | 'function';
 
-export type LeadingPageSpecRenderMode = typeof SPEC_RENDER_MODE_DEFAULT | typeof SPEC_RENDER_MODE_HIDDEN;
+export type LeadingPageSpecRenderMode =
+    | typeof SPEC_RENDER_MODE_DEFAULT
+    | typeof SPEC_RENDER_MODE_HIDDEN;
 
-
-export type SupportedEnumType = typeof SUPPORTED_ENUM_TYPES[number];
+export type SupportedEnumType = (typeof SUPPORTED_ENUM_TYPES)[number];
 
 export enum Stage {
     NEW = 'new',
@@ -262,6 +278,7 @@ export type OpenApiFilter = {
 };
 
 export type OpenApiIncluderParams = {
+    allowAnonymousObjects?: boolean;
     input: string;
     leadingPage?: LeadingPageParams;
     filter?: OpenApiFilter;
@@ -273,7 +290,10 @@ export type OpenApiIncluderParams = {
     };
 };
 
-export type OpenJSONSchema = JSONSchema6 & { example?: any } & {
+export type OpenJSONSchema = JSONSchema6 & {
+    _runtime?: true;
+    _emptyDescription?: true;
+    example?: unknown;
     properties?: {
         [key: string]: JSONSchema6Definition & {
             'x-hidden'?: boolean;
@@ -281,3 +301,14 @@ export type OpenJSONSchema = JSONSchema6 & { example?: any } & {
     };
 };
 export type OpenJSONSchemaDefinition = OpenJSONSchema | boolean;
+
+export type FoundRefType = {
+    ref: string;
+};
+export type BaseJSONSchemaType = Exclude<OpenJSONSchema['type'], undefined>;
+export type JSONSchemaUnionType = {
+    ref?: string;
+    /* Not oneOf because of collision with OpenJSONSchema['oneOf'] */
+    unionOf?: JSONSchemaType[];
+};
+export type JSONSchemaType = BaseJSONSchemaType | JSONSchemaUnionType | FoundRefType;

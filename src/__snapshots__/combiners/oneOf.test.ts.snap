@@ -31,7 +31,10 @@ Generated server url{.openapi__request__description}
 
 
 \`\`\`json
-{}
+{
+    "type": "string",
+    "baz": "string"
+}
 \`\`\`
 
 
@@ -40,7 +43,7 @@ Generated server url{.openapi__request__description}
 
 #||| **Name** | **Type** | **Description** ||
 
-|| ...rest | oneOf | [Dog](#dog)
+|| ...rest | oneOf | [Dog](#dog) 
 or [Cat](#cat) |||#
 #### Or value from:
 
@@ -77,7 +80,10 @@ Cat class
 
 
 \`\`\`json
-{}
+{
+    "type": "string",
+    "baz": "string"
+}
 \`\`\`
 
 
@@ -86,7 +92,8 @@ Cat class
 
 #||| **Name** | **Type** | **Description** ||
 
-|| ...rest | oneOf | [Dog](#dog)
+|| ...rest | oneOf | Base 200 response
+[Dog](#dog) 
 or [Cat](#cat) |||#
 #### Or value from:
 
@@ -144,7 +151,7 @@ Generated server url{.openapi__request__description}
 
 || age | number |  ||
 
-|| ...rest | oneOf | [Dog](#dog)
+|| ...rest | oneOf | [Dog](#dog) 
 or [Cat](#cat) |||#
 #### Or value from:
 
@@ -197,7 +204,8 @@ Cat class
 
 || age | number |  ||
 
-|| ...rest | oneOf | [Dog](#dog)
+|| ...rest | oneOf | Base 200 response
+[Dog](#dog) 
 or [Cat](#cat) |||#
 #### Or value from:
 
@@ -240,7 +248,10 @@ Generated server url{.openapi__request__description}
 
 \`\`\`json
 {
-    "pet": {}
+    "pet": {
+        "type": "string",
+        "baz": "string"
+    }
 }
 \`\`\`
 
@@ -250,10 +261,10 @@ Generated server url{.openapi__request__description}
 
 #||| **Name** | **Type** | **Description** ||
 
-|| pet | object | [Dog](#dog)
-or [Cat](#cat) ||
+|| pet | [Dog](#dog) 
+or [Cat](#cat) |  ||
 
-|| ...rest | oneOf | [Dog](#dog)
+|| ...rest | oneOf | [Dog](#dog) 
 or [Cat](#cat) |||#
 #### Or value from:
 
@@ -291,7 +302,10 @@ Cat class
 
 \`\`\`json
 {
-    "pet": {}
+    "pet": {
+        "type": "string",
+        "baz": "string"
+    }
 }
 \`\`\`
 
@@ -301,10 +315,11 @@ Cat class
 
 #||| **Name** | **Type** | **Description** ||
 
-|| pet | object | [Dog](#dog)
-or [Cat](#cat) ||
+|| pet | [Dog](#dog) 
+or [Cat](#cat) |  ||
 
-|| ...rest | oneOf | [Dog](#dog)
+|| ...rest | oneOf | Base 200 response
+[Dog](#dog) 
 or [Cat](#cat) |||#
 #### Or value from:
 

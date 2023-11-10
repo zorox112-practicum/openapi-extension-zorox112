@@ -40,14 +40,14 @@ export class Body extends React.Component<Props, State> implements Field<string,
         };
 
         return (
-            <Column gap={ 10 }>
-                <Text variant="header-1">{ TextEnum.BODY_INPUT_LABEL }</Text>
+            <Column gap={10}>
+                <Text variant="header-1">{TextEnum.BODY_INPUT_LABEL}</Text>
                 <TextArea
-                    error={ error || false }
-                    rows={ 10 }
+                    error={error || false}
+                    rows={10}
                     name="body"
-                    value={ value }
-                    onUpdate={ onChange }
+                    value={value}
+                    onUpdate={onChange}
                 />
             </Column>
         );

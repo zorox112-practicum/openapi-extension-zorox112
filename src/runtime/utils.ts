@@ -2,10 +2,7 @@ import type {RefObject} from 'react';
 import type {Field, FormState, Parameters, Security} from './types';
 
 export const merge = <T, R>(items: T[], iterator: (item: T) => Record<string, R> | undefined) => {
-    return (items).reduce(
-        (acc, item) => Object.assign(acc, iterator(item)),
-        {} as Record<string, R>,
-    );
+    return items.reduce((acc, item) => Object.assign(acc, iterator(item)), {} as Record<string, R>);
 };
 
 export const prepareRequest = (urlTemplate: string, {search, headers, path, body}: FormState) => {
@@ -29,7 +26,10 @@ export const prepareRequest = (urlTemplate: string, {search, headers, path, body
     };
 };
 
-export const prepareHeaders = ({headers, security}: {
+export const prepareHeaders = ({
+    headers,
+    security,
+}: {
     security?: Security[];
     headers?: Parameters;
 }) => {
@@ -53,21 +53,24 @@ export const prepareHeaders = ({headers, security}: {
 };
 
 export function collectErrors(fields: Record<string, RefObject<Field>>) {
-    const errors = Object.keys(fields).reduce((acc, key) => {
-        const field = fields[key].current;
+    const errors = Object.keys(fields).reduce(
+        (acc, key) => {
+            const field = fields[key].current;
 
-        if (!field) {
+            if (!field) {
+                return acc;
+            }
+
+            const error = field.validate();
+
+            if (error) {
+                acc[key] = error;
+            }
+
             return acc;
-        }
-
-        const error = field.validate();
-
-        if (error) {
-            acc[key] = error;
-        }
-
-        return acc;
-    }, {} as Record<string, unknown>);
+        },
+        {} as Record<string, unknown>,
+    );
 
     if (!Object.keys(errors).length) {
         return null;
@@ -76,18 +79,23 @@ export function collectErrors(fields: Record<string, RefObject<Field>>) {
     return errors;
 }
 
-export function collectValues<F extends Record<string, RefObject<Field>>>(fields: F): Record<keyof F, unknown> {
-    const values = Object.keys(fields).reduce((acc, key: keyof F) => {
-        const field = fields[key].current;
+export function collectValues<F extends Record<string, RefObject<Field>>>(
+    fields: F,
+): Record<keyof F, unknown> {
+    const values = Object.keys(fields).reduce(
+        (acc, key: keyof F) => {
+            const field = fields[key].current;
 
-        if (!field) {
+            if (!field) {
+                return acc;
+            }
+
+            acc[key] = field.value();
+
             return acc;
-        }
-
-        acc[key] = field.value();
-
-        return acc;
-    }, {} as Record<keyof F, unknown>);
+        },
+        {} as Record<keyof F, unknown>,
+    );
 
     return values;
 }

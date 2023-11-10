@@ -1,7 +1,6 @@
-import {JSONSchema6} from 'json-schema';
 import stringify from 'json-stringify-safe';
+import RefsService from '../services/refs';
 
-import {block, body, bold, code, cut, meta, method, page, table, tabs, title} from './common';
 import {
     COOKIES_SECTION_NAME,
     HEADERS_SECTION_NAME,
@@ -15,53 +14,77 @@ import {
 } from '../constants';
 
 import {
+    TableRef,
+    prepareSampleObject,
+    prepareTableRowData,
+    tableFromSchema,
+} from '../traverse/tables';
+
+import {
     Endpoint,
+    OpenJSONSchema,
     Parameter,
     Parameters,
-    Refs,
     Response,
     Responses,
     Schema,
     Security,
     Server,
 } from '../models';
-import {TableRef, prepareSampleObject, prepareTableRowData, tableFromSchema, tableParameterName} from './traverse';
-import {concatNewLine} from '../utils';
-import {openapiBlock} from './constants';
 
-function endpoint(allRefs: Refs, data: Endpoint, sandboxPlugin: {host?: string; tabName?: string} | undefined) {
+import {concatNewLine} from '../utils';
+
+import {
+    block,
+    body,
+    bold,
+    code,
+    cut,
+    meta,
+    method,
+    openapiBlock,
+    page,
+    table,
+    tableParameterName,
+    tabs,
+    title,
+} from './common';
+
+function endpoint(data: Endpoint, sandboxPlugin: {host?: string; tabName?: string} | undefined) {
     // try to remember, which tables we are already printed on page
     const pagePrintedRefs = new Set<string>();
 
     const contentWrapper = (content: string) => {
-        return sandboxPlugin ? tabs({
-            [INFO_TAB_NAME]: content,
-            [(sandboxPlugin?.tabName ?? SANDBOX_TAB_NAME)]: sandbox({
-                params: data.parameters,
-                host: sandboxPlugin?.host,
-                path: data.path,
-                security: data.security,
-                requestBody: data.requestBody,
-                method: data.method,
-            }),
-        }) : content;
+        return sandboxPlugin
+            ? tabs({
+                  [INFO_TAB_NAME]: content,
+                  [sandboxPlugin?.tabName ?? SANDBOX_TAB_NAME]: sandbox({
+                      params: data.parameters,
+                      host: sandboxPlugin?.host,
+                      path: data.path,
+                      security: data.security,
+                      requestBody: data.requestBody,
+                      method: data.method,
+                  }),
+              })
+            : content;
     };
 
     const endpointPage = block([
         title(1)(data.summary ?? data.id),
-        contentWrapper(block([
-            data.description?.length && body(data.description),
-            request(data),
-            parameters(allRefs, pagePrintedRefs, data.parameters),
-            openapiBody(allRefs, pagePrintedRefs, data.requestBody),
-            responses(allRefs, pagePrintedRefs, data.responses),
-        ])),
+        contentWrapper(
+            block([
+                data.description?.length && body(data.description),
+                request(data),
+                parameters(pagePrintedRefs, data.parameters),
+                openapiBody(pagePrintedRefs, data.requestBody),
+                responses(pagePrintedRefs, data.responses),
+            ]),
+        ),
     ]);
 
     return block([
-        meta([
-            data.noindex && 'noIndex: true',
-        ]),
+        meta([data.noindex && 'noIndex: true']),
         `<div class="${openapiBlock()}">`,
         page(endpointPage),
         '</div>',
@@ -102,11 +125,7 @@ function sandbox({
         host: host ?? '',
     });
 
-    return block([
-        '{% openapi sandbox %}',
-        props,
-        '{% end openapi sandbox %}',
-    ]);
+    return block(['{% openapi sandbox %}', props, '{% end openapi sandbox %}']);
 }
 
 function request(data: Endpoint) {
@@ -117,7 +136,6 @@ function request(data: Endpoint) {
 
     const requestTableRow = [method(type), `${url}`];
 
-
     if (servers.every((server: Server) => server.description)) {
         description = block(servers.map(({description}) => description));
     }
@@ -127,22 +145,19 @@ function request(data: Endpoint) {
         `<div class="openapi__request" style="--method: var(--dc-openapi-methods-${type})">`,
         ...requestTableRow,
         '</div>',
-        '</div>'
-    ])
+        '</div>',
+    ]);
 
-    const result = [
-        title(2)(REQUEST_SECTION_NAME),
-        requestTable,
-    ]
+    const result = [title(2)(REQUEST_SECTION_NAME), requestTable];
 
     if (description) {
-        result.push(`${description}{.openapi__request__description}`)
+        result.push(`${description}{.openapi__request__description}`);
     }
 
     return block(result);
 }
 
-function parameters(allRefs: Refs, pagePrintedRefs: Set<string>, params?: Parameters) {
+function parameters(pagePrintedRefs: Set<string>, params?: Parameters) {
     const sections = {
         path: PATH_PARAMETERS_SECTION_NAME,
         query: QUERY_PARAMETERS_SECTION_NAME,
@@ -156,7 +171,7 @@ function parameters(allRefs: Refs, pagePrintedRefs: Set<string>, params?: Parame
             const rows: string[][] = [];
             const tableRefs: TableRef[] = [];
             for (const param of inParams) {
-                const {cells, ref} = parameterRow(allRefs, param);
+                const {cells, ref} = parameterRow(param);
                 rows.push(cells);
                 if (ref) {
                     // there may be enums, which should be printed in separate tables
@@ -164,18 +179,15 @@ function parameters(allRefs: Refs, pagePrintedRefs: Set<string>, params?: Parame
                 }
             }
             tables.push(title(3)(heading));
-            tables.push(table([
-                ['Name', 'Type', 'Description'],
-                ...rows,
-            ]));
-            tables.push(...printAllTables(allRefs, pagePrintedRefs, tableRefs));
+            tables.push(table([['Name', 'Type', 'Description'], ...rows]));
+            tables.push(...printAllTables(pagePrintedRefs, tableRefs));
         }
     }
     return block(tables);
 }
 
-function parameterRow(allRefs: Refs, param: Parameter): {cells: string[]; ref?: TableRef} {
-    const row = prepareTableRowData(allRefs, param.schema, param.name);
+function parameterRow(param: Parameter): {cells: string[]; ref?: TableRef} {
+    const row = prepareTableRowData(param.schema, param.name);
     let description = param.description ?? '';
     if (!row.ref && row.description.length) {
         // if row.ref present, row.description will be printed in separate table
@@ -193,7 +205,7 @@ function parameterRow(allRefs: Refs, param: Parameter): {cells: string[]; ref?: 
     };
 }
 
-function openapiBody(allRefs: Refs, pagePrintedRefs: Set<string>, obj?: Schema) {
+function openapiBody(pagePrintedRefs: Set<string>, obj?: Schema) {
     if (!obj) {
         return '';
     }
@@ -201,9 +213,7 @@ function openapiBody(allRefs: Refs, pagePrintedRefs: Set<string>, obj?: Schema) 
     const {type = 'schema', schema} = obj;
     const sectionTitle = title(4)('Body');
 
-    let result: any[] = [
-        sectionTitle,
-    ];
+    let result: any[] = [sectionTitle];
 
     if (isPrimitive(schema.type)) {
         result = [
@@ -214,29 +224,24 @@ function openapiBody(allRefs: Refs, pagePrintedRefs: Set<string>, obj?: Schema) 
             schema.description && `${bold('Description:')} ${schema.description}`,
         ];
 
-
         return block(result);
     }
 
-    const {content, tableRefs} = tableFromSchema(allRefs, schema);
+    const {content, tableRefs} = tableFromSchema(schema);
     const parsedSchema = prepareSampleObject(schema);
 
-    result = [
-        ...result,
-        cut(code(stringify(parsedSchema, null, 4), 'json'), type),
-        content,
-    ];
+    result = [...result, cut(code(stringify(parsedSchema, null, 4), 'json'), type), content];
 
-    result.push(...printAllTables(allRefs, pagePrintedRefs, tableRefs));
+    result.push(...printAllTables(pagePrintedRefs, tableRefs));
 
     return block(result);
 }
 
-function isPrimitive(type: JSONSchema6['type']) {
+function isPrimitive(type: OpenJSONSchema['type']) {
     return PRIMITIVE_JSON6_SCHEMA_TYPES.has(type);
 }
 
-function printAllTables(allRefs: Refs, pagePrintedRefs: Set<string>, tableRefs: TableRef[]): string[] {
+function printAllTables(pagePrintedRefs: Set<string>, tableRefs: TableRef[]): string[] {
     const result = [];
 
     while (tableRefs.length > 0) {
@@ -250,29 +255,39 @@ function printAllTables(allRefs: Refs, pagePrintedRefs: Set<string>, tableRefs: 
             continue;
         }
 
-        const schema = allRefs[tableRef];
-        const schemaTable = tableFromSchema(allRefs, schema);
+        const schema = RefsService.get(tableRef);
 
-        result.push(block([
-            title(3)(tableRef),
-            schema.description,
-            schemaTable.content,
-        ]));
+        if (!schema) {
+            continue;
+        }
+
+        const schemaTable = tableFromSchema(schema);
+        const titleLevel = schema._runtime ? 4 : 3;
+
+        result.push(
+            block([
+                title(titleLevel)(tableRef),
+                schema._emptyDescription ? '' : schema.description,
+                schemaTable.content,
+            ]),
+        );
         tableRefs.push(...schemaTable.tableRefs);
         pagePrintedRefs.add(tableRef);
-
     }
     return result;
 }
 
-function responses(refs: Refs, visited: Set<string>, resps?: Responses) {
-    return resps?.length && block([
-        title(2)(RESPONSES_SECTION_NAME),
-        block(resps.map((resp) => response(refs, visited, resp))),
-    ]);
+function responses(visited: Set<string>, resps?: Responses) {
+    return (
+        resps?.length &&
+        block([
+            title(2)(RESPONSES_SECTION_NAME),
+            block(resps.map((resp) => response(visited, resp))),
+        ])
+    );
 }
 
-function response(allRefs: Refs, visited: Set<string>, resp: Response) {
+function response(visited: Set<string>, resp: Response) {
     let header = resp.code;
 
     if (resp.statusText.length) {
@@ -283,8 +298,8 @@ function response(allRefs: Refs, visited: Set<string>, resp: Response) {
         `<div class="openapi__response__code__${resp.code}">`,
         title(2)(header),
         body(resp.description),
-        resp.schemas?.length && block(resp.schemas.map((s) => openapiBody(allRefs, visited, s))),
-        '</div>'
+        resp.schemas?.length && block(resp.schemas.map((s) => openapiBody(visited, s))),
+        '</div>',
     ]);
 }
 
