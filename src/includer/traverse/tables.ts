@@ -204,18 +204,22 @@ function prepareComplexDescription(baseDescription: string, value: OpenJSONSchem
 function findNonNullOneOfElement(schema: OpenJSONSchema): OpenJSONSchema {
     const isValid = (v: OpenJSONSchema) => {
         if (typeof inferType(v) === 'string') {
-            return true;
+            return v;
         }
 
-        if (Object.keys(v.properties || {}).length) {
-            return true;
+        const merged = RefsService.merge(v);
+
+        if (Object.keys(merged.properties || {}).length) {
+            return v;
         }
 
         return false;
     };
 
-    if (isValid(schema)) {
-        return RefsService.merge(schema);
+    const result = isValid(schema);
+
+    if (result) {
+        return result;
     }
 
     const stack = [...(schema.oneOf || [])];
@@ -227,8 +231,10 @@ function findNonNullOneOfElement(schema: OpenJSONSchema): OpenJSONSchema {
             continue;
         }
 
-        if (isValid(v)) {
-            return RefsService.merge(v);
+        const status = isValid(v);
+
+        if (status) {
+            return status;
         }
 
         stack.push(...(v.oneOf || []));
