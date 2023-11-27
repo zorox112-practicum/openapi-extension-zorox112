@@ -1,8 +1,9 @@
 import {DocumentBuilder, run} from '../__helpers__/run';
 
+const name = 'oneOf';
 describe('oneOf operator support', () => {
     it('renders empty', async () => {
-        const spec = new DocumentBuilder('oneOf')
+        const spec = new DocumentBuilder(name)
             .component('Cat', {
                 type: 'object',
                 properties: {
@@ -42,13 +43,13 @@ describe('oneOf operator support', () => {
 
         const fs = await run(spec);
 
-        const page = fs.match('oneOf');
+        const page = fs.match(name);
 
         expect(page).toMatchSnapshot();
     });
 
     it('renders filled', async () => {
-        const spec = new DocumentBuilder('oneOf')
+        const spec = new DocumentBuilder(name)
             .component('Cat', {
                 type: 'object',
                 properties: {
@@ -104,13 +105,13 @@ describe('oneOf operator support', () => {
 
         const fs = await run(spec);
 
-        const page = fs.match('oneOf');
+        const page = fs.match(name);
 
         expect(page).toMatchSnapshot();
     });
 
     it('renders parameter', async () => {
-        const spec = new DocumentBuilder('oneOf')
+        const spec = new DocumentBuilder(name)
             .component('Cat', {
                 type: 'object',
                 properties: {
@@ -160,7 +161,7 @@ describe('oneOf operator support', () => {
 
         const fs = await run(spec);
 
-        const page = fs.match('oneOf');
+        const page = fs.match(name);
 
         expect(page).toMatchSnapshot();
     });

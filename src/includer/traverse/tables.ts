@@ -213,7 +213,11 @@ function findNonNullOneOfElement(schema: OpenJSONSchema): OpenJSONSchema {
             return v;
         }
 
-        return false;
+        if (merged.oneOf?.length) {
+            return false;
+        }
+
+        return v;
     };
 
     const result = isValid(schema);

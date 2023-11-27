@@ -1,8 +1,9 @@
 import {DocumentBuilder, run} from '../__helpers__/run';
 
-describe('basic openapi project', () => {
-    it('renders description', async () => {
-        const spec = new DocumentBuilder('basic')
+const name = 'complex';
+describe('operators complex test', () => {
+    it('renders ok', async () => {
+        const spec = new DocumentBuilder(name)
             .component('Cat', {
                 type: 'object',
                 properties: {
@@ -102,7 +103,7 @@ describe('basic openapi project', () => {
 
         const fs = await run(spec);
 
-        const page = fs.match('basic');
+        const page = fs.match(name);
 
         expect(page).toMatchSnapshot();
     });

@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`basic openapi project renders description 1`] = `
+exports[`operators complex test renders ok 1`] = `
 "<div class="openapi">
 
-# basic
+# complex
 
 ## Request
 

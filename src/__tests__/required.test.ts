@@ -1,8 +1,9 @@
 import {DocumentBuilder, run} from './__helpers__/run';
 
-describe('description', () => {
-    it('renders correct description', async () => {
-        const spec = new DocumentBuilder('description')
+const name = 'required';
+describe('required', () => {
+    it('renders correct required', async () => {
+        const spec = new DocumentBuilder(name)
             .parameter({
                 name: 'a',
                 in: 'query',
@@ -69,10 +70,12 @@ describe('description', () => {
                     },
                 },
                 description: 'Cat class',
-            });
-        const fs = await run(spec.build());
+            })
+            .build();
 
-        const page = fs.match('description.md');
+        const fs = await run(spec);
+
+        const page = fs.match(name);
 
         expect(page).toMatchSnapshot();
     });

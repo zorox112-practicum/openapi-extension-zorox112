@@ -1,8 +1,9 @@
 import {DocumentBuilder, run} from '../__helpers__/run';
 
+const name = 'allOf';
 describe('allOf operator support', () => {
     it('renders simple allOf', async () => {
-        const spec = new DocumentBuilder('allOf')
+        const spec = new DocumentBuilder(name)
             .component('Cat', {
                 type: 'object',
                 properties: {
@@ -60,13 +61,13 @@ describe('allOf operator support', () => {
 
         const fs = await run(spec);
 
-        const page = fs.match('allOf');
+        const page = fs.match(name);
 
         expect(page).toMatchSnapshot();
     });
 
     it('renders single allOf', async () => {
-        const spec = new DocumentBuilder('allOf')
+        const spec = new DocumentBuilder(name)
             .component('Cat', {
                 type: 'object',
                 properties: {
@@ -117,7 +118,7 @@ describe('allOf operator support', () => {
 
         const fs = await run(spec);
 
-        const page = fs.match('allOf');
+        const page = fs.match(name);
 
         expect(page).toMatchSnapshot();
     });
