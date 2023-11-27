@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`description renders correct description 1`] = `
+exports[`required renders correct required 1`] = `
 "<div class="openapi">
 
-# description
+# required
 
 ## Request
 

@@ -1,8 +1,9 @@
 import {DocumentBuilder, run} from './__helpers__/run';
 
+const name = 'basic';
 describe('basic openapi project', () => {
     it('renders description', async () => {
-        const spec = new DocumentBuilder('basic')
+        const spec = new DocumentBuilder(name)
             .response(200, {
                 description: 'Base 200 response',
                 schema: {
@@ -35,7 +36,7 @@ describe('basic openapi project', () => {
 
         const fs = await run(spec);
 
-        const page = fs.match('basic');
+        const page = fs.match(name);
 
         expect(page).toMatchSnapshot();
     });
