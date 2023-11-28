@@ -1,3 +1,5 @@
+import ArgvService from '../services/argv';
+
 import stringify from 'json-stringify-safe';
 
 import {sep} from 'path';
@@ -69,10 +71,18 @@ function description(text?: string) {
 function sections({tags, endpoints}: Specification) {
     const content = [];
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-    const taggedLinks = Array.from(tags).map(([_, {name, id}]: [any, Tag]) =>
-        link(name, id + sep + 'index.md'),
-    );
+    const taggedLinks = Array.from(tags)
+        .map(([_, {name, id}]: [unknown, Tag]) => {
+            const custom = ArgvService.tag(name);
+
+            if (custom?.hidden) {
+                return undefined;
+            }
+
+            return link(name, id + sep + 'index.md');
+        })
+        .filter(Boolean) as string[];
+
     if (taggedLinks.length) {
         content.push(title(2)(TAGS_SECTION_NAME), list(taggedLinks));
     }

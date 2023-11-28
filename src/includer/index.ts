@@ -1,7 +1,10 @@
-import assert from 'assert';
+import RefsService from './services/refs';
+import ArgvService from './services/argv';
 
+import assert from 'assert';
 import {dirname, join, resolve} from 'path';
 import {mkdir, writeFile} from 'fs/promises';
+import {readFileSync} from 'fs';
 import {matchFilter} from './utils';
 
 import {dump} from 'js-yaml';
@@ -33,8 +36,6 @@ import {
     YfmTocItem,
 } from './models';
 
-import RefsService from './services/refs';
-
 const INCLUDER_NAME = 'openapi';
 
 class OpenApiIncluderError extends Error {
@@ -54,9 +55,11 @@ async function includerFunction(params: IncluderFunctionParams<OpenApiIncluderPa
         writeBasePath,
         tocPath,
         vars,
-        passedParams: {input, leadingPage = {}, filter, noindex, hidden, sandbox},
+        passedParams: {input, leadingPage = {}, filter, noindex, hidden, sandbox, tags = {}},
         index,
     } = params;
+
+    ArgvService.init(tags);
 
     const tocDirPath = dirname(tocPath);
 
@@ -91,6 +94,7 @@ async function includerFunction(params: IncluderFunctionParams<OpenApiIncluderPa
             data,
             writePath,
             leadingPage,
+            contentPath,
             filter,
             noindex,
             vars,
@@ -162,7 +166,13 @@ async function generateToc(params: GenerateTocParams): Promise<void> {
 
         section.items = endpointsOfTag.map((endpoint) => handleEndpointRender(endpoint, id));
 
-        addLeadingPage(section, leadingPageMode, leadingPageName, join(id, 'index.md'));
+        const custom = ArgvService.tag(tag.name);
+
+        const customLeadingPageName = custom?.name || leadingPageName;
+
+        if (!custom?.hidden) {
+            addLeadingPage(section, leadingPageMode, customLeadingPageName, join(id, 'index.md'));
+        }
 
         toc.items.push(section);
     });
@@ -171,7 +181,12 @@ async function generateToc(params: GenerateTocParams): Promise<void> {
         toc.items.push(handleEndpointRender(endpoint));
     }
 
-    addLeadingPage(toc, leadingPageMode, leadingPageName, 'index.md');
+    const root = ArgvService.tag('__root__');
+    const rootLadingPageName = root?.name || leadingPageName;
+
+    if (!root?.hidden) {
+        addLeadingPage(toc, leadingPageMode, rootLadingPageName, 'index.md');
+    }
 
     await mkdir(dirname(writePath), {recursive: true});
     await writeFile(join(writePath, 'toc.yaml'), dump(toc));
@@ -193,6 +208,7 @@ export type GenerateContentParams = {
     vars: YfmPreset;
     writePath: string;
     allRefs: Refs;
+    contentPath: string;
     leadingPage: OpenApiIncluderParams['leadingPage'];
     filter?: OpenApiIncluderParams['filter'];
     noindex?: OpenApiIncluderParams['noindex'];
@@ -206,7 +222,11 @@ type EndpointRoute = {
 };
 
 async function generateContent(params: GenerateContentParams): Promise<void> {
-    const {data, writePath, leadingPage, filter, noindex, hidden, vars, sandbox} = params;
+    const {data, writePath, leadingPage, filter, noindex, hidden, vars, sandbox, contentPath} =
+        params;
+
+    const customLeadingPageDir = dirname(contentPath);
+
     const filterContent = filterUsefullContent(filter, vars);
     const applyNoindex = matchFilter(noindex || {}, vars, (endpoint) => {
         endpoint.noindex = true;
@@ -234,12 +254,18 @@ async function generateContent(params: GenerateContentParams): Promise<void> {
 
     spec = filterContent(spec);
 
-    const main: string = generators.main({data, info, spec, leadingPageSpecRenderMode});
+    const root = ArgvService.tag('__root__');
 
-    results.push({
-        path: join(writePath, 'index.md'),
-        content: main,
-    });
+    if (!root?.hidden) {
+        const mainContent = root?.path
+            ? readFileSync(join(customLeadingPageDir, root.path)).toString()
+            : generators.main({data, info, spec, leadingPageSpecRenderMode});
+
+        results.push({
+            path: join(writePath, 'index.md'),
+            content: mainContent,
+        });
+    }
 
     spec.tags.forEach((tag, id) => {
         const {endpoints} = tag;
@@ -248,9 +274,19 @@ async function generateContent(params: GenerateContentParams): Promise<void> {
             results.push(handleEndpointIncluder(endpoint, join(writePath, id), sandbox));
         });
 
+        const custom = ArgvService.tag(tag.name);
+
+        if (custom?.hidden) {
+            return;
+        }
+
+        const content = custom?.path
+            ? readFileSync(join(customLeadingPageDir, custom.path)).toString()
+            : generators.section(tag);
+
         results.push({
             path: join(writePath, id, 'index.md'),
-            content: generators.section(tag),
+            content,
         });
     });
 

@@ -277,6 +277,12 @@ export type OpenApiFilter = {
     tag?: string;
 };
 
+export type CustomTag = {
+    hidden?: boolean;
+    name?: string;
+    path?: string;
+};
+
 export type OpenApiIncluderParams = {
     allowAnonymousObjects?: boolean;
     input: string;
@@ -287,6 +293,11 @@ export type OpenApiIncluderParams = {
     sandbox?: {
         tabName?: string;
         host?: string;
+    };
+    tags?: {
+        [tag: string]: CustomTag | undefined;
+        /** top-level leading page */
+        __root__?: CustomTag;
     };
 };
 
