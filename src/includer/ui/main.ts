@@ -2,7 +2,7 @@ import ArgvService from '../services/argv';
 
 import stringify from 'json-stringify-safe';
 
-import {sep} from 'path';
+import {join} from 'path';
 
 import {block, body, code, cut, link, list, mono, page, title} from '.';
 
@@ -79,7 +79,9 @@ function sections({tags, endpoints}: Specification) {
                 return undefined;
             }
 
-            return link(name, id + sep + 'index.md');
+            const customId = custom?.alias || id;
+
+            return link(name, join(customId, 'index.md'));
         })
         .filter(Boolean) as string[];
 

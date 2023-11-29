@@ -1,15 +1,21 @@
-import {DocumentBuilder, run} from './__helpers__/run';
+import {DocumentBuilder, run} from '../__helpers__/run';
 
-const name = 'example';
+const name = 'example.array';
 describe('openapi project with examples', () => {
     it('renders example field', async () => {
         const spec = new DocumentBuilder(name)
             .request({
                 schema: {
-                    example: {
-                        name: 'Example',
-                    },
-                    type: 'object',
+                    example: [
+                        {
+                            test: 1,
+                        },
+                        {
+                            test: 2,
+                        },
+                    ],
+                    type: 'array',
+                    items: {},
                 },
             })
             .response(200, {
@@ -27,12 +33,12 @@ describe('openapi project with examples', () => {
         expect(page).toMatchSnapshot();
     });
 
-    it('renders example from oneOf', async () => {
+    it('renders infered example', async () => {
         const spec = new DocumentBuilder(name)
             .request({
                 schema: {
-                    type: 'object',
-                    oneOf: [DocumentBuilder.ref('Cat')],
+                    type: 'array',
+                    items: DocumentBuilder.ref('Cat'),
                 },
             })
             .response(200, {
@@ -58,12 +64,15 @@ describe('openapi project with examples', () => {
         expect(page).toMatchSnapshot();
     });
 
-    it('renders example from allOf', async () => {
+    it('renders nested arrays exmaple', async () => {
         const spec = new DocumentBuilder(name)
             .request({
                 schema: {
-                    type: 'object',
-                    allOf: [DocumentBuilder.ref('Cat')],
+                    type: 'array',
+                    items: {
+                        type: 'array',
+                        items: DocumentBuilder.ref('Cat'),
+                    },
                 },
             })
             .response(200, {

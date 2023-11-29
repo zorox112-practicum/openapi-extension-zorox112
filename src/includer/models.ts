@@ -281,6 +281,7 @@ export type CustomTag = {
     hidden?: boolean;
     name?: string;
     path?: string;
+    alias?: string;
 };
 
 export type OpenApiIncluderParams = {
