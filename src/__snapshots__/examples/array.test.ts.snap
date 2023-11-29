@@ -1,0 +1,231 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`openapi project with examples renders example field 1`] = `
+"<div class="openapi">
+
+# example.array
+
+## Request
+
+<div class="openapi__request__wrapper">
+
+<div class="openapi__request" style="--method: var(--dc-openapi-methods-post)">
+
+POST {.openapi__method}
+
+
+\`\`\`
+http://localhost:8080/test
+\`\`\`
+
+
+</div>
+
+</div>
+
+Generated server url{.openapi__request__description}
+
+#### Body
+
+{% cut "application/json" %}
+
+
+\`\`\`json
+[
+    {
+        "test": 1
+    },
+    {
+        "test": 2
+    }
+]
+\`\`\`
+
+
+{% endcut %}
+
+
+any[]
+
+## Responses
+
+<div class="openapi__response__code__200">
+
+## 200 OK
+
+Base 200 response
+
+#### Body
+
+{% cut "application/json" %}
+
+
+\`\`\`json
+{}
+\`\`\`
+
+
+{% endcut %}
+
+
+</div>
+<!-- markdownlint-disable-file -->
+
+</div>"
+`;
+
+exports[`openapi project with examples renders infered example 1`] = `
+"<div class="openapi">
+
+# example.array
+
+## Request
+
+<div class="openapi__request__wrapper">
+
+<div class="openapi__request" style="--method: var(--dc-openapi-methods-post)">
+
+POST {.openapi__method}
+
+
+\`\`\`
+http://localhost:8080/test
+\`\`\`
+
+
+</div>
+
+</div>
+
+Generated server url{.openapi__request__description}
+
+#### Body
+
+{% cut "application/json" %}
+
+
+\`\`\`json
+[
+    {
+        "name": "string"
+    }
+]
+\`\`\`
+
+
+{% endcut %}
+
+
+[Cat](#cat)[]
+
+### Cat
+
+#||| **Name** | **Type** | **Description** ||
+
+|| name | string |  |||#
+
+## Responses
+
+<div class="openapi__response__code__200">
+
+## 200 OK
+
+Base 200 response
+
+#### Body
+
+{% cut "application/json" %}
+
+
+\`\`\`json
+{}
+\`\`\`
+
+
+{% endcut %}
+
+
+</div>
+<!-- markdownlint-disable-file -->
+
+</div>"
+`;
+
+exports[`openapi project with examples renders nested arrays exmaple 1`] = `
+"<div class="openapi">
+
+# example.array
+
+## Request
+
+<div class="openapi__request__wrapper">
+
+<div class="openapi__request" style="--method: var(--dc-openapi-methods-post)">
+
+POST {.openapi__method}
+
+
+\`\`\`
+http://localhost:8080/test
+\`\`\`
+
+
+</div>
+
+</div>
+
+Generated server url{.openapi__request__description}
+
+#### Body
+
+{% cut "application/json" %}
+
+
+\`\`\`json
+[
+    [
+        {
+            "name": "string"
+        }
+    ]
+]
+\`\`\`
+
+
+{% endcut %}
+
+
+[Cat](#cat)[][]
+
+### Cat
+
+#||| **Name** | **Type** | **Description** ||
+
+|| name | string |  |||#
+
+## Responses
+
+<div class="openapi__response__code__200">
+
+## 200 OK
+
+Base 200 response
+
+#### Body
+
+{% cut "application/json" %}
+
+
+\`\`\`json
+{}
+\`\`\`
+
+
+{% endcut %}
+
+
+</div>
+<!-- markdownlint-disable-file -->
+
+</div>"
+`;

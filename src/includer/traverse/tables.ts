@@ -37,6 +37,15 @@ export function tableFromSchema(schema: OpenJSONSchema): TableFromSchemaResult {
         return {content, tableRefs: []};
     }
 
+    if (schema.type === 'array') {
+        const {type, ref} = prepareTableRowData(schema);
+
+        return {
+            content: type,
+            tableRefs: ref ? [ref] : [],
+        };
+    }
+
     const {rows, refs} = prepareObjectSchemaTable(schema);
     let content = rows.length ? table([['Name', 'Type', 'Description'], ...rows]) : '';
 
@@ -135,8 +144,8 @@ export function prepareTableRowData(
 
         const inner = prepareTableRowData(value.items, key, parentRef);
         const innerDescription = inner.ref
-            ? description
-            : concatNewLine(description, inner.description);
+            ? concatNewLine(description, inner.description)
+            : description;
 
         if (RefsService.isRuntimeAllowed() && inner.runtimeRef) {
             RefsService.runtime(inner.runtimeRef, value.items);
@@ -178,20 +187,20 @@ export function prepareTableRowData(
 function prepareComplexDescription(baseDescription: string, value: OpenJSONSchema): string {
     let description = baseDescription;
     const enumValues = value.enum?.map((s) => `\`${s}\``).join(', ');
-    if (enumValues) {
+    if (typeof enumValues !== 'undefined') {
         description = concatNewLine(
             description,
             `<span style="color:gray;">Enum</span>: ${enumValues}`,
         );
     }
-    if (value.default) {
+    if (typeof value.default !== 'undefined') {
         description = concatNewLine(
             description,
             `<span style="color:gray;">Default</span>: \`${value.default}\``,
         );
     }
 
-    if (value.example) {
+    if (typeof value.example !== 'undefined') {
         description = concatNewLine(
             description,
             `<span style="color:gray;">Example</span>: \`${value.example}\``,
@@ -247,11 +256,27 @@ function findNonNullOneOfElement(schema: OpenJSONSchema): OpenJSONSchema {
     throw new Error(`Unable to create sample element: \n ${stringify(schema, null, 2)}`);
 }
 
-export function prepareSampleObject(schema: OpenJSONSchema, callstack: OpenJSONSchema[] = []) {
+export function prepareSampleObject(
+    schema: OpenJSONSchema,
+    callstack: OpenJSONSchema[] = [],
+): Object | Array<Object> {
     const result: {[key: string]: unknown} = {};
 
     if (schema.example) {
         return schema.example;
+    }
+
+    if (schema.type === 'array') {
+        if (Array.isArray(schema.items) || typeof schema.items !== 'object') {
+            throw new Error(
+                `Unable to create sample element for ${stringify(
+                    schema,
+                    null,
+                    4,
+                )}.\n You can pass only one scheme to items`,
+            );
+        }
+        return [prepareSampleObject(schema.items)];
     }
 
     const merged = findNonNullOneOfElement(RefsService.merge(schema));
@@ -302,7 +327,13 @@ function prepareSampleElement(
             return prepareSampleObject(schema, downCallstack);
         case 'array':
             if (!schema.items || schema.items === true || Array.isArray(schema.items)) {
-                throw Error(`Unsupported array items for ${key}`);
+                throw new Error(
+                    `Unable to create sample element for ${stringify(
+                        schema,
+                        null,
+                        4,
+                    )}.\n You can pass only one scheme to items`,
+                );
             }
             return [
                 prepareSampleElement(key, schema.items, isRequired(key, schema), downCallstack),

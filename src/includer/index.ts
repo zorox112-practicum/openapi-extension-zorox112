@@ -164,14 +164,20 @@ async function generateToc(params: GenerateTocParams): Promise<void> {
             items: [],
         };
 
-        section.items = endpointsOfTag.map((endpoint) => handleEndpointRender(endpoint, id));
-
         const custom = ArgvService.tag(tag.name);
+        const customId = custom?.alias || id;
+
+        section.items = endpointsOfTag.map((endpoint) => handleEndpointRender(endpoint, customId));
 
         const customLeadingPageName = custom?.name || leadingPageName;
 
         if (!custom?.hidden) {
-            addLeadingPage(section, leadingPageMode, customLeadingPageName, join(id, 'index.md'));
+            addLeadingPage(
+                section,
+                leadingPageMode,
+                customLeadingPageName,
+                join(customId, 'index.md'),
+            );
         }
 
         toc.items.push(section);
@@ -270,11 +276,12 @@ async function generateContent(params: GenerateContentParams): Promise<void> {
     spec.tags.forEach((tag, id) => {
         const {endpoints} = tag;
 
-        endpoints.forEach((endpoint) => {
-            results.push(handleEndpointIncluder(endpoint, join(writePath, id), sandbox));
-        });
-
         const custom = ArgvService.tag(tag.name);
+        const customId = custom?.alias || id;
+
+        endpoints.forEach((endpoint) => {
+            results.push(handleEndpointIncluder(endpoint, join(writePath, customId), sandbox));
+        });
 
         if (custom?.hidden) {
             return;
@@ -285,7 +292,7 @@ async function generateContent(params: GenerateContentParams): Promise<void> {
             : generators.section(tag);
 
         results.push({
-            path: join(writePath, id, 'index.md'),
+            path: join(writePath, customId, 'index.md'),
             content,
         });
     });
