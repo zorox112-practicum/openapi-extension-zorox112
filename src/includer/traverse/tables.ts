@@ -6,9 +6,9 @@ import {concatNewLine} from '../utils';
 import {EOL} from '../constants';
 import {OpenJSONSchema, OpenJSONSchemaDefinition} from '../models';
 import {
+    collectRefs,
     descriptionForOneOfElement,
     extractOneOfElements,
-    extractRefFromType,
     inferType,
     typeToText,
 } from './types';
@@ -42,7 +42,7 @@ export function tableFromSchema(schema: OpenJSONSchema): TableFromSchemaResult {
 
         return {
             content: type,
-            tableRefs: ref ? [ref] : [],
+            tableRefs: ref || [],
         };
     }
 
@@ -84,7 +84,7 @@ function prepareObjectSchemaTable(schema: OpenJSONSchema): PrepareObjectSchemaTa
         result.rows.push([name, type, description]);
 
         if (ref) {
-            result.refs.push(ref);
+            result.refs.push(...ref);
         }
 
         if (runtimeRef) {
@@ -96,7 +96,7 @@ function prepareObjectSchemaTable(schema: OpenJSONSchema): PrepareObjectSchemaTa
             const {ref: innerRef} = prepareTableRowData(mergedInner);
 
             if (innerRef) {
-                result.refs.push(innerRef);
+                result.refs.push(...innerRef);
 
                 continue;
             }
@@ -119,7 +119,7 @@ function prepareObjectSchemaTable(schema: OpenJSONSchema): PrepareObjectSchemaTa
 type PrepareRowResult = {
     type: string;
     description: string;
-    ref?: TableRef;
+    ref?: TableRef[];
     /*
      * if object has no ref in RefsService
      * then we will create runtime ref and render it later
@@ -157,8 +157,10 @@ export function prepareTableRowData(
             };
         }
 
+        const returnType = (inner.ref?.length || 0) <= 1 ? `${inner.type}[]` : `(${inner.type})[]`;
+
         return {
-            type: `${inner.type}[]`,
+            type: returnType,
             // if inner.ref present, inner description will be in separate table
             ref: inner.ref,
             description: innerDescription,
@@ -180,7 +182,7 @@ export function prepareTableRowData(
     return {
         type: typeToText(type) + format,
         description: prepareComplexDescription(description, value),
-        ref: extractRefFromType(type),
+        ref: collectRefs(type),
     };
 }
 

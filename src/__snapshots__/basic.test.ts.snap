@@ -33,7 +33,7 @@ Generated server url{.openapi__request__description}
 
 Base 200 response
 
-#### Body
+### Body
 
 {% cut "application/json" %}
 
@@ -63,7 +63,7 @@ Base 200 response
 
 Base 200 response
 
-#### Body
+### Body
 
 {% cut "application/json" %}
 

@@ -321,6 +321,6 @@ export type BaseJSONSchemaType = Exclude<OpenJSONSchema['type'], undefined>;
 export type JSONSchemaUnionType = {
     ref?: string;
     /* Not oneOf because of collision with OpenJSONSchema['oneOf'] */
-    unionOf?: JSONSchemaType[];
+    unionOf: JSONSchemaType[];
 };
 export type JSONSchemaType = BaseJSONSchemaType | JSONSchemaUnionType | FoundRefType;

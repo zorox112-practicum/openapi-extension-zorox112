@@ -175,7 +175,7 @@ function parameters(pagePrintedRefs: Set<string>, params?: Parameters) {
                 rows.push(cells);
                 if (ref) {
                     // there may be enums, which should be printed in separate tables
-                    tableRefs.push(ref);
+                    tableRefs.push(...ref);
                 }
             }
             tables.push(title(3)(heading));
@@ -186,7 +186,7 @@ function parameters(pagePrintedRefs: Set<string>, params?: Parameters) {
     return block(tables);
 }
 
-function parameterRow(param: Parameter): {cells: string[]; ref?: TableRef} {
+function parameterRow(param: Parameter): {cells: string[]; ref?: TableRef[]} {
     const row = prepareTableRowData(param.schema, param.name);
     let description = param.description ?? '';
     if (!row.ref && row.description.length) {
@@ -211,7 +211,7 @@ function openapiBody(pagePrintedRefs: Set<string>, obj?: Schema) {
     }
 
     const {type = 'schema', schema} = obj;
-    const sectionTitle = title(4)('Body');
+    const sectionTitle = title(3)('Body');
 
     let result: any[] = [sectionTitle];
 

@@ -31,7 +31,7 @@ Generated server url{.openapi__request__description}
 
 ## 200 OK
 
-#### Body
+### Body
 
 {% cut "application/json" %}
 

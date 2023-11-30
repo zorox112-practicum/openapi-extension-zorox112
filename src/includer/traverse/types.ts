@@ -70,7 +70,7 @@ function inferType(value: OpenJSONSchema): JSONSchemaType {
 }
 
 function extractRefFromType(type: JSONSchemaType): string | undefined {
-    if (typeof type === 'string' || isUnionType(type)) {
+    if (typeof type === 'string') {
         return undefined;
     }
 
@@ -79,6 +79,18 @@ function extractRefFromType(type: JSONSchemaType): string | undefined {
     }
 
     return type.ref;
+}
+
+function collectRefs(type: JSONSchemaType): string[] | undefined {
+    const result: JSONSchemaType[] = [];
+
+    if (isUnionType(type)) {
+        result.push(...(type.unionOf || []));
+    } else {
+        result.push(type);
+    }
+
+    return result.map(extractRefFromType).filter(Boolean) as string[] | undefined;
 }
 
 function isUnionType(type: JSONSchemaType): type is JSONSchemaUnionType {
@@ -103,7 +115,7 @@ function typeToText(type: JSONSchemaType): string {
     }
 
     if (isUnionType(type)) {
-        return [...new Set(type.unionOf)].map(typeToText).join(' \nor ');
+        return type.unionOf.map(typeToText).join(' \nor ');
     }
 
     if (type.ref) {
@@ -162,5 +174,6 @@ export {
     isSupportedEnumType,
     extractOneOfElements,
     extractRefFromType,
+    collectRefs,
     descriptionForOneOfElement,
 };

@@ -25,7 +25,7 @@ http://localhost:8080/test
 
 Generated server url{.openapi__request__description}
 
-#### Body
+### Body
 
 {% cut "application/json" %}
 
@@ -48,7 +48,7 @@ Generated server url{.openapi__request__description}
 
 Base 200 response
 
-#### Body
+### Body
 
 {% cut "application/json" %}
 
@@ -92,7 +92,7 @@ http://localhost:8080/test
 
 Generated server url{.openapi__request__description}
 
-#### Body
+### Body
 
 {% cut "application/json" %}
 
@@ -119,7 +119,7 @@ Generated server url{.openapi__request__description}
 
 Base 200 response
 
-#### Body
+### Body
 
 {% cut "application/json" %}
 
@@ -163,7 +163,7 @@ http://localhost:8080/test
 
 Generated server url{.openapi__request__description}
 
-#### Body
+### Body
 
 {% cut "application/json" %}
 
@@ -198,7 +198,7 @@ Generated server url{.openapi__request__description}
 
 Base 200 response
 
-#### Body
+### Body
 
 {% cut "application/json" %}
 
