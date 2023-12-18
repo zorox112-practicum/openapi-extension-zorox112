@@ -1,5 +1,5 @@
 module.exports = {
-    extends: ['@diplodoc/eslint-config', '@diplodoc/eslint-config/prettier'],
+    extends: ['@diplodoc/eslint-config'],
     root: true,
     overrides: [
         {
