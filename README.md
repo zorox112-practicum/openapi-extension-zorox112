@@ -1,3 +1,5 @@
+# Diplodoc OpenAPI extension
+
 [![NPM version](https://img.shields.io/npm/v/@diplodoc/openapi-extension.svg?style=flat)](https://www.npmjs.org/package/@diplodoc/openapi-extension)
 
 ## Configuration:
