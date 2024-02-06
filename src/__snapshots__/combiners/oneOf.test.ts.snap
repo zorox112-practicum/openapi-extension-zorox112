@@ -201,7 +201,9 @@ Generated server url{.openapi__request__description}
 \`\`\`json
 {
     "name": "string",
-    "age": 0
+    "age": 0,
+    "type": "string",
+    "baz": "string"
 }
 \`\`\`
 
@@ -320,7 +322,9 @@ Cat class
 \`\`\`json
 {
     "name": "string",
-    "age": 0
+    "age": 0,
+    "type": "string",
+    "baz": "string"
 }
 \`\`\`
 
@@ -407,7 +411,9 @@ Generated server url{.openapi__request__description}
     "pet": {
         "type": "string",
         "baz": "string"
-    }
+    },
+    "type": "string",
+    "baz": "string"
 }
 \`\`\`
 
@@ -520,7 +526,9 @@ Cat class
     "pet": {
         "type": "string",
         "baz": "string"
-    }
+    },
+    "type": "string",
+    "baz": "string"
 }
 \`\`\`
 
