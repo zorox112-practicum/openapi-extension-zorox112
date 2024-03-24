@@ -1,13 +1,13 @@
 import RefsService from '../services/refs';
 import stringify from 'json-stringify-safe';
 
-import {anchor, table, tableParameterName} from '../ui';
+import {anchor, block, bold, table, tableParameterName} from '../ui';
 import {concatNewLine} from '../utils';
-import {EOL} from '../constants';
 import {OpenJSONSchema, OpenJSONSchemaDefinition} from '../models';
 import {collectRefs, extractOneOfElements, inferType, typeToText} from './types';
+import {prepareComplexDescription} from './description';
 
-type TableRow = [string, string, string];
+type TableRow = [string, string];
 
 export type TableRef = string;
 
@@ -40,7 +40,7 @@ export function tableFromSchema(schema: OpenJSONSchema): TableFromSchemaResult {
     }
 
     const {rows, refs} = prepareObjectSchemaTable(schema);
-    const content = rows.length ? table([['Name', 'Type', 'Description'], ...rows]) : '';
+    const content = rows.length ? table([['Name', 'Description'], ...rows]) : '';
 
     return {content, tableRefs: refs};
 }
@@ -61,7 +61,7 @@ function prepareObjectSchemaTable(schema: OpenJSONSchema): PrepareObjectSchemaTa
         const name = tableParameterName(key, isRequired(key, merged));
         const {type, description, ref, runtimeRef} = prepareTableRowData(value, key, tableRef);
 
-        result.rows.push([name, type, description]);
+        result.rows.push([name, block([`${bold('Type:')} ${type}`, description])]);
 
         if (ref) {
             result.refs.push(...ref);
@@ -99,7 +99,10 @@ function prepareObjectSchemaTable(schema: OpenJSONSchema): PrepareObjectSchemaTa
                 return;
             }
 
-            result.rows.push(['oneOf', anchor(ref), value.description || '']);
+            result.rows.push([
+                '...rest',
+                block([`${bold('oneOf')} ${anchor(ref)}`, value.description || '']),
+            ]);
 
             result.refs.push(ref);
         });
@@ -145,7 +148,7 @@ export function prepareTableRowData(
             return {
                 type: `${anchor(inner.runtimeRef, key)}[]`,
                 runtimeRef: inner.runtimeRef,
-                description: innerDescription,
+                description: prepareComplexDescription(innerDescription, value),
             };
         }
 
@@ -156,7 +159,7 @@ export function prepareTableRowData(
             type: returnType,
             // if inner.ref present, inner description will be in separate table
             ref: inner.ref,
-            description: innerDescription,
+            description: prepareComplexDescription(innerDescription, value),
         };
     }
 
@@ -177,49 +180,6 @@ export function prepareTableRowData(
         description: prepareComplexDescription(description, value),
         ref: collectRefs(type),
     };
-}
-
-function prepareComplexDescription(baseDescription: string, value: OpenJSONSchema): string {
-    let description = baseDescription + EOL;
-
-    const enumValues = value.enum?.map((s) => `\`${s}\``).join(', ');
-
-    if (typeof enumValues !== 'undefined') {
-        description = concatNewLine(
-            description,
-            `<span style="color:gray;">Enum</span>: ${enumValues}`,
-        );
-    }
-
-    if (typeof value.default !== 'undefined') {
-        description = concatNewLine(
-            description,
-            `<span style="color:gray;">Default</span>: \`${value.default}\``,
-        );
-    }
-
-    if (typeof value.example !== 'undefined') {
-        description = concatNewLine(
-            description,
-            `<span style="color:gray;">Example</span>: \`${value.example}\``,
-        );
-    }
-
-    if (typeof value.minLength !== 'undefined') {
-        description = concatNewLine(
-            description,
-            `<span style="color:gray;">Min length</span>: \`${value.minLength}\``,
-        );
-    }
-
-    if (typeof value.maxLength !== 'undefined') {
-        description = concatNewLine(
-            description,
-            `<span style="color:gray;">Max length</span>: \`${value.maxLength}\``,
-        );
-    }
-
-    return description;
 }
 
 function findNonNullOneOfElement(schema: OpenJSONSchema): OpenJSONSchema {
@@ -312,6 +272,7 @@ export function prepareSampleObject(
     return result;
 }
 
+// eslint-disable-next-line
 function prepareSampleElement(
     key: string,
     v: OpenJSONSchemaDefinition,
