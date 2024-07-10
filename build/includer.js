@@ -2,7 +2,7 @@ const glob = require('glob');
 const path = require('node:path');
 const esbuild = require('esbuild');
 
-const IN_PATH = path.resolve('src', 'includer');
+const IN_PATH = path.resolve('src', 'includer').replace(/\\/g, '/');
 const OUT_PATH = 'includer';
 const FORMATS = ['cjs', 'esm'];
 
