@@ -1,5 +1,4 @@
 import {OpenJSONSchema} from '../models';
-import {concatNewLine} from '../utils';
 
 type Field = {
     key: keyof OpenJSONSchema;
@@ -92,17 +91,14 @@ function concatConstraint(
     constraintLabel: string,
     notWrapValueIntoCode = false,
 ) {
-    if (typeof constraint !== 'undefined') {
-        return concatNewLine(
-            description,
-            `<span class="openapi-description-annotation">${constraintLabel}</span> ${prepareConstraintValue(
-                constraint,
-                notWrapValueIntoCode,
-            )}`,
-        );
+    if (typeof constraint === 'undefined') {
+        return description;
     }
 
-    return description;
+    constraint = prepareConstraintValue(constraint, notWrapValueIntoCode);
+    description = description.replace(/\n$/, '');
+
+    return `${description}\n\n*${constraintLabel}*{.openapi-description-annotation} ${constraint}\n`;
 }
 
 function prepareConstraintValue(value: unknown, notWrapValueIntoCode: boolean) {

@@ -111,7 +111,10 @@ Cat class
 |
  **Type:** string
 
-<span class="openapi-description-annotation">Min length:</span> \`3\` 
+
+
+*Min length:*{.openapi-description-annotation} \`3\`
+ 
 ||
 
 ||
@@ -139,7 +142,12 @@ Dog class
 |
  **Type:** string
 
-<span class="openapi-description-annotation">Min length:</span> \`1\`<br><span class="openapi-description-annotation">Max length:</span> \`99\` 
+
+
+*Min length:*{.openapi-description-annotation} \`1\`
+
+*Max length:*{.openapi-description-annotation} \`99\`
+ 
 ||
 
 ||
@@ -147,7 +155,10 @@ Dog class
 |
  **Type:** string
 
-Pet name<br><span class="openapi-description-annotation">Max length:</span> \`100\` 
+Pet name
+
+*Max length:*{.openapi-description-annotation} \`100\`
+ 
 |||#
 
 </div>

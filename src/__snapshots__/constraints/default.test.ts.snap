@@ -41,7 +41,10 @@ Generated server url
 |
  **Type:** number&lt;int32&gt;
 
-Amount of search results to show<br><span class="openapi-description-annotation">Default:</span> \`10\` 
+Amount of search results to show<br>
+
+*Default:*{.openapi-description-annotation} \`10\`
+ 
 |||#
 
 ## Responses
@@ -134,7 +137,10 @@ Generated server url
 |
  **Type:** number
 
-<span class="openapi-description-annotation">Default:</span> \`7\` 
+
+
+*Default:*{.openapi-description-annotation} \`7\`
+ 
 ||
 
 ||
@@ -142,7 +148,10 @@ Generated server url
 |
  **Type:** string
 
-<span class="openapi-description-annotation">Default:</span> \`Anonymous\` 
+
+
+*Default:*{.openapi-description-annotation} \`Anonymous\`
+ 
 ||
 
 ||
@@ -150,7 +159,12 @@ Generated server url
 |
  **Type:** string
 
-Role for the user being created<br><span class="openapi-description-annotation">Default:</span> \`basic\`<br><span class="openapi-description-annotation">Enum:</span> \`basic\`, \`admin\` 
+Role for the user being created
+
+*Default:*{.openapi-description-annotation} \`basic\`
+
+*Enum:*{.openapi-description-annotation} \`basic\`, \`admin\`
+ 
 ||
 
 ||
@@ -158,7 +172,10 @@ Role for the user being created<br><span class="openapi-description-annotation">
 |
  **Type:** string[]
 
-<span class="openapi-description-annotation">Default:</span> \`blah\` 
+
+
+*Default:*{.openapi-description-annotation} \`blah\`
+ 
 |||#
 
 </div>

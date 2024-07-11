@@ -67,7 +67,10 @@ Generated server url
 |
  **Type:** string
 
-<span class="openapi-description-annotation">Default:</span> \`b\` 
+
+
+*Default:*{.openapi-description-annotation} \`b\`
+ 
 ||
 
 ||
@@ -187,7 +190,10 @@ Base 200 response
 |
  **Type:** string
 
-<span class="openapi-description-annotation">Default:</span> \`b\` 
+
+
+*Default:*{.openapi-description-annotation} \`b\`
+ 
 ||
 
 ||

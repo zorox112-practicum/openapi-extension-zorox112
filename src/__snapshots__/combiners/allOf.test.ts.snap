@@ -116,7 +116,10 @@ Base 200 response
 |
  **Type:** string
 
-<span class="openapi-description-annotation">Default:</span> \`a\` 
+
+
+*Default:*{.openapi-description-annotation} \`a\`
+ 
 ||
 
 ||
