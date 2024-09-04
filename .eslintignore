@@ -1,8 +1,0 @@
-node_modules
-/includer
-/plugin
-/runtime
-.eslintrc.js
-jest.snapshots.js
-jest.config.js
-build

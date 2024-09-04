@@ -40,8 +40,6 @@
     "build:declarations": "tsc --emitDeclarationOnly --outDir .",
     "prepublishOnly": "npm run build",
     "test": "jest",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
     "typecheck": "tsc --noEmit"
   },
   "files": [
@@ -56,8 +54,6 @@
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
-    "@diplodoc/eslint-config": "^2.0.0",
-    "@diplodoc/prettier-config": "^2.0.0",
     "@diplodoc/tsconfig": "^1.0.2",
     "@gravity-ui/uikit": "^6.0.0",
     "@types/html-escaper": "^3.0.0",
