@@ -8,3 +8,12 @@ node_modules
 
 .vscode
 .idea
+
+.history
+.env
+.DS_Store
+/lib
+/dist
+/build
+/cache
+/coverage
