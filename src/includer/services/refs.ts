@@ -105,6 +105,7 @@ function merge(schema: OpenJSONSchemaDefinition, needToSaveRef = true): OpenJSON
     }
 
     let description = value.description || '';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const properties: Record<string, any> = value.properties || {};
     const required: string[] = value.required || [];
 

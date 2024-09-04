@@ -1,9 +1,8 @@
 import stringify from 'json-stringify-safe';
-import RefsService from '../services/refs';
 import {dump} from 'js-yaml';
-
 import groupBy from 'lodash/groupBy';
 
+import RefsService from '../services/refs';
 import {
     COOKIES_SECTION_NAME,
     HEADERS_SECTION_NAME,
@@ -15,26 +14,23 @@ import {
     RESPONSES_SECTION_NAME,
     SANDBOX_TAB_NAME,
 } from '../constants';
-
 import {
     TableRef,
     prepareSampleObject,
     prepareTableRowData,
     tableFromSchema,
 } from '../traverse/tables';
-
 import {
-    Endpoint,
     In,
     OpenJSONSchema,
-    Parameter,
-    Parameters,
-    Response,
-    Responses,
-    Schema,
-    Security,
+    V3Endpoint,
+    V3Parameter,
+    V3Parameters,
+    V3Response,
+    V3Responses,
+    V3Schema,
+    V3Security,
 } from '../models';
-
 import {concatNewLine} from '../utils';
 
 import {
@@ -54,7 +50,7 @@ import {
 } from './common';
 import {prepareRenderableParameterList} from './presentationUtils/prepareRenderableParameterList';
 
-function endpoint(data: Endpoint, sandboxPlugin: {host?: string; tabName?: string} | undefined) {
+function endpoint(data: V3Endpoint, sandboxPlugin: {host?: string; tabName?: string} | undefined) {
     // try to remember, which tables we are already printed on page
     const pagePrintedRefs = new Set<string>();
 
@@ -103,16 +99,16 @@ function sandbox({
     requestBody,
     method,
 }: {
-    params?: Parameters;
+    params?: V3Parameters;
     host?: string;
     path: string;
-    security: Security[];
-    requestBody?: Schema;
+    security: V3Security[];
+    requestBody?: V3Schema;
     method: string;
 }) {
-    const pathParams = params?.filter((param: Parameter) => param.in === 'path');
-    const searchParams = params?.filter((param: Parameter) => param.in === 'query');
-    const headers = params?.filter((param: Parameter) => param.in === 'header');
+    const pathParams = params?.filter((param: V3Parameter) => param.in === 'path');
+    const searchParams = params?.filter((param: V3Parameter) => param.in === 'query');
+    const headers = params?.filter((param: V3Parameter) => param.in === 'header');
     let bodyStr: null | string = null;
 
     if (requestBody?.type === 'application/json' || requestBody?.type === 'multipart/form-data') {
@@ -135,7 +131,7 @@ function sandbox({
     return block(['```openapi-sandbox\n' + props + '\n```']);
 }
 
-function request(data: Endpoint) {
+function request(data: V3Endpoint) {
     const {path, method: type, servers} = data;
 
     const requests = servers.map((server, index) => {
@@ -165,7 +161,7 @@ function request(data: Endpoint) {
     return block(result);
 }
 
-function getParameterSourceTableContents(parameterList: readonly Parameter[]) {
+function getParameterSourceTableContents(parameterList: readonly V3Parameter[]) {
     const rowsAndRefs = parameterList.map((param) => parameterRow(param));
 
     const additionalRefs = rowsAndRefs
@@ -177,7 +173,7 @@ function getParameterSourceTableContents(parameterList: readonly Parameter[]) {
     return {additionalRefs, contentRows};
 }
 
-function parameters(pagePrintedRefs: Set<string>, params?: Parameters) {
+function parameters(pagePrintedRefs: Set<string>, params?: V3Parameters) {
     const sections = {
         path: PATH_PARAMETERS_SECTION_NAME,
         query: QUERY_PARAMETERS_SECTION_NAME,
@@ -187,7 +183,7 @@ function parameters(pagePrintedRefs: Set<string>, params?: Parameters) {
 
     const partitionedParameters = groupBy(params, (parameterSpec) => parameterSpec.in) as Record<
         In,
-        Parameter[] | undefined
+        V3Parameter[] | undefined
     >;
 
     const content = Object.keys(sections)
@@ -220,7 +216,7 @@ function parameters(pagePrintedRefs: Set<string>, params?: Parameters) {
     return block(content);
 }
 
-function parameterRow(param: Parameter): {cells: string[]; ref?: TableRef[]} {
+function parameterRow(param: V3Parameter): {cells: string[]; ref?: TableRef[]} {
     const row = prepareTableRowData(param.schema, param.name);
     let description = param.description ?? '';
     if (!row.ref?.length && row.description.length) {
@@ -242,7 +238,7 @@ function parameterRow(param: Parameter): {cells: string[]; ref?: TableRef[]} {
     };
 }
 
-function openapiBody(pagePrintedRefs: Set<string>, obj?: Schema) {
+function openapiBody(pagePrintedRefs: Set<string>, obj?: V3Schema) {
     if (!obj) {
         return '';
     }
@@ -329,7 +325,7 @@ function printAllTables(pagePrintedRefs: Set<string>, tableRefs: TableRef[]): st
     return result;
 }
 
-function responses(visited: Set<string>, resps?: Responses) {
+function responses(visited: Set<string>, resps?: V3Responses) {
     return (
         resps?.length &&
         block([
@@ -339,7 +335,7 @@ function responses(visited: Set<string>, resps?: Responses) {
     );
 }
 
-function response(visited: Set<string>, resp: Response) {
+function response(visited: Set<string>, resp: V3Response) {
     let header = resp.code;
 
     if (resp.statusText.length) {

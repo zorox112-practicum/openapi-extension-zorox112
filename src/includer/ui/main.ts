@@ -1,11 +1,7 @@
-import ArgvService from '../services/argv';
-
 import stringify from 'json-stringify-safe';
-
 import {join} from 'path';
 
-import {block, body, code, cut, link, list, mono, page, title} from '.';
-
+import ArgvService from '../services/argv';
 import {
     CONTACTS_SECTION_NAME,
     ENDPOINTS_SECTION_NAME,
@@ -14,21 +10,21 @@ import {
     SPEC_SECTION_TYPE,
     TAGS_SECTION_NAME,
 } from '../constants';
-
 import {
-    Contact,
     ContactSource,
-    Info,
     LeadingPageSpecRenderMode,
     Specification,
-    Tag,
+    V3Contact,
+    V3Info,
+    V3Tag,
 } from '../models';
-
 import {mdPath, sectionName} from '../index';
+
+import {block, body, code, cut, link, list, mono, page, title} from '.';
 
 export type MainParams = {
     data: unknown;
-    info: Info;
+    info: V3Info;
     spec: Specification;
     leadingPageSpecRenderMode: LeadingPageSpecRenderMode;
 };
@@ -52,7 +48,7 @@ function main(params: MainParams) {
     return page(block(mainPage));
 }
 
-function contact(data?: Contact) {
+function contact(data?: V3Contact) {
     return (
         data?.name.length &&
         data?.sources.length &&
@@ -60,7 +56,7 @@ function contact(data?: Contact) {
     );
 }
 
-function contactSource(data: Contact) {
+function contactSource(data: V3Contact) {
     return (src: ContactSource) => link(data.name + ` ${src.type}`, src.url);
 }
 
@@ -72,7 +68,7 @@ function sections({tags, endpoints}: Specification) {
     const content = [];
 
     const taggedLinks = Array.from(tags)
-        .map(([_, {name, id}]: [unknown, Tag]) => {
+        .map(([_, {name, id}]: [unknown, V3Tag]) => {
             const custom = ArgvService.tag(name);
 
             if (custom?.hidden) {

@@ -3,27 +3,26 @@ import slugify from 'slugify';
 import {getStatusText} from 'http-status-codes';
 
 import {TAG_NAMES_FIELD} from './constants';
-
 import {
-    Endpoint,
-    Endpoints,
-    Info,
     Method,
     OpenAPIOperation,
     OpenAPISpec,
-    Response,
-    Responses,
-    Server,
     Specification,
-    Tag,
+    V3Endpoint,
+    V3Endpoints,
+    V3Info,
+    V3Response,
+    V3Responses,
+    V3Server,
+    V3Tag,
 } from './models';
 
-function info(spec: OpenAPISpec): Info {
+function info(spec: OpenAPISpec): V3Info {
     const {
         info: {title, description, version, termsOfService, license, contact},
     } = spec;
 
-    const parsed: Info = {
+    const parsed: V3Info = {
         name: title,
         version: version,
     };
@@ -66,7 +65,7 @@ function info(spec: OpenAPISpec): Info {
     return parsed;
 }
 
-function tagsFromSpec(spec: OpenAPISpec): Map<string, Tag> {
+function tagsFromSpec(spec: OpenAPISpec): Map<string, V3Tag> {
     const {tags, paths} = spec;
 
     const parsed = new Map();
@@ -82,7 +81,7 @@ function tagsFromSpec(spec: OpenAPISpec): Map<string, Tag> {
 
         const id = slugify(tag.name);
 
-        parsed.set(id, {...tag, id, endpoints: [] as Endpoints});
+        parsed.set(id, {...tag, id, endpoints: [] as V3Endpoints});
     }
 
     type VisiterOutput = {tags: string[]; titles: string[]};
@@ -114,8 +113,8 @@ function tagsFromSpec(spec: OpenAPISpec): Map<string, Tag> {
 }
 const opid = (path: string, method: string, id?: string) => slugify(id ?? [path, method].join('-'));
 
-function pathsFromSpec(spec: OpenAPISpec, tagsByID: Map<string, Tag>): Specification {
-    const endpoints: Endpoints = [];
+function pathsFromSpec(spec: OpenAPISpec, tagsByID: Map<string, V3Tag>): Specification {
+    const endpoints: V3Endpoints = [];
     const {paths, servers, components = {}, security: globalSecurity = []} = spec;
     const visiter = ({path, method, endpoint}: VisiterParams) => {
         const {
@@ -141,7 +140,7 @@ function pathsFromSpec(spec: OpenAPISpec, tagsByID: Map<string, Tag>): Specifica
         }, []);
 
         const parsedServers = (endpoint.servers || servers || [{url: '/'}]).map(
-            (server: Server) => {
+            (server: V3Server) => {
                 server.url = trimSlash(server.url);
 
                 return server;
@@ -150,7 +149,7 @@ function pathsFromSpec(spec: OpenAPISpec, tagsByID: Map<string, Tag>): Specifica
 
         /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
         const parseResponse = ([code, response]: [string, {[key: string]: any}]) => {
-            const parsed: Partial<Response> = {code, description: response.description};
+            const parsed: Partial<V3Response> = {code, description: response.description};
 
             try {
                 parsed.statusText = getStatusText(code);
@@ -165,17 +164,17 @@ function pathsFromSpec(spec: OpenAPISpec, tagsByID: Map<string, Tag>): Specifica
                 );
             }
 
-            return parsed as Response;
+            return parsed as V3Response;
         };
 
         /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-        const parsedResponses: Responses = Object.entries<{[key: string]: any}>(
+        const parsedResponses: V3Responses = Object.entries<{[key: string]: any}>(
             responses ?? {},
         ).map(parseResponse);
 
         const contentType = requestBody ? Object.keys(requestBody.content)[0] : undefined;
 
-        const parsedEndpoint: Endpoint = {
+        const parsedEndpoint: V3Endpoint = {
             servers: parsedServers,
             responses: parsedResponses,
             parameters,

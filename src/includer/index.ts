@@ -1,19 +1,15 @@
-import RefsService from './services/refs';
-import ArgvService from './services/argv';
-
 import assert from 'assert';
 import {dirname, join, resolve} from 'path';
 import {mkdir, writeFile} from 'fs/promises';
 import {readFileSync} from 'fs';
-import {matchFilter} from './utils';
-
 import {dump} from 'js-yaml';
-
-import parsers from './parsers';
-import generators from './ui';
-
 import SwaggerParser from '@apidevtools/swagger-parser';
 
+import {matchFilter} from './utils';
+import parsers from './parsers';
+import generators from './ui';
+import ArgvService from './services/argv';
+import RefsService from './services/refs';
 import {
     LEADING_PAGE_MODES,
     LEADING_PAGE_NAME_DEFAULT,
@@ -21,16 +17,15 @@ import {
     SPEC_RENDER_MODES,
     SPEC_RENDER_MODE_DEFAULT,
 } from './constants';
-
 import {
-    Endpoint,
     IncluderFunctionParams,
-    Info,
     OpenAPISpec,
     OpenApiIncluderParams,
     OpenJSONSchema,
     Refs,
     Specification,
+    V3Endpoint,
+    V3Info,
     YfmPreset,
     YfmToc,
     YfmTocItem,
@@ -247,7 +242,7 @@ async function generateContent(params: GenerateContentParams): Promise<void> {
 
     const results: EndpointRoute[] = [];
 
-    const info: Info = parsers.info(data);
+    const info: V3Info = parsers.info(data);
     let spec = parsers.paths(data, parsers.tags(data));
 
     if (noindex) {
@@ -307,14 +302,18 @@ async function generateContent(params: GenerateContentParams): Promise<void> {
     }
 }
 
-function handleEndpointIncluder(endpoint: Endpoint, pathPrefix: string, sandbox?: {host?: string}) {
+function handleEndpointIncluder(
+    endpoint: V3Endpoint,
+    pathPrefix: string,
+    sandbox?: {host?: string},
+) {
     const path = join(pathPrefix, mdPath(endpoint));
     const content = generators.endpoint(endpoint, sandbox);
 
     return {path, content};
 }
 
-function handleEndpointRender(endpoint: Endpoint, pathPrefix?: string): YfmToc {
+function handleEndpointRender(endpoint: V3Endpoint, pathPrefix?: string): YfmToc {
     let path = mdPath(endpoint);
     if (pathPrefix) {
         path = join(pathPrefix, path);
@@ -358,11 +357,11 @@ function filterUsefullContent(
     };
 }
 
-export function sectionName(e: Endpoint): string {
+export function sectionName(e: V3Endpoint): string {
     return e.summary ?? e.operationId ?? `${e.method} ${e.path}`;
 }
 
-export function mdPath(e: Endpoint): string {
+export function mdPath(e: V3Endpoint): string {
     return `${e.id}.md`;
 }
 

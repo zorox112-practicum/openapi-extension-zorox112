@@ -1,11 +1,13 @@
-import type {FormState, SandboxProps} from './types';
+import type {SandboxProps} from '../includer/models';
+import type {FormState} from './types';
+
 import React, {useRef, useState} from 'react';
 import {Button} from '@gravity-ui/uikit';
-import {BodyFormData, BodyJson, Column, Params, Result} from './components';
 
 import {Text, yfmSandbox} from '../plugin/constants';
-import {collectErrors, collectValues, prepareHeaders, prepareRequest} from './utils';
 
+import {BodyFormData, BodyJson, Column, Params, Result} from './components';
+import {collectErrors, collectValues, prepareHeaders, prepareRequest} from './utils';
 import './sandbox.scss';
 
 export const Sandbox: React.FC<SandboxProps> = (props) => {

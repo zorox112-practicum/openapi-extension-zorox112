@@ -1,10 +1,10 @@
 /* eslint-disable-next-line no-shadow */
-import {block, body, link, list, page, title} from './common';
 import {ENDPOINTS_SECTION_NAME} from '../constants';
+import {V3Endpoint, V3Endpoints, V3Tag} from '../models';
 
-import {Endpoint, Endpoints, Tag} from '../models';
+import {block, body, link, list, page, title} from './common';
 
-function section(tag: Tag) {
+function section(tag: V3Tag) {
     const sectionPage = [
         title(1)(tag.name),
         description(tag.description),
@@ -18,9 +18,9 @@ function description(text?: string) {
     return text?.length && body(text);
 }
 
-function endpoints(data?: Endpoints) {
+function endpoints(data?: V3Endpoints) {
     const visibleEndpoints = data?.filter((ep) => !ep.hidden);
-    const linkMap = ({id, summary}: Endpoint) => link(summary ?? id, id + '.md');
+    const linkMap = ({id, summary}: V3Endpoint) => link(summary ?? id, id + '.md');
 
     return (
         visibleEndpoints?.length &&

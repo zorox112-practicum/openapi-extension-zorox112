@@ -1,8 +1,7 @@
-import RefsService from '../services/refs';
 import stringify from 'json-stringify-safe';
 
+import RefsService from '../services/refs';
 import {EOL, SUPPORTED_ENUM_TYPES} from '../constants';
-
 import {
     JSONSchemaType,
     JSONSchemaUnionType,
@@ -10,7 +9,6 @@ import {
     OpenJSONSchema,
     SupportedEnumType,
 } from '../models';
-
 import {anchor} from '../ui';
 
 function inferType(value: OpenJSONSchema): JSONSchemaType {

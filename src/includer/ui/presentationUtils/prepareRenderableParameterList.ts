@@ -1,7 +1,8 @@
-import {Parameter} from '../../models';
+import {V3Parameter} from '../../models';
+
 import {getOrderedPropList} from './orderedProps/getOrderedPropList';
 
-const shouldRenderParameter = (parameter: Parameter) => !parameter['x-hidden'];
+const shouldRenderParameter = (parameter: V3Parameter) => !parameter['x-hidden'];
 
 /**
  * Get ordered & filtered parameter list, mostly ready for table rendering.
@@ -12,8 +13,8 @@ const shouldRenderParameter = (parameter: Parameter) => !parameter['x-hidden'];
  * @returns {ReadonlyArray<Parameter>} Well-ordered parameter list with hidden ones filtered out.
  */
 export const prepareRenderableParameterList = (
-    rawParamsFromSingleSource: readonly Parameter[],
-): readonly Parameter[] => {
+    rawParamsFromSingleSource: readonly V3Parameter[],
+): readonly V3Parameter[] => {
     const filteredParams = rawParamsFromSingleSource.filter(shouldRenderParameter);
 
     return getOrderedPropList({

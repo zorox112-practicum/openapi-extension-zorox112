@@ -1,8 +1,55 @@
 import type {RefObject} from 'react';
-import type {Field, FormState, Parameters, Security} from './types';
+import type {V3Parameters, V3Security} from '../includer/models';
+import type {Field, FormState} from './types';
 
 export const merge = <T, R>(items: T[], iterator: (item: T) => Record<string, R> | undefined) => {
     return items.reduce((acc, item) => Object.assign(acc, iterator(item)), {} as Record<string, R>);
+};
+
+export const prepareBody = ({
+    bodyType,
+    bodyJson,
+    bodyFormData,
+}: {
+    bodyType?: string;
+    bodyJson: string | undefined;
+    bodyFormData: FormData | undefined;
+}) => {
+    switch (bodyType) {
+        case 'application/json':
+            return {body: bodyJson};
+        case 'multipart/form-data':
+            return {body: bodyFormData};
+
+        default:
+            return {};
+    }
+};
+
+export const prepareHeaders = ({
+    headers,
+    security,
+}: {
+    security?: V3Security[];
+    headers?: V3Parameters;
+}) => {
+    const preparedHeaders = headers ? [...headers] : [];
+
+    const hasOAuth2 = security?.find(({type}) => type === 'oauth2');
+    if (hasOAuth2) {
+        preparedHeaders.push({
+            name: 'Authorization',
+            schema: {
+                type: 'string',
+            },
+            in: 'header',
+            required: true,
+            description: '',
+            example: 'Bearer <token>',
+        });
+    }
+
+    return preparedHeaders;
 };
 
 export const prepareRequest = (
@@ -36,52 +83,6 @@ export const prepareRequest = (
     };
 };
 
-export const prepareBody = ({
-    bodyType,
-    bodyJson,
-    bodyFormData,
-}: {
-    bodyType?: string;
-    bodyJson: string | undefined;
-    bodyFormData: FormData | undefined;
-}) => {
-    switch (bodyType) {
-        case 'application/json':
-            return {body: bodyJson};
-        case 'multipart/form-data':
-            return {body: bodyFormData};
-
-        default:
-            return {};
-    }
-};
-
-export const prepareHeaders = ({
-    headers,
-    security,
-}: {
-    security?: Security[];
-    headers?: Parameters;
-}) => {
-    const preparedHeaders = headers ? [...headers] : [];
-
-    const hasOAuth2 = security?.find(({type}) => type === 'oauth2');
-    if (hasOAuth2) {
-        preparedHeaders.push({
-            name: 'Authorization',
-            schema: {
-                type: 'string',
-            },
-            in: 'header',
-            required: true,
-            description: '',
-            example: 'Bearer <token>',
-        });
-    }
-
-    return preparedHeaders;
-};
-
 export function collectErrors(fields: Record<string, RefObject<Field>>) {
     const errors = Object.keys(fields).reduce(
         (acc, key) => {
@@ -112,7 +113,7 @@ export function collectErrors(fields: Record<string, RefObject<Field>>) {
 export function collectValues<F extends Record<string, RefObject<Field>>>(
     fields: F,
 ): Record<keyof F, unknown> {
-    const values = Object.keys(fields).reduce(
+    return Object.keys(fields).reduce(
         (acc, key: keyof F) => {
             const field = fields[key].current;
 
@@ -126,6 +127,4 @@ export function collectValues<F extends Record<string, RefObject<Field>>>(
         },
         {} as Record<keyof F, unknown>,
     );
-
-    return values;
 }

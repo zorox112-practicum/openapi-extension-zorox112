@@ -8,8 +8,7 @@ import {
     HTML_COMMENTS_CLOSE_DIRECTIVE,
     HTML_COMMENTS_OPEN_DIRECTIVE,
 } from '../constants';
-
-import {Server, TitleDepth} from '../models';
+import {TitleDepth, V3Server} from '../models';
 
 const openapiBlock = bem('openapi');
 
@@ -52,7 +51,7 @@ function code(text: string, type = '') {
     return EOL + ['```' + appliedType, text, '```'].join(EOL) + EOL;
 }
 
-function method(text: string, path: string, server: Server) {
+function method(text: string, path: string, server: V3Server) {
     let result = `${text.toUpperCase()} {.openapi__method}`;
 
     result += ` ${code(server.url + '/' + path)}` + EOL;

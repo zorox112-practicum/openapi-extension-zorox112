@@ -99,53 +99,55 @@ export type SandboxProps = {
     path: string;
     host?: string;
     method: Method;
-    pathParams?: Parameters;
-    searchParams?: Parameters;
-    headers?: Parameters;
+    pathParams?: V3Parameters;
+    searchParams?: V3Parameters;
+    headers?: V3Parameters;
     body?: string;
-    security?: Security[];
+    bodyType?: string;
+    schema?: OpenJSONSchema;
+    security?: V3Security[];
 };
 
 export type OpenAPISpec = {
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     [key: string]: any;
-    security?: Array<Record<string, Security>>;
+    security?: Array<Record<string, V3Security>>;
 };
 
-export type Security = {type: string; description: string};
+export type V3Security = {type: string; description: string};
 
 export type OpenAPIOperation = {
     summary?: string;
     description?: string;
     operationId?: string;
     tags?: string[];
-    servers?: Servers;
-    parameters?: Parameters;
+    servers?: V3Servers;
+    parameters?: V3Parameters;
     responses?: {};
     requestBody?: {
         required?: boolean;
         description?: string;
         content: {[ContentType: string]: {schema: OpenJSONSchema}};
     };
-    security?: Array<Record<string, Security>>;
+    security?: Array<Record<string, V3Security>>;
     'x-navtitle': string[];
 };
 
-export type Info = {
+export type V3Info = {
     name: string;
     version: string;
     description?: string;
     terms?: string;
-    license?: License;
-    contact?: Contact;
+    license?: V3License;
+    contact?: V3Contact;
 };
 
-export type License = {
+export type V3License = {
     name: string;
     url?: string;
 };
 
-export type Contact = {
+export type V3Contact = {
     name: string;
     sources: ContactSource[];
 };
@@ -154,16 +156,16 @@ export type ContactSource = {type: ContactSourceType; url: string};
 
 export type ContactSourceType = 'web' | 'email';
 
-export type Tag = {
+export type V3Tag = {
     id: string;
     name: string;
     description?: string;
-    endpoints: Endpoints;
+    endpoints: V3Endpoints;
 };
 
-export type Endpoints = Endpoint[];
+export type V3Endpoints = V3Endpoint[];
 
-export type Endpoint = {
+export type V3Endpoint = {
     id: string;
     operationId?: string;
     method: Method;
@@ -171,19 +173,19 @@ export type Endpoint = {
     tags: string[];
     summary?: string;
     description?: string;
-    servers: Servers;
-    parameters?: Parameters;
-    responses?: Responses;
-    requestBody?: Schema;
-    security: Security[];
+    servers: V3Servers;
+    parameters?: V3Parameters;
+    responses?: V3Responses;
+    requestBody?: V3Schema;
+    security: V3Security[];
     noindex?: boolean;
     hidden?: boolean;
     deprecated?: boolean;
 };
 
 export type Specification = {
-    tags: Map<string, Tag>;
-    endpoints: Endpoints;
+    tags: Map<string, V3Tag>;
+    endpoints: V3Endpoints;
 };
 
 export const methods = [
@@ -199,20 +201,21 @@ export const methods = [
 
 export type Method = (typeof methods)[number];
 
-export type Servers = Server[];
+export type V3Servers = V3Server[];
 
-export type Server = {
+export type V3Server = {
     url: string;
     description?: string;
 };
 
-export type Parameters = Parameter[];
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type V3Parameters = V3Parameter[];
 
 export type In = 'path' | 'query' | 'header' | 'cookie';
 
 export type Primitive = string | number | boolean;
 
-export type Parameter = {
+export type V3Parameter = {
     name: string;
     in: In;
     required: boolean;
@@ -225,19 +228,20 @@ export type Parameter = {
     'x-hidden'?: boolean;
 };
 
-export type Responses = Response[];
+export type V3Responses = V3Response[];
 
-export type Response = {
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type V3Response = {
     // response code validation omitted
     code: string;
     statusText: string;
     description: string;
-    schemas?: Schemas;
+    schemas?: V3Schemas;
 };
 
-export type Schemas = Schema[];
+export type V3Schemas = V3Schema[];
 
-export type Schema = {
+export type V3Schema = {
     type: string;
     schema: OpenJSONSchema;
 };

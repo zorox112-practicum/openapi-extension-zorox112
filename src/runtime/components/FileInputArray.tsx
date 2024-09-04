@@ -1,5 +1,6 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {Button} from '@gravity-ui/uikit';
+
 import {Column} from './Column';
 
 const isFile = (item: undefined | File): item is File => item !== undefined;

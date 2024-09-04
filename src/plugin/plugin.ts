@@ -1,5 +1,6 @@
 import type Token from 'markdown-it/lib/token';
 import type {MarkdownItPluginCb} from '@diplodoc/transform/lib/plugins/typings';
+
 import {load} from 'js-yaml';
 
 function isSandboxBlock(token: Token) {

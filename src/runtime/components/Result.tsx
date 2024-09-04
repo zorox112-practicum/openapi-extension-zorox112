@@ -1,8 +1,10 @@
 import type {ErrorState, ResponseState} from '../types';
+
 import React, {useEffect, useState} from 'react';
+
 import {Loader} from './Loader';
-import {Response} from './Response';
-import {Error} from './Error';
+import {ResponsePart} from './Response';
+import {ErrorPart} from './Error';
 
 export const getAttachName = (response: Response): string => {
     const unknownName = 'unknown file';
@@ -73,8 +75,8 @@ export const Result: React.FC<{
     return (
         <>
             {!response && !error && <Loader />}
-            {response && <Response response={response} />}
-            {error && <Error message={error.message} />}
+            {response && <ResponsePart response={response} />}
+            {error && <ErrorPart message={error.message} />}
         </>
     );
 };

@@ -1,12 +1,13 @@
-import RefsService from '../services/refs';
 import stringify from 'json-stringify-safe';
 
+import RefsService from '../services/refs';
 import {anchor, block, bold, table, tableParameterName} from '../ui';
 import {concatNewLine} from '../utils';
 import {OpenJSONSchema, OpenJSONSchemaDefinition} from '../models';
+import {getOrderedPropList} from '../ui/presentationUtils/orderedProps/getOrderedPropList';
+
 import {collectRefs, extractOneOfElements, inferType, typeToText} from './types';
 import {prepareComplexDescription} from './description';
-import {getOrderedPropList} from '../ui/presentationUtils/orderedProps/getOrderedPropList';
 
 type TableRow = [string, string];
 

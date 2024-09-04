@@ -1,5 +1,6 @@
-import {Endpoint, OpenApiIncluderParams, Specification, Tag} from './models';
 import {evalExp} from '@diplodoc/transform/lib/liquid/evaluation';
+
+import {OpenApiIncluderParams, Specification, V3Endpoint, V3Tag} from './models';
 
 export function concatNewLine(prefix: string, suffix: string) {
     return prefix.trim().length ? `${prefix}<br>${suffix}` : suffix;
@@ -8,12 +9,12 @@ export function concatNewLine(prefix: string, suffix: string) {
 export function matchFilter(
     filter: OpenApiIncluderParams['filter'],
     vars: Record<string, string>,
-    action: (endpoint: Endpoint, tag?: Tag) => void,
+    action: (endpoint: V3Endpoint, tag?: V3Tag) => void,
 ) {
     const {endpoint: endpointExpr, tag: tagExpr} = filter || {};
-    const matchTag = tagExpr ? (tag: Tag) => evalExp(tagExpr as string, {...tag, vars}) : null;
+    const matchTag = tagExpr ? (tag: V3Tag) => evalExp(tagExpr as string, {...tag, vars}) : null;
     const matchEndpoint = endpointExpr
-        ? (endpoint: Endpoint) => evalExp(endpointExpr, {...endpoint, vars})
+        ? (endpoint: V3Endpoint) => evalExp(endpointExpr, {...endpoint, vars})
         : null;
 
     return (spec: Specification): void => {

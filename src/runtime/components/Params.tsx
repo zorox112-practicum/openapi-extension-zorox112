@@ -1,12 +1,15 @@
-import type {Field, Nullable, Parameter, Parameters, Primitive} from '../types';
+import type {Primitive, V3Parameter, V3Parameters} from '../../includer/models';
+import type {Field, Nullable} from '../types';
+
 import React from 'react';
 import {Text, TextInput} from '@gravity-ui/uikit';
 
-import {Column} from './Column';
 import {merge} from '../utils';
 
+import {Column} from './Column';
+
 function validate(
-    params: Parameters | undefined,
+    params: V3Parameters | undefined,
     values: Record<string, Nullable<Primitive>>,
 ): Nullable<Record<string, string>> {
     const errors = merge(params || [], (param) =>
@@ -20,7 +23,7 @@ export class Params
     extends React.Component<
         {
             title: string;
-            params?: Array<Parameter & {placeholder?: string}>;
+            params?: Array<V3Parameter & {placeholder?: string}>;
         },
         {
             values: Record<string, Nullable<Primitive>>;
@@ -31,7 +34,7 @@ export class Params
 {
     private onchange: Record<string, (value: string) => void>;
 
-    constructor(props: {title: string; params?: Array<Parameter & {placeholder?: string}>}) {
+    constructor(props: {title: string; params?: Array<V3Parameter & {placeholder?: string}>}) {
         super(props);
 
         this.state = {

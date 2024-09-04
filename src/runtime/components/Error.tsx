@@ -1,11 +1,13 @@
+import type {ErrorState} from '../types';
+
 import React from 'react';
 import {Card, Text} from '@gravity-ui/uikit';
 
 import {Text as TextEnum, possibleReasonsFailToFetch, yfmSandbox} from '../../plugin/constants';
-import {ErrorState} from '../types';
+
 import {Column} from '.';
 
-export const Error = ({message}: ErrorState) => {
+export const ErrorPart = ({message}: ErrorState) => {
     return (
         <Column>
             <Text variant="header-1">{TextEnum.RESPONSE_ERROR_SECTION_TITLE}</Text>
