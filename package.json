@@ -56,6 +56,7 @@
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
+    "@diplodoc/lint": "^1.1.3",
     "@diplodoc/tsconfig": "^1.0.2",
     "@gravity-ui/uikit": "^6.0.0",
     "@types/html-escaper": "^3.0.0",
@@ -84,7 +85,6 @@
   },
   "dependencies": {
     "@apidevtools/swagger-parser": "^10.1.0",
-    "@diplodoc/lint": "^1.1.3",
     "@diplodoc/transform": "^4.3.0",
     "bem-cn-lite": "^4.1.0",
     "html-escaper": "^3.0.3",
