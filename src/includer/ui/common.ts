@@ -46,9 +46,11 @@ function bold(text: string) {
     return `**${text}**`;
 }
 
-function code(text: string, type = '') {
-    const appliedType = type && text.length <= 2000 ? type : '';
-    return EOL + ['```' + appliedType, text, '```'].join(EOL) + EOL;
+function code(text: string, type = 'text', translate = false) {
+    const appliedType = type && text.length <= 2000 ? type : 'text';
+    const additionalParam = translate ? '' : 'translate=no';
+
+    return EOL + [`\`\`\` ${appliedType} ${additionalParam}`, text, '```'].join(EOL) + EOL;
 }
 
 function method(text: string, path: string, server: V3Server) {
