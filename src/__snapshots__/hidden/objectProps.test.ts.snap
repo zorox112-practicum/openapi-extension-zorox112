@@ -14,7 +14,7 @@ exports[`Properties in object schemas marked with \`x-hidden\` should not be ren
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -35,7 +35,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "luminosityClass": "string",
     "name": "string"
@@ -83,7 +83,7 @@ Name of this star
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 

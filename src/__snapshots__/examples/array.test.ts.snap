@@ -14,7 +14,7 @@ exports[`openapi project with examples renders array + allOf example 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -35,7 +35,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "a": [
         {
@@ -79,7 +79,7 @@ Base 200 response
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 
@@ -113,7 +113,7 @@ exports[`openapi project with examples renders array + oneOf + allOf example 1`]
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -134,7 +134,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "a": [
         {
@@ -180,7 +180,7 @@ Base 200 response
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 
@@ -214,7 +214,7 @@ exports[`openapi project with examples renders array + oneOf example 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -235,7 +235,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "a": [
         "s",
@@ -278,7 +278,7 @@ Base 200 response
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 
@@ -312,7 +312,7 @@ exports[`openapi project with examples renders example field 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -333,7 +333,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 [
     {
         "test": 1
@@ -367,7 +367,7 @@ Base 200 response
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 
@@ -401,7 +401,7 @@ exports[`openapi project with examples renders infered example 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -422,7 +422,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 [
     {
         "name": "string"
@@ -471,7 +471,7 @@ Base 200 response
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 
@@ -505,7 +505,7 @@ exports[`openapi project with examples renders nested arrays exmaple 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -526,7 +526,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 [
     [
         {
@@ -577,7 +577,7 @@ Base 200 response
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 

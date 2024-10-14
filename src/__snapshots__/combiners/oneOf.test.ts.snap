@@ -14,7 +14,7 @@ exports[`oneOf operator support renders empty 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -35,7 +35,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "type": "string",
     "baz": "string"
@@ -135,7 +135,7 @@ Cat class
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "type": "string",
     "baz": "string"
@@ -194,7 +194,7 @@ exports[`oneOf operator support renders filled 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -215,7 +215,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "name": "string",
     "age": 0,
@@ -329,7 +329,7 @@ Cat class
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "name": "string",
     "age": 0,
@@ -402,7 +402,7 @@ exports[`oneOf operator support renders parameter 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -423,7 +423,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "pet": {
         "type": "string",
@@ -534,7 +534,7 @@ Cat class
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "pet": {
         "type": "string",

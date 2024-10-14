@@ -14,7 +14,7 @@ exports[`Default value constraints should process default constraints specified 
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -60,7 +60,7 @@ Amount of search results to show<br>
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 
@@ -94,7 +94,7 @@ exports[`Default value constraints should process default constraints specified 
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -115,7 +115,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "role": "basic",
     "name": "Anonymous",
@@ -197,7 +197,7 @@ Role for the user being created
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 

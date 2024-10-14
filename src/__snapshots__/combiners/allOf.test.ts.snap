@@ -14,7 +14,7 @@ exports[`allOf operator support renders simple allOf 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -35,7 +35,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "type": "string",
     "foo": "string",
@@ -88,7 +88,7 @@ Base 200 response
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "type": "string",
     "baz": "string"
@@ -154,7 +154,7 @@ exports[`allOf operator support renders single allOf 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -175,7 +175,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "pet": {
         "type": "string",
@@ -245,7 +245,7 @@ Base 200 response
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "pet": {
         "type": "string",

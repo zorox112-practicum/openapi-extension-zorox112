@@ -14,7 +14,7 @@ exports[`Property rows in tables describing object schemas are hoisted to the to
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -35,7 +35,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "id": "c3073b9d-edd0-49f2-a28d-b7ded8ff9a8b",
     "luminosityClass": "string",
@@ -101,7 +101,7 @@ CCDM catalogue designation for this star
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 
@@ -135,7 +135,7 @@ exports[`Property rows in tables describing object schemas are ordered lexicogra
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -156,7 +156,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "id": "c3073b9d-edd0-49f2-a28d-b7ded8ff9a8b",
     "luminosityClass": "string",
@@ -222,7 +222,7 @@ Name of this star
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 

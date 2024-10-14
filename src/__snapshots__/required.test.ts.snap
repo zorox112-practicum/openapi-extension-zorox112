@@ -14,7 +14,7 @@ exports[`required renders correct required 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -61,7 +61,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "d": 0,
     "e": 0
@@ -125,7 +125,7 @@ Cat class
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "type": "string",
     "foo": "string"
