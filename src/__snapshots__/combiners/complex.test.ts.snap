@@ -14,7 +14,7 @@ exports[`operators complex test renders ok 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -35,7 +35,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "name": "b",
     "age": {
@@ -158,7 +158,7 @@ Base 200 response
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "name": "b",
     "age": {

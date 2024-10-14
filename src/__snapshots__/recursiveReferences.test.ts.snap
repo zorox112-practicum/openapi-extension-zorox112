@@ -14,7 +14,7 @@ exports[`Recursive references in schemas resulting in a cycle between two compon
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -41,7 +41,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "A": {
         "B": {}
@@ -127,7 +127,7 @@ exports[`Recursive references in schemas resulting in a trivial self-referential
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -154,7 +154,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "A": {}
 }
@@ -220,7 +220,7 @@ exports[`Recursive references in schemas where the cycle itself is not trivially
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -247,7 +247,7 @@ Generated server url
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "A": {}
 }

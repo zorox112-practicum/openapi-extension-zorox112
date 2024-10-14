@@ -50,7 +50,11 @@ function bold(text: string) {
 
 function code(text: string, type = 'text', translate = false) {
     const appliedType = type && text.length <= 2000 ? type : 'text';
-    return EOL + ['```' + appliedType + ` ${translate ? '' : 'translate=no'}`, text, '```'].join(EOL) + EOL;
+    return (
+        EOL +
+        ['```' + appliedType + ` ${translate ? '' : 'translate=no'}`, text, '```'].join(EOL) +
+        EOL
+    );
 }
 
 function method(text: string, path: string, server: V3Server) {

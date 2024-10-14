@@ -14,7 +14,7 @@ exports[`basic openapi project renders description 1`] = `
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -43,7 +43,7 @@ Base 200 response
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "type": "string",
     "foo": "string"
@@ -89,7 +89,7 @@ Base 200 response
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {
     "type": "string",
     "bar": "string"

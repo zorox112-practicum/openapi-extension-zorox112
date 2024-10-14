@@ -14,7 +14,7 @@ exports[`Endpoint parameter tables should be omitted if all of their respective 
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -57,7 +57,7 @@ Access token
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 
@@ -91,7 +91,7 @@ exports[`Endpoint parameter tables should not include parameters marked with \`x
 <div class="openapi__request">
 
 POST {.openapi__method} 
-\`\`\`
+\`\`\`text translate=no
 http://localhost:8080/test
 \`\`\`
 
@@ -134,7 +134,7 @@ Name for the requested star
 {% cut "application/json" %}
 
 
-\`\`\`json
+\`\`\`json translate=no
 {}
 \`\`\`
 
