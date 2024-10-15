@@ -39,10 +39,11 @@ const fields: Fields = [
         key: 'pattern',
         label: 'Pattern',
     },
-    {
+    (value) => ({
         key: 'uniqueItems',
         label: 'Unique items',
-    },
+        computed: String(value.uniqueItems),
+    }),
     (value) => {
         return {
             key: 'minimum',
@@ -75,7 +76,7 @@ function prepareComplexDescription(baseDescription: string, value: OpenJSONSchem
     return fields.reduce((acc, curr) => {
         const field = typeof curr === 'function' ? curr(value) : curr;
 
-        if (typeof field === 'undefined' || !value[field.key]) {
+        if (typeof field === 'undefined' || typeof value[field.key] === 'undefined') {
             return acc;
         }
 
