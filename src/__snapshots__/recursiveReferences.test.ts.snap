@@ -60,7 +60,7 @@ Generated server url
 ||
 
 ||
- A 
+ A {.openapi-table-parameter-name} 
 |
  **Type:** [RecurseMiddle](#recursemiddle) 
 |||#
@@ -78,7 +78,7 @@ Generated server url
 ||
 
 ||
- B 
+ B {.openapi-table-parameter-name} 
 |
  **Type:** [RecurseTop](#recursetop) 
 |||#
@@ -96,7 +96,7 @@ Generated server url
 ||
 
 ||
- A 
+ A {.openapi-table-parameter-name} 
 |
  **Type:** [RecurseMiddle](#recursemiddle) 
 |||#
@@ -171,7 +171,7 @@ Generated server url
 ||
 
 ||
- A 
+ A {.openapi-table-parameter-name} 
 |
  **Type:** [RecurseTop](#recursetop) 
 |||#
@@ -189,7 +189,7 @@ Generated server url
 ||
 
 ||
- A 
+ A {.openapi-table-parameter-name} 
 |
  **Type:** [RecurseTop](#recursetop) 
 |||#
@@ -264,7 +264,7 @@ Generated server url
 ||
 
 ||
- A 
+ A {.openapi-table-parameter-name} 
 |
  **Type:** [RecurseTop](#recursetop) 
 |||#
@@ -282,7 +282,7 @@ Generated server url
 ||
 
 ||
- A 
+ A {.openapi-table-parameter-name} 
 |
  **Type:** [RecurseTop](#recursetop) 
 |||#

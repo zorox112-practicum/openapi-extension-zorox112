@@ -61,13 +61,13 @@ Base 200 response
 ||
 
 ||
- foo 
+ foo {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#
@@ -107,13 +107,13 @@ Base 200 response
 ||
 
 ||
- bar 
+ bar {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#

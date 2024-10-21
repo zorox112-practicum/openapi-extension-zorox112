@@ -57,7 +57,7 @@ Generated server url
 ||
 
 ||
- a 
+ a {.openapi-table-parameter-name} 
 |
  **Type:** object[] 
 |||#
@@ -158,7 +158,7 @@ Generated server url
 ||
 
 ||
- a 
+ a {.openapi-table-parameter-name} 
 |
  **Type:** any[] 
 |||#
@@ -255,7 +255,7 @@ Generated server url
 ||
 
 ||
- a 
+ a {.openapi-table-parameter-name} 
 |
  **Type:** (string 
 or integer)[] 
@@ -449,7 +449,7 @@ Generated server url
 ||
 
 ||
- name 
+ name {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#
@@ -555,7 +555,7 @@ Generated server url
 ||
 
 ||
- name 
+ name {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#

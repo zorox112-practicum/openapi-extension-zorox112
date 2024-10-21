@@ -57,13 +57,13 @@ Generated server url
 ||
 
 ||
- age 
+ age {.openapi-table-parameter-name} 
 |
  **Type:** any 
 ||
 
 ||
- name 
+ name {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -104,13 +104,13 @@ Dog class
 ||
 
 ||
- bar 
+ bar {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#
@@ -130,13 +130,13 @@ Cat class
 ||
 
 ||
- foo 
+ foo {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#
@@ -180,13 +180,13 @@ Base 200 response
 ||
 
 ||
- age 
+ age {.openapi-table-parameter-name} 
 |
  **Type:** any 
 ||
 
 ||
- name 
+ name {.openapi-table-parameter-name} 
 |
  **Type:** string
 

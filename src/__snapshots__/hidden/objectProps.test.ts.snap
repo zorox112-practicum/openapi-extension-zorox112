@@ -53,7 +53,7 @@ Generated server url
 ||
 
 ||
- luminosityClass 
+ luminosityClass {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -61,7 +61,7 @@ Morgan-Keenan luminosity class for this star
 ||
 
 ||
- name 
+ name {.openapi-table-parameter-name} 
 |
  **Type:** string
 

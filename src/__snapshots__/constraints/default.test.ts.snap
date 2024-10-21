@@ -37,7 +37,7 @@ Generated server url
 ||
 
 ||
- limit 
+ limit {.openapi-table-parameter-name} 
 |
  **Type:** number&lt;int32&gt;
 
@@ -137,7 +137,7 @@ Generated server url
 ||
 
 ||
- age 
+ age {.openapi-table-parameter-name} 
 |
  **Type:** number
 
@@ -148,7 +148,7 @@ Generated server url
 ||
 
 ||
- name 
+ name {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -159,7 +159,7 @@ Generated server url
 ||
 
 ||
- role 
+ role {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -172,7 +172,7 @@ Role for the user being created
 ||
 
 ||
- tags 
+ tags {.openapi-table-parameter-name} 
 |
  **Type:** string[]
 
