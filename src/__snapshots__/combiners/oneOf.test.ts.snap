@@ -83,13 +83,13 @@ Dog class
 ||
 
 ||
- baz 
+ baz {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#
@@ -109,13 +109,13 @@ Cat class
 ||
 
 ||
- foo 
+ foo {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#
@@ -235,13 +235,13 @@ Generated server url
 ||
 
 ||
- age 
+ age {.openapi-table-parameter-name} 
 |
  **Type:** number 
 ||
 
 ||
- name 
+ name {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
@@ -277,13 +277,13 @@ Dog class
 ||
 
 ||
- baz 
+ baz {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#
@@ -303,13 +303,13 @@ Cat class
 ||
 
 ||
- foo 
+ foo {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#
@@ -349,13 +349,13 @@ Cat class
 ||
 
 ||
- age 
+ age {.openapi-table-parameter-name} 
 |
  **Type:** number 
 ||
 
 ||
- name 
+ name {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
@@ -445,7 +445,7 @@ Generated server url
 ||
 
 ||
- pet 
+ pet {.openapi-table-parameter-name} 
 |
  **Type:** [Dog](#dog) 
 or [Cat](#cat) 
@@ -482,13 +482,13 @@ Dog class
 ||
 
 ||
- baz 
+ baz {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#
@@ -508,13 +508,13 @@ Cat class
 ||
 
 ||
- foo 
+ foo {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#
@@ -556,7 +556,7 @@ Cat class
 ||
 
 ||
- pet 
+ pet {.openapi-table-parameter-name} 
 |
  **Type:** [Dog](#dog) 
 or [Cat](#cat) 

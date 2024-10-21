@@ -37,7 +37,7 @@ Generated server url
 ||
 
 ||
- id<span class="openapi__required">*</span> 
+ id<span class="openapi__required">*</span> {.openapi-table-parameter-name} 
 |
  **Type:** string&lt;uuid&gt;
 
@@ -45,7 +45,7 @@ Internal ID for the requested star
 ||
 
 ||
- catalogueCCDM 
+ catalogueCCDM {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -53,7 +53,7 @@ CCDM designation for the requested star
 ||
 
 ||
- name 
+ name {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -130,7 +130,7 @@ Generated server url
 ||
 
 ||
- catalogueCCDM 
+ catalogueCCDM {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -138,7 +138,7 @@ CCDM designation for the requested star
 ||
 
 ||
- id 
+ id {.openapi-table-parameter-name} 
 |
  **Type:** string&lt;uuid&gt;
 
@@ -146,7 +146,7 @@ Internal ID for the requested star
 ||
 
 ||
- name 
+ name {.openapi-table-parameter-name} 
 |
  **Type:** string
 

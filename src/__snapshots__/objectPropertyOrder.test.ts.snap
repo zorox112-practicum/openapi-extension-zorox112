@@ -55,7 +55,7 @@ Generated server url
 ||
 
 ||
- id<span class="openapi__required">*</span> 
+ id<span class="openapi__required">*</span> {.openapi-table-parameter-name} 
 |
  **Type:** string&lt;uuid&gt;
 
@@ -63,7 +63,7 @@ Internal ID for this star
 ||
 
 ||
- luminosityClass<span class="openapi__required">*</span> 
+ luminosityClass<span class="openapi__required">*</span> {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -71,7 +71,7 @@ Morgan-Keenan luminosity class for this star
 ||
 
 ||
- name<span class="openapi__required">*</span> 
+ name<span class="openapi__required">*</span> {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -79,7 +79,7 @@ Name of this star
 ||
 
 ||
- catalogueDesignationCCDM 
+ catalogueDesignationCCDM {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -176,7 +176,7 @@ Generated server url
 ||
 
 ||
- catalogueDesignationCCDM 
+ catalogueDesignationCCDM {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -184,7 +184,7 @@ CCDM catalogue designation for this star
 ||
 
 ||
- id 
+ id {.openapi-table-parameter-name} 
 |
  **Type:** string&lt;uuid&gt;
 
@@ -192,7 +192,7 @@ Internal ID for this star
 ||
 
 ||
- luminosityClass 
+ luminosityClass {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -200,7 +200,7 @@ Morgan-Keenan luminosity class for this star
 ||
 
 ||
- name 
+ name {.openapi-table-parameter-name} 
 |
  **Type:** string
 

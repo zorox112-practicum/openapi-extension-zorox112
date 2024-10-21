@@ -70,7 +70,7 @@ Generated server url
 ||
 
 ||
- pet 
+ pet {.openapi-table-parameter-name} 
 |
  **Type:** [Cat](#cat)
 
@@ -78,7 +78,7 @@ From response
 ||
 
 ||
- petWithoutDescription 
+ petWithoutDescription {.openapi-table-parameter-name} 
 |
  **Type:** [Cat](#cat)
 
@@ -86,7 +86,7 @@ Cat class
 ||
 
 ||
- refToSchemaWithDescription 
+ refToSchemaWithDescription {.openapi-table-parameter-name} 
 |
  **Type:** [Dog](#dog)
 
@@ -94,7 +94,7 @@ Dog class
 ||
 
 ||
- simpleDescription 
+ simpleDescription {.openapi-table-parameter-name} 
 |
  **Type:** object
 
@@ -116,13 +116,13 @@ Cat class
 ||
 
 ||
- foo 
+ foo {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#
@@ -142,13 +142,13 @@ Dog class
 ||
 
 ||
- bar 
+ bar {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#

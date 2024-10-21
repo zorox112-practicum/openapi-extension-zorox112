@@ -30,6 +30,10 @@
         display: inline-block;
     }
 
+    .openapi-table-parameter-name {
+        white-space: nowrap;
+    }
+
     & .openapi-deprecated {
         display: inline-block;
         background-color: var(--dc-openapi-deprecated-bg);

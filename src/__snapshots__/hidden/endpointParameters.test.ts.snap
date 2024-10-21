@@ -37,7 +37,7 @@ Generated server url
 ||
 
 ||
- accessToken 
+ accessToken {.openapi-table-parameter-name} 
 |
  **Type:** string
 
@@ -114,7 +114,7 @@ Generated server url
 ||
 
 ||
- name 
+ name {.openapi-table-parameter-name} 
 |
  **Type:** string
 

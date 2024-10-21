@@ -37,19 +37,19 @@ Generated server url
 ||
 
 ||
- c<span class="openapi__required">*</span> 
+ c<span class="openapi__required">*</span> {.openapi-table-parameter-name} 
 |
  **Type:** number 
 ||
 
 ||
- a 
+ a {.openapi-table-parameter-name} 
 |
  **Type:** number 
 ||
 
 ||
- b 
+ b {.openapi-table-parameter-name} 
 |
  **Type:** number 
 |||#
@@ -79,31 +79,31 @@ Generated server url
 ||
 
 ||
- a<span class="openapi__required">*</span> 
+ a<span class="openapi__required">*</span> {.openapi-table-parameter-name} 
 |
  **Type:** number 
 ||
 
 ||
- b<span class="openapi__required">*</span> 
+ b<span class="openapi__required">*</span> {.openapi-table-parameter-name} 
 |
  **Type:** number 
 ||
 
 ||
- d<span class="openapi__required">*</span> 
+ d<span class="openapi__required">*</span> {.openapi-table-parameter-name} 
 |
  **Type:** number 
 ||
 
 ||
- c 
+ c {.openapi-table-parameter-name} 
 |
  **Type:** number 
 ||
 
 ||
- e 
+ e {.openapi-table-parameter-name} 
 |
  **Type:** number 
 |||#
@@ -143,13 +143,13 @@ Cat class
 ||
 
 ||
- foo 
+ foo {.openapi-table-parameter-name} 
 |
  **Type:** string 
 ||
 
 ||
- type 
+ type {.openapi-table-parameter-name} 
 |
  **Type:** string 
 |||#

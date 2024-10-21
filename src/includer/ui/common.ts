@@ -133,7 +133,7 @@ function tableParameterName(key: string, {required, deprecated}: ParameterNamePr
         tableName += popups.deprecated({compact: true});
     }
 
-    return tableName;
+    return tableName + ' {.openapi-table-parameter-name}';
 }
 
 export {
