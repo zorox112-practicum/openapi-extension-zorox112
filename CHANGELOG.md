@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.4.3](https://github.com/diplodoc-platform/openapi-extension/compare/v2.4.2...v2.4.3) (2024-10-25)
+
+
+### Bug Fixes
+
+* styles ([4e39346](https://github.com/diplodoc-platform/openapi-extension/commit/4e393462500d1ed82382a6c5957beeb3aec9c758))
+
+## [2.4.2](https://github.com/diplodoc-platform/openapi-extension/compare/v2.4.1...v2.4.2) (2024-10-23)
+
+
+### Bug Fixes
+
+* inline request ([e22357d](https://github.com/diplodoc-platform/openapi-extension/commit/e22357da51bb9badee2b9a90689f8251ea9f0de0))
+
+## [2.4.1](https://github.com/diplodoc-platform/openapi-extension/compare/v2.4.0...v2.4.1) (2024-10-21)
+
+
+### Bug Fixes
+
+* add 'translate=no' for code ([4bb3490](https://github.com/diplodoc-platform/openapi-extension/commit/4bb3490ecff3e1d87b3f8b1fb880b79a97a2002e))
+* deprecated ([492364d](https://github.com/diplodoc-platform/openapi-extension/commit/492364db050b3038d4d49a091b6560370bbb24e0))
+* Fix complex descriptions (with constraints) ([b4526d0](https://github.com/diplodoc-platform/openapi-extension/commit/b4526d0a65ce4da72625f98ec11fa7e891e5b243))
+* update snapshots ([566ea7d](https://github.com/diplodoc-platform/openapi-extension/commit/566ea7d8b683341f4347269d52c40e105631ecd9))
+
 ## [2.4.0](https://github.com/diplodoc-platform/openapi-extension/compare/v2.3.4...v2.4.0) (2024-10-07)
 
 

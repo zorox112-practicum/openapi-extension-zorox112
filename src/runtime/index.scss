@@ -17,6 +17,11 @@
         display: inline-block;
     }
 
+    #request,
+    #responses {
+        min-width: 70%;
+    }
+
     .openapi-description-annotation {
         font-style: normal;
         color: var(--g-color-text-hint);
